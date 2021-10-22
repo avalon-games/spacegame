@@ -32,6 +32,9 @@
 # DS Store cache
 .DS_Store
 
+# NuGet for vscode
+**/NuGet/
+
 # Gradle cache directory
 .gradle/
 
