@@ -33,6 +33,6 @@ public class ButtonManager : MonoBehaviour
         obstacle.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX;
         obstacle.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
         obstacle.GetComponent<Rigidbody2D>().AddForce(new Vector2(0f, -5.0f));
-        block.SetActive(false);
+        block.GetComponent<Rigidbody2D>().AddForce(new Vector2(1000f, 0f));
     }
 }
