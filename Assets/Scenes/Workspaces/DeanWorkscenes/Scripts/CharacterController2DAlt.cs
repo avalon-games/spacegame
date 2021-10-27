@@ -7,6 +7,7 @@ public class CharacterController2DAlt : MonoBehaviour
     
     Rigidbody2D rb;
     Collider2D coll;
+    SpriteRenderer sprite;
     LayerMask groundLayer;
     //LayerMask enemyLayer;
     //Animator animator;
@@ -24,7 +25,8 @@ public class CharacterController2DAlt : MonoBehaviour
     bool jumpButton;
     bool isOnGround;
 
-    void Start() { 
+    void Start() {
+        sprite = GetComponent<SpriteRenderer>();
         state = State.idle;
         rb = GetComponent<Rigidbody2D>();
         //animator = GetComponent<Animator>();
@@ -75,11 +77,11 @@ public class CharacterController2DAlt : MonoBehaviour
                     targetVelocity = new Vector2(0, rb.velocity.y);
             }
             if (horizontalInput < 0)
-                transform.localScale = new Vector2(-1, 1);
+                sprite.flipX = true;
             else if (horizontalInput > 0)
-                transform.localScale = new Vector2(1, 1);
+                sprite.flipX = false;
 
-			rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
+            rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
         }
     }
     void AssignState() {
