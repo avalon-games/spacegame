@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CharacterController2DAlt : MonoBehaviour
 {
-    
     Rigidbody2D rb;
     Collider2D coll;
     SpriteRenderer sprite;
@@ -34,11 +33,11 @@ public class CharacterController2DAlt : MonoBehaviour
 
 
     [Header("Grappling:")]
-    public Tutorial_GrapplingRope grappleRope;
-    [Range(0, 500)] [SerializeField] float wallHopForceX = 200;
-    [Range(0, 500)] [SerializeField] float wallHopForceY = 200;
-    bool isOnRightWall;
-    bool isOnLeftWall;
+    public Tutorial_GrapplingGun grappleGun;
+    //[Range(0, 500)] [SerializeField] float wallHopForceX = 200;
+    //[Range(0, 500)] [SerializeField] float wallHopForceY = 200;
+    //bool isOnRightWall;
+    //bool isOnLeftWall;
 
     void Start() {
         maxSpeedLeft = -initialMaxSpeed;
@@ -87,7 +86,7 @@ public class CharacterController2DAlt : MonoBehaviour
             else if (horizontalInput > 0)
                 sprite.flipX = false;
         }
-        if (!jumpButton && rb.velocity.y > 0.5f && !grappleRope.isGrappling) //if releasing the jump key early, have a shorter jump
+        if (!jumpButton && rb.velocity.y > 0.5f && !grappleGun.grappleRope.isGrappling) //if releasing the jump key early, have a shorter jump
             targetVelocity.y = earlyJumpReleaseYVelocity;
 
         //if (isOnLeftWall) //wallhop
@@ -131,13 +130,13 @@ public class CharacterController2DAlt : MonoBehaviour
         Debug.DrawRay(coll.bounds.center, Vector2.down * (coll.bounds.extents.y + groundDetectRadius));
         isOnGround = groundHit.collider != null;
     }
-    private void DetectWall() {
-        RaycastHit2D rightWallHit = Physics2D.Raycast(coll.bounds.center, Vector2.right, coll.bounds.extents.x + groundDetectRadius, groundLayer);
-        Debug.DrawRay(coll.bounds.center, Vector2.right * (coll.bounds.extents.x + groundDetectRadius));
-        isOnRightWall = rightWallHit.collider != null;
+    //private void DetectWall() {
+    //    RaycastHit2D rightWallHit = Physics2D.Raycast(coll.bounds.center, Vector2.right, coll.bounds.extents.x + groundDetectRadius, groundLayer);
+    //    Debug.DrawRay(coll.bounds.center, Vector2.right * (coll.bounds.extents.x + groundDetectRadius));
+    //    isOnRightWall = rightWallHit.collider != null;
 
-        RaycastHit2D leftWallHit = Physics2D.Raycast(coll.bounds.center, Vector2.left, coll.bounds.extents.x + groundDetectRadius, groundLayer);
-        Debug.DrawRay(coll.bounds.center, Vector2.left * (coll.bounds.extents.x + groundDetectRadius));
-        isOnLeftWall = leftWallHit.collider != null;
-    }
+    //    RaycastHit2D leftWallHit = Physics2D.Raycast(coll.bounds.center, Vector2.left, coll.bounds.extents.x + groundDetectRadius, groundLayer);
+    //    Debug.DrawRay(coll.bounds.center, Vector2.left * (coll.bounds.extents.x + groundDetectRadius));
+    //    isOnLeftWall = leftWallHit.collider != null;
+    //}
 }
