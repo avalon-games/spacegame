@@ -30,11 +30,8 @@ public class CharacterController2DAlt : MonoBehaviour
     [Range(0, 1f)][SerializeField] float airControl = 0.8f;
     //[SerializeField] float hurtForce = 2f;
     [Range(0, .5f)][SerializeField] float groundDetectRadius = 0.24f;
-    float defaultGravity;
+    [HideInInspector] public bool jumpReleaseActive = true;
 
-
-    [Header("Grappling:")]
-    public Tutorial_GrapplingGun grappleGun;
     //[Range(0, 500)] [SerializeField] float wallHopForceX = 200;
     //[Range(0, 500)] [SerializeField] float wallHopForceY = 200;
     //bool isOnRightWall;
@@ -52,7 +49,7 @@ public class CharacterController2DAlt : MonoBehaviour
         groundLayer = LayerMask.GetMask("Ground");
         //enemyLayer = LayerMask.GetMask("Enemy");
 
-        defaultGravity = rb.gravityScale;
+
     }
 
     void Update() {
@@ -89,13 +86,10 @@ public class CharacterController2DAlt : MonoBehaviour
             else if (horizontalInput > 0)
                 sprite.flipX = false;
         }
-        if (!jumpButton && rb.velocity.y > 0.5f && !grappleGun.grappleRope.isGrappling) //if releasing the jump key early, have a shorter jump
+        if (!jumpButton && rb.velocity.y > 0.5f && jumpReleaseActive) //if releasing the jump key early, have a shorter jump
             targetVelocity.y = earlyJumpReleaseYVelocity;
 
-		if (grappleGun.grappleRope.isGrappling)
-			rb.gravityScale = 0;
-		else
-			rb.gravityScale = defaultGravity;
+
 
 		//if (isOnLeftWall) //wallhop
 		//    rb.AddForce(new Vector2(wallHopForceX, wallHopForceY));
