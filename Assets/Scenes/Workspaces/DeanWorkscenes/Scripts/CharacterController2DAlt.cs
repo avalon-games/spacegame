@@ -30,6 +30,7 @@ public class CharacterController2DAlt : MonoBehaviour
     [Range(0, 1f)][SerializeField] float airControl = 0.8f;
     //[SerializeField] float hurtForce = 2f;
     [Range(0, .5f)][SerializeField] float groundDetectRadius = 0.24f;
+    float defaultGravity;
 
 
     [Header("Grappling:")]
@@ -50,6 +51,8 @@ public class CharacterController2DAlt : MonoBehaviour
         coll = GetComponent<CapsuleCollider2D>();
         groundLayer = LayerMask.GetMask("Ground");
         //enemyLayer = LayerMask.GetMask("Enemy");
+
+        defaultGravity = rb.gravityScale;
     }
 
     void Update() {
@@ -89,12 +92,17 @@ public class CharacterController2DAlt : MonoBehaviour
         if (!jumpButton && rb.velocity.y > 0.5f && !grappleGun.grappleRope.isGrappling) //if releasing the jump key early, have a shorter jump
             targetVelocity.y = earlyJumpReleaseYVelocity;
 
-        //if (isOnLeftWall) //wallhop
-        //    rb.AddForce(new Vector2(wallHopForceX, wallHopForceY));
-        //else if (isOnRightWall)
-        //    rb.AddForce(new Vector2(-wallHopForceX, wallHopForceY));
+		if (grappleGun.grappleRope.isGrappling)
+			rb.gravityScale = 0;
+		else
+			rb.gravityScale = defaultGravity;
 
-        if (isOnGround)
+		//if (isOnLeftWall) //wallhop
+		//    rb.AddForce(new Vector2(wallHopForceX, wallHopForceY));
+		//else if (isOnRightWall)
+		//    rb.AddForce(new Vector2(-wallHopForceX, wallHopForceY));
+
+		if (isOnGround)
             rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref m_Velocity, movementSmoothTime);
         else
             rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref m_Velocity, movementSmoothTime/airControl);

@@ -128,8 +128,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grappleRope: {fileID: 5517557312371972271}
-  grappleToAll: 1
-  grappableLayerNumber: 9
+  grappleLayer:
+    serializedVersion: 2
+    m_Bits: 320
   m_camera: {fileID: 0}
   gunHolder: {fileID: 5517557312321501834}
   gunPivot: {fileID: 5517557312189513985}
@@ -138,11 +139,10 @@ MonoBehaviour:
   m_rigidbody: {fileID: 5517557312321501836}
   rotateOverTime: 1
   rotationSpeed: 4
-  hasMaxDistance: 0
-  maxDistnace: 20
+  maxDistance: 20
   launchToPoint: 1
   launchType: 1
-  launchSpeed: 0.5
+  launchSpeed: 1.19
   autoConfigureDistance: 0
   targetDistance: 3
   targetFrequncy: 1
@@ -282,7 +282,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 2
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 12ceda23b929843738467fd034826584, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
@@ -319,11 +319,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d102006db89a493eaa9db1dd4daa9c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSpeed: 10
+  initialMaxSpeed: 10
+  maxSpeedDelta: 4
+  movementSmoothTime: 0.2
   jumpForce: 1000
-  airControl: 0.8
+  earlyJumpReleaseYVelocity: -1.83
+  airControl: 0.5
   groundDetectRadius: 0.24
-  m_MovementSmoothing: 0.2
+  grappleGun: {fileID: 5517557312222636844}
 --- !u!70 &5517557312321501838
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -414,7 +417,6 @@ LineRenderer:
   m_SortingOrder: -10
   m_Positions:
   - {x: 80.31105, y: -2.6812499, z: 0}
-  - {x: 82.15288, y: -3.51516, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.25
@@ -537,7 +539,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  StartWaveSize: 2
+  StartWaveSize: 0.56
   ropeProgressionCurve:
     serializedVersion: 2
     m_Curve:
@@ -562,5 +564,5 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  ropeProgressionSpeed: 1
+  ropeProgressionSpeed: 35.3
   isGrappling: 1
