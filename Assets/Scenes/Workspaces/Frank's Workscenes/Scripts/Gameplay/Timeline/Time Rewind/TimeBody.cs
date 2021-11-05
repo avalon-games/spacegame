@@ -6,8 +6,6 @@ public class TimeBody : MonoBehaviour
 {
     private bool isRecording = false;
 
-    private bool isRewinding = false;
-
     private float recordRate = 15f;
 
     private float recordDuration = 120f;
@@ -59,7 +57,7 @@ public class TimeBody : MonoBehaviour
         for (int i = pointsInTime.Count - 1; i > 0; i--)
         {
             float startTime = Time.time;
-            float duration = 0.1f;
+            float duration = 0.25f;
 
             while (Time.time < startTime + duration)
             {
