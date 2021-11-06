@@ -25,6 +25,8 @@ public class CharacterController2DAlt : MonoBehaviour
     bool jumpButton;
     bool isOnGround;
 
+    private bool movementAllowed = true;
+
     void Start() {
         sprite = GetComponent<SpriteRenderer>();
         state = State.idle;
@@ -36,6 +38,12 @@ public class CharacterController2DAlt : MonoBehaviour
     }
 
     void Update() {
+
+        if (!movementAllowed)
+        {
+            return;
+        }
+
         horizontalInput = Input.GetAxisRaw("Horizontal");
         if (Input.GetButtonDown("Jump")) jumpButton = true;
         RaycastHit2D groundHit = Physics2D.Raycast(coll.bounds.center, Vector2.down, coll.bounds.extents.y + groundDetectRadius, groundLayer);
@@ -49,6 +57,12 @@ public class CharacterController2DAlt : MonoBehaviour
     }
 
     void FixedUpdate() {
+
+        if (!movementAllowed)
+        {
+            return;
+        }
+
         MovePlayer();
     }
 
@@ -95,5 +109,10 @@ public class CharacterController2DAlt : MonoBehaviour
             state = State.running;
         else
             state = State.idle;
+    }
+
+    public void EnableMovement(bool _movementAllowed)
+    {
+        movementAllowed = _movementAllowed;
     }
 }
