@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TimeBody : MonoBehaviour
+public abstract class TimeBody : MonoBehaviour
 {
     private bool isRecording = false;
 
@@ -10,14 +10,14 @@ public class TimeBody : MonoBehaviour
 
     private float recordDuration = 120f;
 
-    private List<Vector2> pointsInTime;
+    protected List<PointInTime> pointsInTime;
 
-    private Rigidbody2D rb;
+    protected Rigidbody2D rb;
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
-        pointsInTime = new List<Vector2>();
+        pointsInTime = new List<PointInTime>();
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -29,7 +29,7 @@ public class TimeBody : MonoBehaviour
         }
     }
 
-    private void Record()
+    protected virtual void Record()
     {
         recordRate = ++recordRate % 15;
         if (recordRate != 0)
@@ -42,7 +42,7 @@ public class TimeBody : MonoBehaviour
             pointsInTime.RemoveAt(pointsInTime.Count - 1);
         }
 
-        pointsInTime.Add(transform.position);
+        pointsInTime.Add(new PointInTime(transform.position, transform.rotation, transform.GetComponent<SpriteRenderer>().flipX));
     }
     
     public void StartTimeLoop()
@@ -50,7 +50,7 @@ public class TimeBody : MonoBehaviour
         StartCoroutine("Rewind");
     }
 
-    private IEnumerator Rewind()
+    protected virtual IEnumerator Rewind()
     {
         rb.isKinematic = true;
 
@@ -61,16 +61,19 @@ public class TimeBody : MonoBehaviour
 
             while (Time.time < startTime + duration)
             {
-                transform.position = Vector2.Lerp(pointsInTime[i], pointsInTime[i - 1], (Time.time - startTime) / duration);
+                transform.position = Vector2.Lerp(pointsInTime[i].GetPosition(), pointsInTime[i - 1].GetPosition(), (Time.time - startTime) / duration);
                 yield return new WaitForEndOfFrame();
             }
 
-            transform.position = pointsInTime[i - 1];
+            transform.rotation = pointsInTime[i - 1].GetRotation();
+            transform.position = pointsInTime[i - 1].GetPosition();
+            transform.GetComponent<SpriteRenderer>().flipX = pointsInTime[i - 1].GetFaceRight();
             pointsInTime.RemoveAt(i);
         }
+        OnTimeLoopEnd();
         yield return false;
     }
-
+    /*
     private void RewindObject(Vector2 startPos, Vector2 endPos)
     {
         float startTime = Time.time;
@@ -83,7 +86,7 @@ public class TimeBody : MonoBehaviour
 
         transform.position = endPos;
     }
-
+    */
     public void StartRecording()
     {
         isRecording = true;
@@ -93,4 +96,6 @@ public class TimeBody : MonoBehaviour
     {
         isRecording = false;
     }
+
+    protected abstract void OnTimeLoopEnd();
 }
