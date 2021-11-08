@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class Tutorial_GrapplingGun : MonoBehaviour {
     [Header("Scripts Ref:")]
@@ -54,6 +55,8 @@ public class Tutorial_GrapplingGun : MonoBehaviour {
     private void Update() {
         if (Input.GetButtonDown("Grapple")) {
             SetGrapplePoint();
+            if (!grappleRope.hasValidPoint)
+                StartCoroutine(WaitForDisable());
         } else if (Input.GetButtonDown("Grapple")) {
             if (grappleRope.enabled) {
                 RotateGun(grapplePoint, false);
@@ -95,14 +98,29 @@ public class Tutorial_GrapplingGun : MonoBehaviour {
     void SetGrapplePoint() {
         Vector2 distanceVector = m_camera.ScreenToWorldPoint(Input.mousePosition) - gunPivot.position;
         RaycastHit2D _hit = Physics2D.Raycast(firePoint.position, distanceVector.normalized, maxDistance, grappleLayer);
-        
+
         if (_hit) {
             grapplePoint = _hit.point;
             grappleDistanceVector = grapplePoint - (Vector2)gunPivot.position;
+            grappleRope.hasValidPoint = true;
+            grappleRope.enabled = true;
+            
+        }
+        else {
+            grappleDistanceVector = distanceVector.normalized*maxDistance;
+            grapplePoint = grappleDistanceVector + (Vector2)gunPivot.position;
+            grappleRope.hasValidPoint = false;
             grappleRope.enabled = true;
         }
+
     }
 
+    IEnumerator WaitForDisable() {
+        yield return new WaitForSeconds(0.25f);
+
+        Debug.Log("Disabling Rope");
+        grappleRope.enabled = false;
+	}
     public void Grapple() {
         m_springJoint2D.autoConfigureDistance = false;
         if (!launchToPoint && !autoConfigureDistance) {

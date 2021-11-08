@@ -32,11 +32,6 @@ public class CharacterController2DAlt : MonoBehaviour
     [Range(0, .5f)][SerializeField] float groundDetectRadius = 0.24f;
     [HideInInspector] public bool jumpReleaseActive = true;
 
-    //[Range(0, 500)] [SerializeField] float wallHopForceX = 200;
-    //[Range(0, 500)] [SerializeField] float wallHopForceY = 200;
-    //bool isOnRightWall;
-    //bool isOnLeftWall;
-
     void Start() {
         maxSpeedLeft = -initialMaxSpeed;
         maxSpeedRight = initialMaxSpeed;
@@ -48,8 +43,6 @@ public class CharacterController2DAlt : MonoBehaviour
         coll = GetComponent<CapsuleCollider2D>();
         groundLayer = LayerMask.GetMask("Ground");
         //enemyLayer = LayerMask.GetMask("Enemy");
-
-
     }
 
     void Update() {
@@ -57,9 +50,8 @@ public class CharacterController2DAlt : MonoBehaviour
 		if (jumpButton == false && Input.GetButtonDown("Jump")) jumpButton = true;
 		if (jumpButton == true && Input.GetButtonUp("Jump")) jumpButton = false;
 		DetectGround();
-        //if(grappleRope.isGrappling) //this is for wallhop
-        //    DetectWall();
 
+        //animations based on current state of player
 		AssignState();
 		//animator.SetInteger("state", (int)state);
 	}
@@ -86,16 +78,10 @@ public class CharacterController2DAlt : MonoBehaviour
             else if (horizontalInput > 0)
                 sprite.flipX = false;
         }
-        if (!jumpButton && rb.velocity.y > 0.5f && jumpReleaseActive) //if releasing the jump key early, have a shorter jump
+        //variable jump height
+        if (!jumpButton && rb.velocity.y > 0.5f && jumpReleaseActive) 
             targetVelocity.y = earlyJumpReleaseYVelocity;
-
-
-
-		//if (isOnLeftWall) //wallhop
-		//    rb.AddForce(new Vector2(wallHopForceX, wallHopForceY));
-		//else if (isOnRightWall)
-		//    rb.AddForce(new Vector2(-wallHopForceX, wallHopForceY));
-
+        //smooths out player velocity change
 		if (isOnGround)
             rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref m_Velocity, movementSmoothTime);
         else
@@ -103,6 +89,7 @@ public class CharacterController2DAlt : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D collision) {
+        //change velocity when entering wind
         if (collision.gameObject.CompareTag("Wind")) {
             float angle = collision.gameObject.GetComponent<AreaEffector2D>().forceAngle;
             maxSpeedLeft += Mathf.Cos(angle * Mathf.PI / 180) * maxSpeedDelta;
@@ -110,6 +97,7 @@ public class CharacterController2DAlt : MonoBehaviour
         }
     }
     void OnTriggerExit2D(Collider2D collision) {
+        //change velocity on exiting wind
         if (collision.gameObject.CompareTag("Wind")) {
             maxSpeedLeft = -initialMaxSpeed;
             maxSpeedRight = initialMaxSpeed;
@@ -132,13 +120,4 @@ public class CharacterController2DAlt : MonoBehaviour
         Debug.DrawRay(coll.bounds.center, Vector2.down * (coll.bounds.extents.y + groundDetectRadius));
         isOnGround = groundHit.collider != null;
     }
-    //private void DetectWall() {
-    //    RaycastHit2D rightWallHit = Physics2D.Raycast(coll.bounds.center, Vector2.right, coll.bounds.extents.x + groundDetectRadius, groundLayer);
-    //    Debug.DrawRay(coll.bounds.center, Vector2.right * (coll.bounds.extents.x + groundDetectRadius));
-    //    isOnRightWall = rightWallHit.collider != null;
-
-    //    RaycastHit2D leftWallHit = Physics2D.Raycast(coll.bounds.center, Vector2.left, coll.bounds.extents.x + groundDetectRadius, groundLayer);
-    //    Debug.DrawRay(coll.bounds.center, Vector2.left * (coll.bounds.extents.x + groundDetectRadius));
-    //    isOnLeftWall = leftWallHit.collider != null;
-    //}
 }

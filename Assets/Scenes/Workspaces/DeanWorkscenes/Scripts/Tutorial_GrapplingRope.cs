@@ -21,6 +21,7 @@ public class Tutorial_GrapplingRope : MonoBehaviour {
     float moveTime = 0;
 
     [HideInInspector] public bool isGrappling = true;
+    [HideInInspector] public bool hasValidPoint;
 
     bool strightLine = true;
 
@@ -59,7 +60,7 @@ public class Tutorial_GrapplingRope : MonoBehaviour {
                 DrawRopeWaves();
             }
         } else {
-            if (!isGrappling) {
+            if (!isGrappling && hasValidPoint) {
                 grapplingGun.Grapple();
                 isGrappling = true;
             }

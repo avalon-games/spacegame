@@ -193,6 +193,7 @@ GameObject:
   - component: {fileID: 5517557312321501839}
   - component: {fileID: 5517557312321501835}
   - component: {fileID: 5517557312321501838}
+  - component: {fileID: 816248699}
   m_Layer: 0
   m_Name: TestPlayer
   m_TagString: Untagged
@@ -304,7 +305,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 1.919966
+  m_Distance: 10.522615
   m_DampingRatio: 1
   m_Frequency: 1
 --- !u!114 &5517557312321501835
@@ -326,7 +327,7 @@ MonoBehaviour:
   earlyJumpReleaseYVelocity: -1.83
   airControl: 0.5
   groundDetectRadius: 0.24
-  grappleGun: {fileID: 5517557312222636844}
+  jumpReleaseActive: 1
 --- !u!70 &5517557312321501838
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -343,6 +344,19 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 1}
   m_Direction: 0
+--- !u!114 &816248699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5517557312321501937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f398e9851184c3b9740df6a6dc83cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grappleGun: {fileID: 5517557312222636844}
 --- !u!1 &5517557312371972241
 GameObject:
   m_ObjectHideFlags: 0
@@ -510,8 +524,8 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.5225361
-      value: -0.15573755
+      time: 0.35420114
+      value: -0.37219873
       inSlope: 0.15860209
       outSlope: 0.15860209
       tangentMode: 0
@@ -519,8 +533,8 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.76547605
-      value: 0.57800037
+      time: 0.6391333
+      value: 0.8207181
       inSlope: 0.56193966
       outSlope: 0.56193966
       tangentMode: 0
@@ -566,3 +580,4 @@ MonoBehaviour:
     m_RotationOrder: 4
   ropeProgressionSpeed: 35.3
   isGrappling: 1
+  hasValidPoint: 0
