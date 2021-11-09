@@ -400,11 +400,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6356513861712558012, guid: def7962f0e001484191b36da9d5a7413, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -9.201
+      value: -7.7
       objectReference: {fileID: 0}
     - target: {fileID: 6356513861712558012, guid: def7962f0e001484191b36da9d5a7413, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.0016
+      value: 0.04
       objectReference: {fileID: 0}
     - target: {fileID: 6356513861712558012, guid: def7962f0e001484191b36da9d5a7413, type: 3}
       propertyPath: m_LocalPosition.z
@@ -510,7 +510,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 4.53
-  movementSmoothTime: 0.2
 --- !u!212 &1191745224
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -741,11 +740,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6356513861712558012, guid: def7962f0e001484191b36da9d5a7413, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.2
+      value: 7.88
       objectReference: {fileID: 0}
     - target: {fileID: 6356513861712558012, guid: def7962f0e001484191b36da9d5a7413, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 6356513861712558012, guid: def7962f0e001484191b36da9d5a7413, type: 3}
       propertyPath: m_LocalPosition.z

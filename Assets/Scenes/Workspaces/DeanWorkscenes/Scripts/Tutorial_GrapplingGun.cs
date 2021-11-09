@@ -117,8 +117,6 @@ public class Tutorial_GrapplingGun : MonoBehaviour {
 
     IEnumerator WaitForDisable() {
         yield return new WaitForSeconds(0.25f);
-
-        Debug.Log("Disabling Rope");
         grappleRope.enabled = false;
 	}
     public void Grapple() {

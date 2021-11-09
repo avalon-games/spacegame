@@ -10,10 +10,6 @@ public class CharacterTopDown : MonoBehaviour
     float verticalDir;
     bool isBusy;
 
-    Vector3 m_Velocity = Vector3.zero;
-    [Range(0, .3f)] [SerializeField] float movementSmoothTime = .2f;
-
-
     void Start() {
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 0;
