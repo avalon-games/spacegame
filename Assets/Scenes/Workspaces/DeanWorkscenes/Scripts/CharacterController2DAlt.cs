@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CharacterController2DAlt : MonoBehaviour
 {
-    
     Rigidbody2D rb;
     Collider2D coll;
     SpriteRenderer sprite;
@@ -13,21 +12,32 @@ public class CharacterController2DAlt : MonoBehaviour
     //Animator animator;
     enum State {idle, running, jumping, falling, hurt}; //animation states, decides interactions
     State state;
-    [SerializeField] int playerSpeed = 5;
-    [SerializeField] float jumpForce = 300f;
-    [SerializeField] float airControl = 0.8f;
-    //[SerializeField] float hurtForce = 2f;
-    [SerializeField] float groundDetectRadius = 0.24f;
-    [Range(0, .3f)] [SerializeField] private float m_MovementSmoothing = .2f;
+
+    [Header("Horizontal:")]
+    float horizontalInput;
+    [Range(0, 20f)] [SerializeField] float initialMaxSpeed = 10;
+    float maxSpeedLeft;
+    float maxSpeedRight;
+    [Range(0, 10f)][SerializeField] float maxSpeedDelta = 4; //later on may want to make this dependent on force magnitude of wind
+    [Range(0, .3f)][SerializeField] float movementSmoothTime = .2f;
     Vector3 m_Velocity = Vector3.zero;
 
-    float horizontalInput;
+    [Header("Jump & Midair:")]
     bool jumpButton;
     bool isOnGround;
+    [Range(0, 3000f)][SerializeField] float jumpForce = 1000f;
+    [Range(-5, 0f)] [SerializeField] float earlyJumpReleaseYVelocity = -1f;
+    [Range(0, 1f)][SerializeField] float airControl = 0.8f;
+    //[SerializeField] float hurtForce = 2f;
+    [Range(0, .5f)][SerializeField] float groundDetectRadius = 0.24f;
+    [HideInInspector] public bool jumpReleaseActive = true;
 
     private bool movementAllowed = true;
 
     void Start() {
+        maxSpeedLeft = -initialMaxSpeed;
+        maxSpeedRight = initialMaxSpeed;
+
         sprite = GetComponent<SpriteRenderer>();
         state = State.idle;
         rb = GetComponent<Rigidbody2D>();
@@ -38,64 +48,70 @@ public class CharacterController2DAlt : MonoBehaviour
     }
 
     void Update() {
-
         if (!movementAllowed)
         {
             return;
         }
-
         horizontalInput = Input.GetAxisRaw("Horizontal");
-        if (Input.GetButtonDown("Jump")) jumpButton = true;
-        RaycastHit2D groundHit = Physics2D.Raycast(coll.bounds.center, Vector2.down, coll.bounds.extents.y + groundDetectRadius, groundLayer);
-        Debug.DrawRay(coll.bounds.center, Vector2.down * (coll.bounds.extents.y + groundDetectRadius)); 
-        isOnGround = groundHit.collider != null;
+        if (jumpButton == false && Input.GetButtonDown("Jump")) jumpButton = true;
+        if (jumpButton == true && Input.GetButtonUp("Jump")) jumpButton = false;
+        DetectGround();
 
-        AssignState();
-        //animator.SetInteger("state", (int)state);
+        //animations based on current state of player
+		    AssignState();
+		    //animator.SetInteger("state", (int)state);
+	}
 
-        
-    }
 
     void FixedUpdate() {
-
         if (!movementAllowed)
         {
             return;
         }
-
         MovePlayer();
     }
 
     void MovePlayer() {
-        Vector3 targetVelocity;
-        if(state != State.hurt) {
-            if (isOnGround) {
-                if (horizontalInput < 0)
-                    targetVelocity = new Vector2(-playerSpeed, rb.velocity.y);
-                else if (horizontalInput > 0)
-                    targetVelocity = new Vector2(playerSpeed, rb.velocity.y);
-                else
-                    targetVelocity = new Vector2(0, rb.velocity.y);
-                if (jumpButton) {
-                    rb.AddForce(new Vector2(0f, jumpForce));
-                    isOnGround = false;
-                    jumpButton = false;
-                }
-            }
-            else {
-                if (horizontalInput < 0)
-                    targetVelocity = new Vector2(-playerSpeed*airControl, rb.velocity.y);
-                else if (horizontalInput > 0)
-                    targetVelocity = new Vector2(playerSpeed*airControl, rb.velocity.y);
-                else
-                    targetVelocity = new Vector2(0, rb.velocity.y);
+        Vector2 targetVelocity = Vector2.zero;
+        if (state != State.hurt) {
+            if (horizontalInput < 0)
+                targetVelocity = new Vector2(maxSpeedLeft, rb.velocity.y);
+            else if (horizontalInput > 0)
+                targetVelocity = new Vector2(maxSpeedRight, rb.velocity.y);
+            else
+                targetVelocity = new Vector2(0, rb.velocity.y);
+            if (isOnGround && jumpButton) {
+                rb.AddForce(new Vector2(0f, jumpForce));
+                isOnGround = false;
             }
             if (horizontalInput < 0)
                 sprite.flipX = true;
             else if (horizontalInput > 0)
                 sprite.flipX = false;
+        }
+        //variable jump height
+        if (!jumpButton && rb.velocity.y > 0.5f && jumpReleaseActive) 
+            targetVelocity.y = earlyJumpReleaseYVelocity;
+        //smooths out player velocity change
+		if (isOnGround)
+            rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref m_Velocity, movementSmoothTime);
+        else
+            rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref m_Velocity, movementSmoothTime/airControl);
+    }
 
-            rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
+    void OnTriggerEnter2D(Collider2D collision) {
+        //change velocity when entering wind
+        if (collision.gameObject.CompareTag("Wind")) {
+            float angle = collision.gameObject.GetComponent<AreaEffector2D>().forceAngle;
+            maxSpeedLeft += Mathf.Cos(angle * Mathf.PI / 180) * maxSpeedDelta;
+            maxSpeedRight += Mathf.Cos(angle * Mathf.PI/ 180) * maxSpeedDelta;
+        }
+    }
+    void OnTriggerExit2D(Collider2D collision) {
+        //change velocity on exiting wind
+        if (collision.gameObject.CompareTag("Wind")) {
+            maxSpeedLeft = -initialMaxSpeed;
+            maxSpeedRight = initialMaxSpeed;
         }
     }
     void AssignState() {
@@ -111,6 +127,11 @@ public class CharacterController2DAlt : MonoBehaviour
             state = State.idle;
     }
 
+    private void DetectGround() {
+        RaycastHit2D groundHit = Physics2D.Raycast(coll.bounds.center, Vector2.down, coll.bounds.extents.y + groundDetectRadius, groundLayer);
+        Debug.DrawRay(coll.bounds.center, Vector2.down * (coll.bounds.extents.y + groundDetectRadius));
+        isOnGround = groundHit.collider != null;
+    }
     public void EnableMovement(bool _movementAllowed)
     {
         movementAllowed = _movementAllowed;

@@ -128,8 +128,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grappleRope: {fileID: 5517557312371972271}
-  grappleToAll: 1
-  grappableLayerNumber: 9
+  grappleLayer:
+    serializedVersion: 2
+    m_Bits: 320
   m_camera: {fileID: 0}
   gunHolder: {fileID: 5517557312321501834}
   gunPivot: {fileID: 5517557312189513985}
@@ -138,11 +139,10 @@ MonoBehaviour:
   m_rigidbody: {fileID: 5517557312321501836}
   rotateOverTime: 1
   rotationSpeed: 4
-  hasMaxDistance: 0
-  maxDistnace: 20
+  maxDistance: 20
   launchToPoint: 1
   launchType: 1
-  launchSpeed: 0.5
+  launchSpeed: 1.19
   autoConfigureDistance: 0
   targetDistance: 3
   targetFrequncy: 1
@@ -193,6 +193,7 @@ GameObject:
   - component: {fileID: 5517557312321501839}
   - component: {fileID: 5517557312321501835}
   - component: {fileID: 5517557312321501838}
+  - component: {fileID: 816248699}
   m_Layer: 0
   m_Name: TestPlayer
   m_TagString: Untagged
@@ -282,7 +283,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 2
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 12ceda23b929843738467fd034826584, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
@@ -304,7 +305,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 1.919966
+  m_Distance: 10.522615
   m_DampingRatio: 1
   m_Frequency: 1
 --- !u!114 &5517557312321501835
@@ -319,11 +320,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d102006db89a493eaa9db1dd4daa9c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSpeed: 10
+  initialMaxSpeed: 10
+  maxSpeedDelta: 4
+  movementSmoothTime: 0.2
   jumpForce: 1000
-  airControl: 0.8
+  earlyJumpReleaseYVelocity: -1.83
+  airControl: 0.5
   groundDetectRadius: 0.24
-  m_MovementSmoothing: 0.2
+  jumpReleaseActive: 1
 --- !u!70 &5517557312321501838
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -340,6 +344,19 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 1}
   m_Direction: 0
+--- !u!114 &816248699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5517557312321501937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f398e9851184c3b9740df6a6dc83cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grappleGun: {fileID: 5517557312222636844}
 --- !u!1 &5517557312371972241
 GameObject:
   m_ObjectHideFlags: 0
@@ -414,7 +431,6 @@ LineRenderer:
   m_SortingOrder: -10
   m_Positions:
   - {x: 80.31105, y: -2.6812499, z: 0}
-  - {x: 82.15288, y: -3.51516, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.25
@@ -508,8 +524,8 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.5225361
-      value: -0.15573755
+      time: 0.35420114
+      value: -0.37219873
       inSlope: 0.15860209
       outSlope: 0.15860209
       tangentMode: 0
@@ -517,8 +533,8 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.76547605
-      value: 0.57800037
+      time: 0.6391333
+      value: 0.8207181
       inSlope: 0.56193966
       outSlope: 0.56193966
       tangentMode: 0
@@ -537,7 +553,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  StartWaveSize: 2
+  StartWaveSize: 0.56
   ropeProgressionCurve:
     serializedVersion: 2
     m_Curve:
@@ -562,5 +578,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  ropeProgressionSpeed: 1
+  ropeProgressionSpeed: 35.3
   isGrappling: 1
+  hasValidPoint: 0
