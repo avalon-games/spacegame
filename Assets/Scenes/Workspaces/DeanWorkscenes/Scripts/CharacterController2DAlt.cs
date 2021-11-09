@@ -32,6 +32,8 @@ public class CharacterController2DAlt : MonoBehaviour
     [Range(0, .5f)][SerializeField] float groundDetectRadius = 0.24f;
     [HideInInspector] public bool jumpReleaseActive = true;
 
+    private bool movementAllowed = true;
+
     void Start() {
         maxSpeedLeft = -initialMaxSpeed;
         maxSpeedRight = initialMaxSpeed;
@@ -46,17 +48,26 @@ public class CharacterController2DAlt : MonoBehaviour
     }
 
     void Update() {
-		horizontalInput = Input.GetAxisRaw("Horizontal");
-		if (jumpButton == false && Input.GetButtonDown("Jump")) jumpButton = true;
-		if (jumpButton == true && Input.GetButtonUp("Jump")) jumpButton = false;
-		DetectGround();
+        if (!movementAllowed)
+        {
+            return;
+        }
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        if (jumpButton == false && Input.GetButtonDown("Jump")) jumpButton = true;
+        if (jumpButton == true && Input.GetButtonUp("Jump")) jumpButton = false;
+        DetectGround();
 
         //animations based on current state of player
-		AssignState();
-		//animator.SetInteger("state", (int)state);
+		    AssignState();
+		    //animator.SetInteger("state", (int)state);
 	}
 
-	void FixedUpdate() {
+
+    void FixedUpdate() {
+        if (!movementAllowed)
+        {
+            return;
+        }
         MovePlayer();
     }
 
@@ -115,9 +126,14 @@ public class CharacterController2DAlt : MonoBehaviour
         else
             state = State.idle;
     }
+
     private void DetectGround() {
         RaycastHit2D groundHit = Physics2D.Raycast(coll.bounds.center, Vector2.down, coll.bounds.extents.y + groundDetectRadius, groundLayer);
         Debug.DrawRay(coll.bounds.center, Vector2.down * (coll.bounds.extents.y + groundDetectRadius));
         isOnGround = groundHit.collider != null;
+    }
+    public void EnableMovement(bool _movementAllowed)
+    {
+        movementAllowed = _movementAllowed;
     }
 }
