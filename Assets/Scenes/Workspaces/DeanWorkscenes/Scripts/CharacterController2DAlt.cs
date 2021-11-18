@@ -32,6 +32,9 @@ public class CharacterController2DAlt : MonoBehaviour
     [Range(0, .5f)][SerializeField] float groundDetectRadius = 0.24f;
     [HideInInspector] public bool jumpReleaseActive = true;
 
+    bool isInQuicksand;
+    LayerMask sandLayer;
+
     private bool movementAllowed = true;
 
     void Start() {
@@ -44,6 +47,7 @@ public class CharacterController2DAlt : MonoBehaviour
         //animator = GetComponent<Animator>();
         coll = GetComponent<CapsuleCollider2D>();
         groundLayer = LayerMask.GetMask("Ground");
+        sandLayer = LayerMask.GetMask("Sand");
         //enemyLayer = LayerMask.GetMask("Enemy");
     }
 
@@ -56,6 +60,7 @@ public class CharacterController2DAlt : MonoBehaviour
         if (jumpButton == false && Input.GetButtonDown("Jump")) jumpButton = true;
         if (jumpButton == true && Input.GetButtonUp("Jump")) jumpButton = false;
         DetectGround();
+        DetectQuicksand();
 
         //animations based on current state of player
 		    AssignState();
@@ -80,10 +85,16 @@ public class CharacterController2DAlt : MonoBehaviour
                 targetVelocity = new Vector2(maxSpeedRight, rb.velocity.y);
             else
                 targetVelocity = new Vector2(0, rb.velocity.y);
-            if (isOnGround && jumpButton) {
+            if (isInQuicksand) {
+                rb.velocity = Vector2.zero;
+                if (jumpButton)
+                    rb.AddForce(new Vector2(0f, jumpForce * 0.1f));
+            }
+            else if (isOnGround && jumpButton) {
                 rb.AddForce(new Vector2(0f, jumpForce));
                 isOnGround = false;
             }
+
             if (horizontalInput < 0)
                 sprite.flipX = true;
             else if (horizontalInput > 0)
@@ -131,6 +142,10 @@ public class CharacterController2DAlt : MonoBehaviour
         RaycastHit2D groundHit = Physics2D.Raycast(coll.bounds.center, Vector2.down, coll.bounds.extents.y + groundDetectRadius, groundLayer);
         Debug.DrawRay(coll.bounds.center, Vector2.down * (coll.bounds.extents.y + groundDetectRadius));
         isOnGround = groundHit.collider != null;
+    }
+    private void DetectQuicksand() {
+        RaycastHit2D sandHit = Physics2D.Raycast(coll.bounds.center, Vector2.down, coll.bounds.extents.y + groundDetectRadius, sandLayer);
+        isInQuicksand = sandHit.collider != null;
     }
     public void EnableMovement(bool _movementAllowed)
     {
