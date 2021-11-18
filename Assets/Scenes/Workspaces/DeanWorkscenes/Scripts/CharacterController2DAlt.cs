@@ -117,6 +117,9 @@ public class CharacterController2DAlt : MonoBehaviour
             maxSpeedLeft += Mathf.Cos(angle * Mathf.PI / 180) * maxSpeedDelta;
             maxSpeedRight += Mathf.Cos(angle * Mathf.PI/ 180) * maxSpeedDelta;
         }
+        //if (collision.gameObject.CompareTag("Hurtful")) {
+        //    //decrease health
+        //}
     }
     void OnTriggerExit2D(Collider2D collision) {
         //change velocity on exiting wind
@@ -125,7 +128,14 @@ public class CharacterController2DAlt : MonoBehaviour
             maxSpeedRight = initialMaxSpeed;
         }
     }
-    void AssignState() {
+
+	private void OnCollisionEnter2D(Collision2D collision) {
+		if (collision.gameObject.CompareTag("Destructible Block")) {
+            DestructibleBlock db = collision.gameObject.GetComponent<DestructibleBlock>();
+			db.DestroyBlock();
+		}
+	}
+	void AssignState() {
         //if (hurt)
         //    state = State.hurt;
         if (rb.velocity.y > 0)
