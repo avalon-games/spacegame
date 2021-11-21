@@ -5,9 +5,14 @@ using UnityEngine.UI;
 
 public class HeartBar : MonoBehaviour
 {
-    public int numberOfHearts;
+    [SerializeField] private static int numberOfHearts = 8;
     public Image[] hearts;
-    public Sprite fullHeart;
+    private Sprite fullHeart;
+
+    public void Start()
+    {
+        Debug.Log(numberOfHearts);
+    }
 
     public void setMaxHearts() {
         setHearts(hearts.Length);
@@ -21,7 +26,7 @@ public class HeartBar : MonoBehaviour
         setHearts(numberOfHearts + 1);
     }
 
-    public void setHearts(int num) {
+    private void setHearts(int num) {
         numberOfHearts = num;
         for (int i = 0; i < hearts.Length; i++) {
             if (i < numberOfHearts) {
@@ -30,6 +35,11 @@ public class HeartBar : MonoBehaviour
                 hearts[i].enabled = false;
             }
         }    
+    }
+
+    public int getHealth()
+    {
+        return numberOfHearts;
     }
 
 }

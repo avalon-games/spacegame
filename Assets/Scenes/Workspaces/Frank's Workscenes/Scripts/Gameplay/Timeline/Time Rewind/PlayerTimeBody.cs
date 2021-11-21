@@ -19,5 +19,6 @@ public class PlayerTimeBody : TimeBody
     protected override void OnTimeLoopEnd()
     {
         GetComponent<CharacterController2DAlt>().EnableMovement(true);
+        rb.isKinematic = false;
     }
 }
