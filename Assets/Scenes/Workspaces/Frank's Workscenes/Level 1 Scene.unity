@@ -274,6 +274,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2064476977, guid: 96b8a1da3996d384991ecdaab9ad6f4e, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 2064476979}
     - target: {fileID: 789076002646442218, guid: 96b8a1da3996d384991ecdaab9ad6f4e, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -463,65 +467,8 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2064476976 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 789076003421872087, guid: 96b8a1da3996d384991ecdaab9ad6f4e, type: 3}
+--- !u!95 &2064476979 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 789076002646442218, guid: 96b8a1da3996d384991ecdaab9ad6f4e, type: 3}
   m_PrefabInstance: {fileID: 1292365788}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2064476977
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2064476976}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d102006db89a493eaa9db1dd4daa9c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  initialMaxSpeed: 10
-  maxSpeedDelta: 4
-  movementSmoothTime: 0.2
-  jumpForce: 400
-  earlyJumpReleaseYVelocity: -1
-  airControl: 0.8
-  groundDetectRadius: 0.24
-  jumpReleaseActive: 1
---- !u!50 &2064476978
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2064476976}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
---- !u!70 &2064476982
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2064476976}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.010283333, y: 0.5758499}
-  m_Size: {x: 2.9152007, y: 6.201662}
-  m_Direction: 0
