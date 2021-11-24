@@ -13,6 +13,9 @@ public class CharacterController2DAlt : MonoBehaviour
     enum State {idle, running, jumping, falling, hurt}; //animation states, decides interactions
     State state;
 
+    [Header("Animation")]
+    [SerializeField] Animator animator;
+
     [Header("Horizontal:")]
     float horizontalInput;
     [Range(0, 20f)] [SerializeField] float initialMaxSpeed = 10;
@@ -90,7 +93,9 @@ public class CharacterController2DAlt : MonoBehaviour
                 if (jumpButton)
                     rb.AddForce(new Vector2(0f, jumpForce * 0.1f));
             }
-            else if (isOnGround && jumpButton) {
+            else if (isOnGround && jumpButton)
+            {
+                animator.Play("Jump");
                 rb.AddForce(new Vector2(0f, jumpForce));
                 isOnGround = false;
             }
