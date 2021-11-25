@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneChanger : MonoBehaviour
+/**
+ * Manages transition between scenes
+ */
+public static class SceneChanger
 {
 
-    void GoToSpaceship() {
+    public static void GoToSpaceship() {
         SceneManager.LoadScene("Spaceship");
     }
 
-    void GoToLevel(string target) {
+    public static void GoToLevel(int target) {
         SceneManager.LoadScene(target);
     }
 }

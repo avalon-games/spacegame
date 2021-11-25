@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Workspaces/DeanWorkscenes/Dean_SpriteTest.unity
     guid: c2897cb994d7f1547a22cb8d81d9d30e
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/Scenes/Desert_L1.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
     path: Assets/Scenes/Workspaces/Frank's Workscenes/TestScene.unity
@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Workspaces/Frank's Workscenes/Level 1 Scene.unity
     guid: b592425a7fb8bf84d9282a958ad9dd8f
+  - enabled: 1
+    path: Assets/Scenes/Spaceship.unity
+    guid: c70e8a48ecce54dbf802211e91415400
   m_configObjects: {}
