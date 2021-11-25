@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterTopDown : MonoBehaviour
+public class PlayerTopDown : MonoBehaviour
 {
     [Range(0, 5)][SerializeField] float speed;
     Rigidbody2D rb;

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Hazard : MonoBehaviour
 {
-    private static bool healthLockFree;
+    private static bool healthLockFree; //allows current player health to decriment
     private static int count = 0;
     private int id;
 
@@ -19,6 +19,7 @@ public class Hazard : MonoBehaviour
         if (collision.gameObject.tag == "Player" && healthLockFree)
         {
             healthLockFree = false;
+            Debug.Log("reducing health - hazard script");
             collision.gameObject.GetComponent<PlayerManager>().LoseHeart();
         }
     }
