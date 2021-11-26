@@ -4,6 +4,7 @@ using UnityEngine;
 
 /**
  * A class of game objects that breaks when the player steps on it
+ * requires boxcollider and sprite
  */
 public class Breakable : MonoBehaviour
 {

@@ -8,6 +8,9 @@ using UnityEngine.SceneManagement;
  */
 public static class SceneChanger
 {
+    public static void GoToMainMenu() {
+        SceneManager.LoadScene("TitleScene");
+    }
 
     public static void GoToSpaceship() {
         SceneManager.LoadScene("Spaceship");

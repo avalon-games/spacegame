@@ -6,14 +6,18 @@ using UnityEngine.UI;
 /**
  * This class acts as the middleman between the onscreen UI and the player data
  * It updates the Onscreen UI based on current values in playerdata
+ * - manages all player ui elements - hp,oxygen,map,objectives,journal etc.
  * This script should be attached to the UI canvas
  * - it should implement functions that control what is displayed on the UI
  * - to setup, health images and oxygen slider need to be tagged "Heart" and "Oxygen"
+ * - also manages oxygen depletion
+ * - this script should only be instantiated where the player is present
  */
 public class PlayerUI : MonoBehaviour
 {
     Image[] healthUI;
     Slider oxygenUI;
+    [Range(0,10)] public int oxygenDepletionRate; //how much the oxygen depletes each second
 
     void Start()
     {
@@ -22,6 +26,8 @@ public class PlayerUI : MonoBehaviour
 
         UpdateHealth();
         UpdateOxygen();
+
+        StartCoroutine(DecreaseOxygen());
         //Debug.Log(healthUI.Length);
     }
 	private void Update() {
@@ -30,6 +36,7 @@ public class PlayerUI : MonoBehaviour
         //    PlayerData.currHealth -= 1;
         //    UpdateHealth();
         //}
+        UpdateOxygen();
 	}
 
 	/**
@@ -53,6 +60,17 @@ public class PlayerUI : MonoBehaviour
         oxygenUI.value = PlayerData.currOxygen;
 	}
 
+    /**
+     * Depletes the oxygen by a certain amount every second
+     */
+    IEnumerator DecreaseOxygen() {
+        while (PlayerData.currOxygen > 0) {
+            yield return new WaitForSeconds(1);
+            PlayerData.currOxygen -= oxygenDepletionRate;
+        }
+        SceneChanger.GoToSpaceship();
+
+    }
 
 }
 //add reset playerdata,access playerdata and rendering it on UI

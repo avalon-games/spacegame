@@ -6,8 +6,8 @@ public static class PlayerData
 {
 	public static int maxHealth { get; set; }
 	public static int currHealth { get; set; }
-	public static float maxOxygen { get; set; }
-	public static float currOxygen { get; set; }
+	public static int maxOxygen { get; set; }
+	public static int currOxygen { get; set; }
 	public static int currUnlockedLevel { get; set; }
 	public static int currLevel { get; set; }
 

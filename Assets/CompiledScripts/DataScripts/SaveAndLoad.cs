@@ -22,9 +22,9 @@ public class SaveAndLoad : MonoBehaviour
 	public void LoadGame() {
 		if (PlayerPrefs.HasKey("MaxHealth")) {
 			PlayerData.maxHealth = PlayerPrefs.GetInt("MaxHealth");
-			PlayerData.maxOxygen = PlayerPrefs.GetFloat("MaxOxygen");
+			PlayerData.maxOxygen = PlayerPrefs.GetInt("MaxOxygen");
 			PlayerData.currHealth = PlayerPrefs.GetInt("CurrHealth");
-			PlayerData.currOxygen = PlayerPrefs.GetFloat("CurrOxygen");
+			PlayerData.currOxygen = PlayerPrefs.GetInt("CurrOxygen");
 			PlayerData.currUnlockedLevel = PlayerPrefs.GetInt("CurrUnlockedLevel");
 			PlayerData.currLevel = PlayerPrefs.GetInt("CurrLevel");
 
@@ -42,9 +42,9 @@ public class SaveAndLoad : MonoBehaviour
 	 */
 	public void SaveGame() {
 		PlayerPrefs.SetInt("MaxHealth", PlayerData.maxHealth);
-		PlayerPrefs.SetFloat("MaxOxygen", PlayerData.maxOxygen);
+		PlayerPrefs.SetInt("MaxOxygen", PlayerData.maxOxygen);
 		PlayerPrefs.SetInt("CurrHealth", PlayerData.currHealth);
-		PlayerPrefs.SetFloat("CurrOxygen", PlayerData.currOxygen);
+		PlayerPrefs.SetInt("CurrOxygen", PlayerData.currOxygen);
 		PlayerPrefs.SetInt("CurrUnlockedLevel", PlayerData.currUnlockedLevel);
 		PlayerPrefs.SetInt("CurrLevel", PlayerData.currLevel);
 	}
@@ -54,7 +54,7 @@ public class SaveAndLoad : MonoBehaviour
 	 */
 	public void NewGame() {
 		PlayerData.maxHealth = 5;
-		PlayerData.maxOxygen = 100f;
+		PlayerData.maxOxygen = 100;
 		PlayerData.currHealth = PlayerData.maxHealth;
 		PlayerData.currOxygen = PlayerData.maxOxygen;
 		PlayerData.currUnlockedLevel = 1;

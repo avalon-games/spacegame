@@ -10,6 +10,7 @@ TagManager:
   - Heart
   - UI
   - Oxygen
+  - PauseMenu
   layers:
   - Default
   - TransparentFX

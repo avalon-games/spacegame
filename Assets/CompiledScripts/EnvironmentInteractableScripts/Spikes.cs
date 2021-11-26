@@ -14,7 +14,7 @@ public class Spikes : DamagingHazards
 		if(collision.gameObject.CompareTag("Player")) {
 			Rigidbody2D rb = collision.gameObject.GetComponent<Rigidbody2D>();
 			//knock the player back in the opposite direction
-		    rb.AddForce(new Vector2(collision.transform.position.x - transform.position.x, 0f).normalized * hurtForce);
+		    //rb.AddForce(new Vector2(collision.transform.position.x - transform.position.x, 0f).normalized * hurtForce);
 			DealDamage();
 		}
 	}
