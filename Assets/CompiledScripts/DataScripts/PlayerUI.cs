@@ -10,7 +10,7 @@ using UnityEngine.UI;
  * This script should be attached to the UI canvas
  * - it should implement functions that control what is displayed on the UI
  * - to setup, health images and oxygen slider need to be tagged "Heart" and "Oxygen"
- * - also manages oxygen depletion
+ * - also manages oxygen depletion and instantiates volume preferences on scene switch
  * - this script should only be instantiated where the player is present
  */
 public class PlayerUI : MonoBehaviour
@@ -19,11 +19,14 @@ public class PlayerUI : MonoBehaviour
     Slider oxygenUI;
     [Range(0,10)] public int oxygenDepletionRate; //how much the oxygen depletes each second
 
+    public Slider volume;
+
     void Start()
     {
         healthUI = this.gameObject.FindComponentsInChildrenWithTag<Image>("Heart"); //make sure to tag the heart images
         oxygenUI = this.gameObject.FindComponentInChildWithTag<Slider>("Oxygen"); //make sure to tag the oxygen UI
 
+        volume.value = PlayerData.volume;
         UpdateHealth();
         UpdateOxygen();
 
@@ -31,11 +34,6 @@ public class PlayerUI : MonoBehaviour
         //Debug.Log(healthUI.Length);
     }
 	private void Update() {
-        ////DEBUGGING
-        //if (Input.GetKeyDown(KeyCode.G)) {
-        //    PlayerData.currHealth -= 1;
-        //    UpdateHealth();
-        //}
         UpdateOxygen();
 	}
 
@@ -73,7 +71,3 @@ public class PlayerUI : MonoBehaviour
     }
 
 }
-//add reset playerdata,access playerdata and rendering it on UI
-//commands the UI elements to change, acts as the middle man between PlayerData and onscreen UI elements
-//this script should be put in canvas so it can access all children UI elements
-//add functions for interactible ui - map, healthbar, pause menu,journal,objectives,optionsmenu, titlepage,save slot

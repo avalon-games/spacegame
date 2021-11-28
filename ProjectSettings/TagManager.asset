@@ -11,6 +11,8 @@ TagManager:
   - UI
   - Oxygen
   - PauseMenu
+  - Volume
+  - OptionsMenu
   layers:
   - Default
   - TransparentFX

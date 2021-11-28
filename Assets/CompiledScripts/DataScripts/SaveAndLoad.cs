@@ -5,22 +5,26 @@ using UnityEngine;
 /**
  * Savestate saves the state of the player and loads the appropriate values of 
  * health,oxygen,level progress into PlayerData
+ * - attaches to a SaveAndLoad game object
  * - handles saving data to file
  * - saving data between scenes is currently handled by PlayerData
  * - make sure the files level is indexed 0 in build settings
  */
 public class SaveAndLoad : MonoBehaviour
 {
-
-
 	void Start() {
-		
+		//on entering a new scene, set the volume
+		if (PlayerPrefs.HasKey("Volume"))
+			PlayerData.volume = PlayerPrefs.GetFloat("Volume");
 	}
+
+
 	/**
 	* Loads the current savefile values into PlayerData
 	*/
 	public void LoadGame() {
 		if (PlayerPrefs.HasKey("MaxHealth")) {
+			Time.timeScale = 1;
 			PlayerData.maxHealth = PlayerPrefs.GetInt("MaxHealth");
 			PlayerData.maxOxygen = PlayerPrefs.GetInt("MaxOxygen");
 			PlayerData.currHealth = PlayerPrefs.GetInt("CurrHealth");
@@ -53,6 +57,7 @@ public class SaveAndLoad : MonoBehaviour
 	 * Starts a new game, resetting all PlayerData values
 	 */
 	public void NewGame() {
+		Time.timeScale = 1;
 		PlayerData.maxHealth = 5;
 		PlayerData.maxOxygen = 100;
 		PlayerData.currHealth = PlayerData.maxHealth;
@@ -69,7 +74,7 @@ public class SaveAndLoad : MonoBehaviour
 	 * Saves the volume, control, user options and preferences settings
 	 */
 	public void SavePreferences() {
-
+		PlayerPrefs.SetFloat("Volume", PlayerData.volume);
 	}
 }
 //controls saving the player state to save files and transfer between scenes
