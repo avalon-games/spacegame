@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 /**
  * A class of game objects that breaks when the player steps on it
@@ -9,11 +10,12 @@ using UnityEngine;
 public class Breakable : MonoBehaviour
 {
     Collider2D coll;
-    SpriteRenderer sprite;
+    TilemapRenderer tilemap;
 
     void Start() {
-        coll = GetComponent<BoxCollider2D>();
-        sprite = GetComponent<SpriteRenderer>();
+
+        coll = GetComponent<TilemapCollider2D>();
+        tilemap = GetComponent<TilemapRenderer>();
     }
 
     public void DestroyBlock() {
@@ -27,10 +29,10 @@ public class Breakable : MonoBehaviour
     IEnumerator DestroyAndWait() {
         yield return new WaitForSeconds(2f); //time to destroy
         coll.enabled = false;
-        sprite.enabled = false; //make transparent
+        tilemap.enabled = false; //make transparent
         yield return new WaitForSeconds(5f); //time to respawn
         coll.enabled = true;
-        sprite.enabled = true;
+        tilemap.enabled = true;
     }
     /**
      * OnCollisionEnter2D is called when colliding with a collider
@@ -38,7 +40,8 @@ public class Breakable : MonoBehaviour
      * - Detecting if player collides with a destructible block and breaks itself if true
      */
     private void OnCollisionEnter2D(Collision2D collision) {
-        if (collision.gameObject.CompareTag("Player") && collision.transform.position.y > this.transform.position.y) {
+        Debug.Log("Destroying block");
+        if (collision.gameObject.CompareTag("Player")) {
             this.DestroyBlock();
         }
     }
