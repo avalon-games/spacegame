@@ -7,6 +7,12 @@ TagManager:
   - Ground
   - Wind
   - Destructible Block
+  - Heart
+  - UI
+  - Oxygen
+  - PauseMenu
+  - Volume
+  - OptionsMenu
   layers:
   - Default
   - TransparentFX

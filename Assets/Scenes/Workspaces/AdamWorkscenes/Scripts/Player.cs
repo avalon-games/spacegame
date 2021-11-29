@@ -32,6 +32,7 @@ public class Player : MonoBehaviour
     public void updateHearts() {
         if (Input.GetKeyDown(KeyCode.A)) {
             if (currentHearts >= 1) {
+                Debug.Log("Decreasing health - player");
                 currentHearts = currentHearts - 1;
                 heartBar.removeHeart();
             }
