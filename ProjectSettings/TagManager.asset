@@ -47,7 +47,7 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Background
+  - name: Surface BG
     uniqueID: 4114359781
     locked: 0
   - name: Default
