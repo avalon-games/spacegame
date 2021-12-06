@@ -58,6 +58,7 @@ public class PlayerController : MonoBehaviour
         coll = GetComponent<CapsuleCollider2D>();
         groundLayer = LayerMask.GetMask("Ground");
         sandLayer = LayerMask.GetMask("Sand");
+        PlayerData.checkpoint = transform.position; //initial checkpoint is set to initial position
     }
 
     void Update() {
@@ -175,8 +176,8 @@ public class PlayerController : MonoBehaviour
      * Teleports the player to the last ground position that the player stood on
      * Used in: teleports player back to previous position on taking damage
      */
-    public void TeleportToLastSafeTile() {
-        transform.position = lastSafeTile;
+    public void TeleportToCheckpoint() {
+        transform.position = PlayerData.checkpoint;
         rb.velocity = Vector2.zero;
 	}
 }

@@ -13,7 +13,7 @@ using UnityEngine;
 public class SaveAndLoad : MonoBehaviour
 {
 	void Start() {
-		//on entering a new scene, set the volume
+		//on entering a new scene, set the audio volume
 		if (PlayerPrefs.HasKey("Volume"))
 			PlayerData.volume = PlayerPrefs.GetFloat("Volume");
 	}
@@ -65,7 +65,7 @@ public class SaveAndLoad : MonoBehaviour
 		PlayerData.currUnlockedLevel = 1;
 		PlayerData.currLevel = 0;
 
-		SceneChanger.GoToLevel(PlayerData.currLevel);
+		SceneChanger.GoToLevel(PlayerData.currLevel); //go to the first level
 
 		SaveGame();
 	}

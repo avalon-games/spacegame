@@ -8,7 +8,7 @@ using UnityEngine;
  */
 public class FallingSpikes : Spikes
 {
-    [Range (0,100)][SerializeField] float detectionRange = 20f;
+    [Range (0,20)][SerializeField] float detectionRange = 20f;
     Rigidbody2D rb;
     // Start is called before the first frame update
     new void Start()

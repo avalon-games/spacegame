@@ -15,8 +15,14 @@ public class UIMenus : MonoBehaviour {
 
     public AudioMixer mixer; //make sure to drag it in
 
+    public PlayerUI playerUI;
+
 
     void Start() {
+        //for testing only
+        PlayerData.maxOxygen = 100; 
+        PlayerData.currOxygen = PlayerData.maxOxygen;
+        //////////////
         pauseMenu.SetActive(false);
         optionsMenu.SetActive(false);
     }
@@ -80,5 +86,17 @@ public class UIMenus : MonoBehaviour {
         PlayerData.volume = volume;
         mixer.SetFloat("MasterVol", Mathf.Log10(volume)*20);
 	}
+
+    /**
+     * For testing only, so player doesn't die
+     */
+    public void FreeHeal() {
+        PlayerData.maxHealth = 5;
+        PlayerData.maxOxygen = 100;
+        PlayerData.currHealth = PlayerData.maxHealth;
+        PlayerData.currOxygen = PlayerData.maxOxygen;
+        playerUI.UpdateHealth();
+        playerUI.UpdateOxygen();
+    }
 }
 

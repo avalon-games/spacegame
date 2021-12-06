@@ -10,12 +10,12 @@ using UnityEngine.Tilemaps;
 public class Breakable : MonoBehaviour
 {
     Collider2D coll;
-    TilemapRenderer tilemap;
+    SpriteRenderer sprite;
 
     void Start() {
 
-        coll = GetComponent<TilemapCollider2D>();
-        tilemap = GetComponent<TilemapRenderer>();
+        coll = GetComponent<BoxCollider2D>();
+        sprite = GetComponent<SpriteRenderer>();
     }
 
     public void DestroyBlock() {
@@ -27,12 +27,12 @@ public class Breakable : MonoBehaviour
      * then respawn the block after a few seconds
      */
     IEnumerator DestroyAndWait() {
-        yield return new WaitForSeconds(2f); //time to destroy
+        yield return new WaitForSeconds(2f); //time until destroy
         coll.enabled = false;
-        tilemap.enabled = false; //make transparent
-        yield return new WaitForSeconds(5f); //time to respawn
+        sprite.color = new Color(1,1,1,0.2f); //make transparent
+        yield return new WaitForSeconds(5f); //time until respawn
         coll.enabled = true;
-        tilemap.enabled = true;
+        sprite.color = new Color(1, 1, 1, 1); 
     }
     /**
      * OnCollisionEnter2D is called when colliding with a collider

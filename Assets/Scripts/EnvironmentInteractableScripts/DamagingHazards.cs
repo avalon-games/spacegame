@@ -24,9 +24,10 @@ public class DamagingHazards : MonoBehaviour
 	public void DealDamage() {
 		PlayerData.currHealth -= 1;
 		ui.UpdateHealth();
-		if (PlayerData.currHealth > 0)
-			player.TeleportToLastSafeTile();
-		else
+		if (PlayerData.currHealth > 0) { 
+			Debug.Log("teleporting");
+			player.TeleportToCheckpoint();
+		} else
 			SceneChanger.GoToSpaceship();
 	}
 }
