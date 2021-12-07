@@ -24,6 +24,7 @@ public class SaveAndLoad : MonoBehaviour
 	*/
 	public void LoadGame() {
 		if (PlayerPrefs.HasKey("MaxHealth")) {
+			PlayerData.invulnerable = false;
 			Time.timeScale = 1;
 			PlayerData.maxHealth = PlayerPrefs.GetInt("MaxHealth");
 			PlayerData.maxOxygen = PlayerPrefs.GetInt("MaxOxygen");
@@ -57,6 +58,7 @@ public class SaveAndLoad : MonoBehaviour
 	 * Starts a new game, resetting all PlayerData values
 	 */
 	public void NewGame() {
+		PlayerData.invulnerable = false;
 		Time.timeScale = 1;
 		PlayerData.maxHealth = 5;
 		PlayerData.maxOxygen = 100;

@@ -13,7 +13,7 @@ public class Spikes : DamagingHazards
 		base.Start();
 	}
 
-	private void OnTriggerEnter2D(Collider2D collision) {
+	private void OnTriggerStay2D(Collider2D collision) {
 		if(collision.gameObject.CompareTag("Player")) {
 			Rigidbody2D rb = collision.gameObject.GetComponent<Rigidbody2D>();
 			DealDamage();

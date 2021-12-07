@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D rb;
     Collider2D coll;
     SpriteRenderer sprite;
-    enum State { idle, running, jumping, falling, hurt }; //animation states, decides interactions
+    enum State { idle, running, jumping, falling, pushing, hurt }; //animation states, decides interactions
     State state;
 
     [Header("Animation")]
@@ -35,7 +35,9 @@ public class PlayerController : MonoBehaviour
     bool jumpButton;
     bool isOnGround;
     bool isInQuicksand;
-    [Range(0, 3000f)] [SerializeField] float jumpForce = 1000f;
+    [Range(0, 30f)] [SerializeField] float jumpHeight = 10f;
+    [Range(0, 10f)] [SerializeField] float horizontalAtMaxHeight = 3f;
+
     [Range(-5, 0f)] [SerializeField] float earlyJumpReleaseYVelocity = -1f;
     [Range(0, 1f)] [SerializeField] float airControl = 0.8f;
     //[SerializeField] float hurtForce = 2f;
@@ -59,6 +61,7 @@ public class PlayerController : MonoBehaviour
         groundLayer = LayerMask.GetMask("Ground");
         sandLayer = LayerMask.GetMask("Sand");
         PlayerData.checkpoint = transform.position; //initial checkpoint is set to initial position
+
     }
 
     void Update() {
@@ -71,7 +74,12 @@ public class PlayerController : MonoBehaviour
         DetectBottomSurface();
 
         AssignState();
-        //animator.SetInteger("state", (int)state);
+        animator.SetInteger("state", (int)state);
+
+        if (PlayerData.invulnerable)
+            sprite.color = new Color(1, 1, 1, 0.5f);
+        else
+            sprite.color = new Color(1, 1, 1, 1);
 
         /////////////Debugging
         //if (Input.GetKeyDown(KeyCode.R))
@@ -92,6 +100,9 @@ public class PlayerController : MonoBehaviour
      */
     void MovePlayer() {
 		Vector2 targetVelocity = Vector2.zero;
+        //v_0=2hv_x/x_h ----------   v_0= (h - 0.5gt_h^2) / t_h
+        float timeToMaxHeight = Mathf.Sqrt(2f*jumpHeight/(rb.gravityScale*9.81f));
+        float jumpInitialVelocity = (jumpHeight + 1f + 0.5f*rb.gravityScale*9.81f*timeToMaxHeight*timeToMaxHeight)/timeToMaxHeight;
 		if (state != State.hurt) {
 			if (horizontalInput < 0)
 				targetVelocity = new Vector2(maxSpeedLeft, rb.velocity.y);
@@ -100,12 +111,12 @@ public class PlayerController : MonoBehaviour
 			else
 				targetVelocity = new Vector2(0, rb.velocity.y);
 			if (isInQuicksand) {
-				rb.velocity = Vector2.zero;
-				if (jumpButton)
-					rb.AddForce(new Vector2(0f, jumpForce * 0.1f));
+                targetVelocity = Vector2.zero;
+                if (jumpButton)
+                    rb.velocity = new Vector2(rb.velocity.x, 0.1f);
 			} else if (isOnGround && jumpButton) {
 				animator.Play("Jump");
-				rb.AddForce(new Vector2(0f, jumpForce));
+				rb.velocity = new Vector2(rb.velocity.x, jumpInitialVelocity);
 				isOnGround = false;
 			}
 
@@ -146,12 +157,14 @@ public class PlayerController : MonoBehaviour
     }
 
     /**
-     * Drawing Gizmos in edit mode to display the raycast for detecting ground
+     * Drawing Gizmos in edit mode to display the raycast for detecting ground and jump height
      */
     [ExecuteInEditMode]
     private void OnDrawGizmos() {
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, new Vector2(transform.position.x,transform.position.y - groundDetectRadius));
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawLine(transform.position, new Vector2(transform.position.x, transform.position.y + jumpHeight));
     }
     #endregion
 
@@ -162,11 +175,11 @@ public class PlayerController : MonoBehaviour
     void AssignState() {
         //if (hurt)
         //    state = State.hurt;
-        if (rb.velocity.y > 0)
+        if (rb.velocity.y > 0.5f)
             state = State.jumping;
-        else if (rb.velocity.y < 0)
+        else if (rb.velocity.y < -0.5f)
             state = State.falling;
-        else if (Mathf.Abs(horizontalInput) > 0)
+        else if (Mathf.Abs(horizontalInput) > 0.5f)
             state = State.running;
         else
             state = State.idle;

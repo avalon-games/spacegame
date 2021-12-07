@@ -40,7 +40,6 @@ public class Breakable : MonoBehaviour
      * - Detecting if player collides with a destructible block and breaks itself if true
      */
     private void OnCollisionEnter2D(Collision2D collision) {
-        Debug.Log("Destroying block");
         if (collision.gameObject.CompareTag("Player")) {
             this.DestroyBlock();
         }
