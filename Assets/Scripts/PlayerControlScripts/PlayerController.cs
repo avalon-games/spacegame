@@ -46,8 +46,9 @@ public class PlayerController : MonoBehaviour
     LayerMask groundLayer;
     LayerMask sandLayer;
 
-    //in-scene teleportation
-    Vector2 lastSafeTile;
+    //scene interactions
+    [HideInInspector] public bool invulnerable;
+    [Range(0f, 5f)] [SerializeField] float invincibilityDuration = 3f;
 
     void Start() {
         maxSpeedLeft = -initialMaxSpeed;
@@ -76,7 +77,7 @@ public class PlayerController : MonoBehaviour
         AssignState();
         animator.SetInteger("state", (int)state);
 
-        if (PlayerData.invulnerable)
+        if (invulnerable)
             sprite.color = new Color(1, 1, 1, 0.5f);
         else
             sprite.color = new Color(1, 1, 1, 1);
@@ -111,9 +112,9 @@ public class PlayerController : MonoBehaviour
 			else
 				targetVelocity = new Vector2(0, rb.velocity.y);
 			if (isInQuicksand) {
-                targetVelocity = Vector2.zero;
+                rb.velocity = Vector2.zero;
                 if (jumpButton)
-                    rb.velocity = new Vector2(rb.velocity.x, 0.1f);
+                    rb.velocity = new Vector2(0f, jumpInitialVelocity/10);
 			} else if (isOnGround && jumpButton) {
 				animator.Play("Jump");
 				rb.velocity = new Vector2(rb.velocity.x, jumpInitialVelocity);
@@ -149,10 +150,9 @@ public class PlayerController : MonoBehaviour
 		RaycastHit2D groundHit = Physics2D.Raycast(coll.bounds.center, Vector2.down, groundDetectRadius, groundLayer);
 
 		isOnGround = groundHit.collider != null;
-        lastSafeTile = new Vector2(groundHit.point.x, groundHit.point.y);
 
         //detects standing on quicksand
-        RaycastHit2D sandHit = Physics2D.Raycast(coll.bounds.center, Vector2.down, coll.bounds.extents.y + groundDetectRadius, sandLayer);
+        RaycastHit2D sandHit = Physics2D.Raycast(coll.bounds.center, Vector2.down, groundDetectRadius, sandLayer);
         isInQuicksand = sandHit.collider != null;
     }
 
@@ -193,4 +193,10 @@ public class PlayerController : MonoBehaviour
         transform.position = PlayerData.checkpoint;
         rb.velocity = Vector2.zero;
 	}
+
+    public IEnumerator InvincibilityFrames() {
+        invulnerable = true;
+        yield return new WaitForSeconds(invincibilityDuration);
+        invulnerable = false;
+    }
 }

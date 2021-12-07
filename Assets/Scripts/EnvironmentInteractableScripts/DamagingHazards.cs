@@ -22,8 +22,8 @@ public class DamagingHazards : MonoBehaviour
 	 * Causes player to take damage, reducing current hp and causing player to teleport to the last safe tile
 	 */
 	public void DealDamage() {
-		if (!PlayerData.invulnerable) {
-			StartCoroutine(InvincibilityFrames());
+		if (!player.invulnerable) {
+			StartCoroutine(player.InvincibilityFrames());
 			PlayerData.currHealth -= 1;
 			ui.UpdateHealth();
 			if (PlayerData.currHealth > 0) { 
@@ -31,11 +31,5 @@ public class DamagingHazards : MonoBehaviour
 			} else
 				SceneChanger.GoToSpaceship();
 		}
-	}
-
-	IEnumerator InvincibilityFrames() {
-		PlayerData.invulnerable = true;
-		yield return new WaitForSeconds(3);
-		PlayerData.invulnerable = false;
 	}
 }
