@@ -38974,7 +38974,7 @@ MonoBehaviour:
       - m_Target: {fileID: 3618998601109628377, guid: 23bd392c60b83440fa408c9e551d9eab, type: 3}
         m_TargetAssemblyTypeName: SaveAndLoad, Assembly-CSharp
         m_MethodName: SaveGame
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -40613,7 +40613,7 @@ MonoBehaviour:
       - m_Target: {fileID: 3618998601109628377, guid: 23bd392c60b83440fa408c9e551d9eab, type: 3}
         m_TargetAssemblyTypeName: SaveAndLoad, Assembly-CSharp
         m_MethodName: LoadGame
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -46482,7 +46482,6 @@ MonoBehaviour:
   maxSpeedRight: 0
   movementSmoothTime: 0.2
   jumpHeight: 3
-  horizontalAtMaxHeight: 3.3
   earlyJumpReleaseYVelocity: -1
   airControl: 0.8
   groundDetectRadius: 1.08

@@ -11,7 +11,7 @@ public static class PlayerData
 	public static int currOxygen { get; set; }
 	public static int currUnlockedLevel { get; set; }
 	public static int currLevel { get; set; }
-	public static Vector2 checkpoint { get; set; } //location of current checkpoint
+	public static float[] checkpoint { get; set; } //location of current checkpoint
 
 	//options settings
 	public static float volume { get; set; }

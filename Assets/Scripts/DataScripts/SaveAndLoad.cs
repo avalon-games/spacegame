@@ -18,45 +18,43 @@ public class SaveAndLoad : MonoBehaviour
 			PlayerData.volume = PlayerPrefs.GetFloat("Volume");
 	}
 
+	public void LoadGame(int i) {
+		Load(i);
+	}
+	public void SaveGame(int i) {
+		Save(i);
+	}
+	public void SavePreferences() {
+		SavePref();
+	}
 
 	/**
 	* Loads the current savefile values into PlayerData
 	*/
-	public void LoadGame() {
+	void Load(int i) {
 		if (PlayerPrefs.HasKey("MaxHealth")) {
 			Time.timeScale = 1;
-			PlayerData.maxHealth = PlayerPrefs.GetInt("MaxHealth");
-			PlayerData.maxOxygen = PlayerPrefs.GetInt("MaxOxygen");
-			PlayerData.currHealth = PlayerPrefs.GetInt("CurrHealth");
-			PlayerData.currOxygen = PlayerPrefs.GetInt("CurrOxygen");
-			PlayerData.currUnlockedLevel = PlayerPrefs.GetInt("CurrUnlockedLevel");
-			PlayerData.currLevel = PlayerPrefs.GetInt("CurrLevel");
+			SaveFile.Load(i);
 
 
 			SceneChanger.GoToLevel(PlayerData.currLevel);
 			Debug.Log("Game data loaded!");
-		} else
-			Debug.LogError("There is no save data!");
+		}
 	}
 
 
 	/**
-	 * Saves the current game progress (in PlayerData) into a file
-	 * - in the future, add multiple save file functionality
-	 */
-	public void SaveGame() {
-		PlayerPrefs.SetInt("MaxHealth", PlayerData.maxHealth);
-		PlayerPrefs.SetInt("MaxOxygen", PlayerData.maxOxygen);
-		PlayerPrefs.SetInt("CurrHealth", PlayerData.currHealth);
-		PlayerPrefs.SetInt("CurrOxygen", PlayerData.currOxygen);
-		PlayerPrefs.SetInt("CurrUnlockedLevel", PlayerData.currUnlockedLevel);
-		PlayerPrefs.SetInt("CurrLevel", PlayerData.currLevel);
+	* Saves the current game progress (in PlayerData) into a file
+	* - in the future, add multiple save file functionality
+	*/
+	void Save(int i) {
+		SaveFile.Save(i);
 	}
 
 	/*
-	 * Starts a new game, resetting all PlayerData values
-	 */
-	public void NewGame() {
+	* Starts a new game, resetting all PlayerData values
+	*/
+	void NewGame() {
 		Time.timeScale = 1;
 		PlayerData.maxHealth = 5;
 		PlayerData.maxOxygen = 100;
@@ -64,16 +62,15 @@ public class SaveAndLoad : MonoBehaviour
 		PlayerData.currOxygen = PlayerData.maxOxygen;
 		PlayerData.currUnlockedLevel = 1;
 		PlayerData.currLevel = 0;
+		PlayerData.checkpoint = null;
 
 		SceneChanger.GoToLevel(PlayerData.currLevel); //go to the first level
-
-		SaveGame();
 	}
 
 	/**
-	 * Saves the volume, control, user options and preferences settings
-	 */
-	public void SavePreferences() {
+		* Saves the volume, control, user options and preferences settings
+		*/
+	void SavePref() {
 		PlayerPrefs.SetFloat("Volume", PlayerData.volume);
 	}
 }

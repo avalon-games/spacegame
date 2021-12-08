@@ -36,7 +36,6 @@ public class PlayerController : MonoBehaviour
     bool isOnGround;
     bool isInQuicksand;
     [Range(0, 30f)] [SerializeField] float jumpHeight = 10f;
-    [Range(0, 10f)] [SerializeField] float horizontalAtMaxHeight = 3f;
 
     [Range(-5, 0f)] [SerializeField] float earlyJumpReleaseYVelocity = -1f;
     [Range(0, 1f)] [SerializeField] float airControl = 0.8f;
@@ -61,7 +60,12 @@ public class PlayerController : MonoBehaviour
         coll = GetComponent<CapsuleCollider2D>();
         groundLayer = LayerMask.GetMask("Ground");
         sandLayer = LayerMask.GetMask("Sand");
-        PlayerData.checkpoint = transform.position; //initial checkpoint is set to initial position
+
+        if (PlayerData.checkpoint == null)
+            PlayerData.checkpoint = new float[2] { transform.position.x, transform.position.y };  //initial checkpoint is set to initial position
+        else {
+            transform.position = new Vector2(PlayerData.checkpoint[0], PlayerData.checkpoint[1]);
+		}
 
     }
 
@@ -190,7 +194,7 @@ public class PlayerController : MonoBehaviour
      * Used in: teleports player back to previous position on taking damage
      */
     public void TeleportToCheckpoint() {
-        transform.position = PlayerData.checkpoint;
+        transform.position = new Vector2(PlayerData.checkpoint[0], PlayerData.checkpoint[1]);
         rb.velocity = Vector2.zero;
 	}
 

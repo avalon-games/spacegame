@@ -13,7 +13,7 @@ public class Checkpoint : MonoBehaviour
 
 	private void OnTriggerEnter2D(Collider2D collision) {
 		if (collision.gameObject.CompareTag("Player") && !isEnabled) {
-			PlayerData.checkpoint = transform.position;
+			PlayerData.checkpoint = new float[2] { transform.position.x,transform.position.y }; 
 			isEnabled = true;
 			sprite.color = new Color(0.7f, 0.7f, 0.7f, 1);
 		}
