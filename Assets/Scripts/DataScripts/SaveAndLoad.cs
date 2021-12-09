@@ -16,6 +16,15 @@ public class SaveAndLoad : MonoBehaviour
 		//on entering a new scene, set the audio volume
 		if (PlayerPrefs.HasKey("Volume"))
 			PlayerData.volume = PlayerPrefs.GetFloat("Volume");
+		//set the text of savefiles
+		if (PlayerPrefs.HasKey("File0")) {
+			PlayerData.saveFileNames = new string[4];
+			PlayerData.saveFileNames[0] = PlayerPrefs.GetString("File0");
+			PlayerData.saveFileNames[1] = PlayerPrefs.GetString("File1");
+			PlayerData.saveFileNames[2] = PlayerPrefs.GetString("File2");
+			PlayerData.saveFileNames[3] = PlayerPrefs.GetString("File3");
+		}
+
 	}
 
 	public void LoadGame(int i) {
@@ -23,6 +32,7 @@ public class SaveAndLoad : MonoBehaviour
 	}
 	public void SaveGame(int i) {
 		Save(i);
+		SaveFileNames();
 	}
 	public void SavePreferences() {
 		SavePref();
@@ -35,10 +45,8 @@ public class SaveAndLoad : MonoBehaviour
 		if (PlayerPrefs.HasKey("MaxHealth")) {
 			Time.timeScale = 1;
 			SaveFile.Load(i);
-
-
 			SceneChanger.GoToLevel(PlayerData.currLevel);
-			Debug.Log("Game data loaded!");
+			Debug.Log("Loading file " + i);
 		}
 	}
 
@@ -49,6 +57,8 @@ public class SaveAndLoad : MonoBehaviour
 	*/
 	void Save(int i) {
 		SaveFile.Save(i);
+		SaveFileNames();
+		Debug.Log("Saving file " + i);
 	}
 
 	/*
@@ -68,10 +78,20 @@ public class SaveAndLoad : MonoBehaviour
 	}
 
 	/**
-		* Saves the volume, control, user options and preferences settings
-		*/
+	* Saves the volume, control, user options and preferences settings
+	*/
 	void SavePref() {
 		PlayerPrefs.SetFloat("Volume", PlayerData.volume);
 	}
+
+	//the savefile names are also saved using PlayerPrefs as they should contain the same values accross all save files
+	void SaveFileNames() {
+		PlayerPrefs.SetString("File0", PlayerData.saveFileNames[0]);
+		PlayerPrefs.SetString("File1", PlayerData.saveFileNames[1]);
+		PlayerPrefs.SetString("File2", PlayerData.saveFileNames[2]);
+		PlayerPrefs.SetString("File3", PlayerData.saveFileNames[3]);
+	}
+
+
 }
 //controls saving the player state to save files and transfer between scenes

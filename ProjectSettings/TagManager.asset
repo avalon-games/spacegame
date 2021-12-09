@@ -13,6 +13,8 @@ TagManager:
   - PauseMenu
   - Volume
   - OptionsMenu
+  - SaveMenu
+  - LoadMenu
   layers:
   - Default
   - TransparentFX

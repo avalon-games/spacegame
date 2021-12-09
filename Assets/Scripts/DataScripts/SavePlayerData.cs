@@ -14,6 +14,7 @@ public class SavePlayerData
 	public int currUnlockedLevel;
 	public int currLevel;
 	public float[] checkpoint;
+	public string[] saveFileNames;
 
 	public SavePlayerData() {
 		maxHealth = PlayerData.maxHealth;
@@ -23,5 +24,6 @@ public class SavePlayerData
 		currUnlockedLevel = PlayerData.currUnlockedLevel;
 		currLevel = PlayerData.currLevel;
 		checkpoint = PlayerData.checkpoint;
+		saveFileNames = PlayerData.saveFileNames;
 	}
 }

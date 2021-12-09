@@ -7,7 +7,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 public static class SaveFile
 {
 	public static void Save(int i) { //saves to "i"th savefile
-		Debug.Log("Saving File: " + i);
 		BinaryFormatter formatter = new BinaryFormatter();
 		string path = Application.persistentDataPath + "/savefile" + i.ToString() + ".save";
 
@@ -20,7 +19,6 @@ public static class SaveFile
 
 	public static void Load(int i) { //load the "i"th savefile
 		string path = Application.persistentDataPath + "/savefile" + i.ToString() + ".save";
-		Debug.Log("Loading File: " + i);
 		if (File.Exists(path)) {
 			BinaryFormatter formatter = new BinaryFormatter();
 			FileStream stream = new FileStream(path, FileMode.Open);
@@ -35,6 +33,7 @@ public static class SaveFile
 			PlayerData.currUnlockedLevel = data.currUnlockedLevel;
 			PlayerData.currLevel = data.currLevel;
 			PlayerData.checkpoint = data.checkpoint;
+			Debug.Log("data loaded");
 
 			stream.Close();
 		} else {

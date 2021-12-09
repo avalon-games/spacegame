@@ -11,25 +11,42 @@ using UnityEngine.Audio;
 public class UIMenus : MonoBehaviour {
     public GameObject pauseMenu;
     public GameObject optionsMenu;
+    public GameObject saveLoadMenu;
     public SaveAndLoad save;
 
     public AudioMixer mixer; //make sure to drag it in
 
     public PlayerUI playerUI;
+    [HideInInspector] public bool isSaving; //is loading if false, used to control button behavior in SaveOrLoadButton
 
 
     void Start() {
         //for testing only
-        PlayerData.maxOxygen = 100; 
+        PlayerData.maxOxygen = 100;
         PlayerData.currOxygen = PlayerData.maxOxygen;
         //////////////
         pauseMenu.SetActive(false);
         optionsMenu.SetActive(false);
+        saveLoadMenu.SetActive(false);
     }
 
     void Update() {
-        if (Input.GetKeyDown(KeyCode.Escape) & !pauseMenu.activeSelf) {
-            TogglePauseMenu();
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            if (pauseMenu.activeSelf) {
+                Time.timeScale = 1;
+                pauseMenu.SetActive(false);
+            } else if (optionsMenu.activeSelf) {
+                save.SavePreferences();
+                pauseMenu.SetActive(true);
+                optionsMenu.SetActive(false);
+            } else if (saveLoadMenu.activeSelf) {
+                pauseMenu.SetActive(true);
+                saveLoadMenu.SetActive(false);
+            } else {
+                Time.timeScale = 0;
+                pauseMenu.SetActive(true);
+            }
+                
         }
     }
 
@@ -53,7 +70,7 @@ public class UIMenus : MonoBehaviour {
      */
     public void QuitGame() {
         Application.Quit();
-	}
+    }
 
     /**
      * Loads title scene
@@ -61,7 +78,7 @@ public class UIMenus : MonoBehaviour {
     public void LoadMainMenu() {
         Time.timeScale = 1;
         SceneChanger.GoToMainMenu();
-	}
+    }
 
     #endregion
 
@@ -73,7 +90,7 @@ public class UIMenus : MonoBehaviour {
             save.SavePreferences();
             pauseMenu.SetActive(true);
             optionsMenu.SetActive(false);
-        } else { 
+        } else {
             optionsMenu.SetActive(true);
             pauseMenu.SetActive(false);
         }
@@ -84,8 +101,8 @@ public class UIMenus : MonoBehaviour {
      */
     void SetVolume(float volume) {
         PlayerData.volume = volume;
-        mixer.SetFloat("MasterVol", Mathf.Log10(volume)*20);
-	}
+        mixer.SetFloat("MasterVol", Mathf.Log10(volume) * 20);
+    }
 
     /**
      * For testing only, so player doesn't die
@@ -98,5 +115,26 @@ public class UIMenus : MonoBehaviour {
         playerUI.UpdateHealth();
         playerUI.UpdateOxygen();
     }
-}
 
+    public void ToggleSaveMenu() {
+        if (saveLoadMenu.activeSelf) {
+            pauseMenu.SetActive(true);
+            saveLoadMenu.SetActive(false);
+        } else {
+            saveLoadMenu.SetActive(true);
+            pauseMenu.SetActive(false);
+            isSaving = true;
+        }
+    }
+    public void ToggleLoadMenu() {
+        if (saveLoadMenu.activeSelf) {
+            pauseMenu.SetActive(true);
+            saveLoadMenu.SetActive(false);
+        } else {
+            saveLoadMenu.SetActive(true);
+            pauseMenu.SetActive(false);
+            isSaving = false;
+        }
+    }
+
+}
