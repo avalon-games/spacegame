@@ -22,11 +22,14 @@ public class DamagingHazards : MonoBehaviour
 	 * Causes player to take damage, reducing current hp and causing player to teleport to the last safe tile
 	 */
 	public void DealDamage() {
-		PlayerData.currHealth -= 1;
-		ui.UpdateHealth();
-		if (PlayerData.currHealth > 0)
-			player.TeleportToLastSafeTile();
-		else
-			SceneChanger.GoToSpaceship();
+		if (!player.invulnerable) {
+			StartCoroutine(player.InvincibilityFrames());
+			PlayerData.currHealth -= 1;
+			ui.UpdateHealth();
+			if (PlayerData.currHealth > 0) { 
+				player.TeleportToCheckpoint();
+			} else
+				SceneChanger.GoToSpaceship();
+		}
 	}
 }
