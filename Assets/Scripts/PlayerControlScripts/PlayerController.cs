@@ -13,7 +13,7 @@ using UnityEngine;
  */
 public class PlayerController : MonoBehaviour
 {
-    Rigidbody2D rb;
+    public Rigidbody2D rb;
     Collider2D coll;
     SpriteRenderer sprite;
     enum State { idle, running, jumping, falling, pushing, hurt }; //animation states, decides interactions
@@ -70,9 +70,6 @@ public class PlayerController : MonoBehaviour
     }
 
     void Update() {
-        if (!movementAllowed) {
-            return;
-        }
         horizontalInput = Input.GetAxisRaw("Horizontal");
         if (jumpButton == false && Input.GetButtonDown("Jump")) jumpButton = true;
         if (jumpButton == true && Input.GetButtonUp("Jump")) jumpButton = false;
@@ -93,9 +90,6 @@ public class PlayerController : MonoBehaviour
 
     #region MainPlayerMovementControl
     void FixedUpdate() {
-        if (!movementAllowed) {
-            return;
-        }
         MovePlayer();
     }
 
@@ -104,7 +98,14 @@ public class PlayerController : MonoBehaviour
      * Includes: vertical/horizontal movement
      */
     void MovePlayer() {
-		Vector2 targetVelocity = Vector2.zero;
+        Vector2 targetVelocity = Vector2.zero;
+        if (!movementAllowed) {
+            if (isOnGround || isInQuicksand) {
+                rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref m_Velocity, movementSmoothTime);
+            }
+            return;
+        }
+
         //v_0=2hv_x/x_h ----------   v_0= (h - 0.5gt_h^2) / t_h
         float timeToMaxHeight = Mathf.Sqrt(2f*jumpHeight/(rb.gravityScale*9.81f));
         float jumpInitialVelocity = (jumpHeight + 1f + 0.5f*rb.gravityScale*9.81f*timeToMaxHeight*timeToMaxHeight)/timeToMaxHeight;
@@ -139,8 +140,8 @@ public class PlayerController : MonoBehaviour
 		else
 			rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref m_Velocity, movementSmoothTime / airControl);
 	}
-	public void EnableMovement(bool _movementAllowed) {
-		movementAllowed = _movementAllowed;
+	public void ToggleMovementControl(bool toggle) {
+		movementAllowed = toggle;
 	}
 	#endregion
 

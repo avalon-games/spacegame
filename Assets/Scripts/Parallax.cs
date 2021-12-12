@@ -2,6 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/**
+ * Allows the background graphics to have parallax effect
+ * 
+ * Tutorial used: https://youtu.be/zit45k6CUMk
+ */
 public class Parallax : MonoBehaviour
 {
     float length, startpos;
