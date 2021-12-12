@@ -28,6 +28,7 @@ public class DebugController : MonoBehaviour
 
 	public void OnToggleDebug(InputValue value) {
 		showConsole = !showConsole;
+		input = "";
 	}
 
 	public void OnReturn(InputValue value) {
@@ -38,12 +39,12 @@ public class DebugController : MonoBehaviour
 	}
 
 	private void Awake() {
-		CheckErrors();
+		CheckMissingObjects();
 		HEAL = new DebugCommand("heal", "heal player to max hp (8). ", "heal", () => {
 			menu.SetHp(8);
 		});
 		SET_HP = new DebugCommand<int>("set_hp", "sets hp to the specified hp and heal to full oxygen, max is 8. ", "set_hp <target_hp>", (x) => {
-			menu.SetHp(x);
+				menu.SetHp(x);
 		});
 
 		HELP = new DebugCommand("help", "shows the list of commands", "help", () => {
@@ -62,7 +63,7 @@ public class DebugController : MonoBehaviour
 	/**
 	 * Logs missing objects that prevent the console from working properly
 	 */
-	private void CheckErrors() {
+	private void CheckMissingObjects() {
 		if (menu == null) {
 			Debug.LogError("ERROR *** menu object not set");
 		}
