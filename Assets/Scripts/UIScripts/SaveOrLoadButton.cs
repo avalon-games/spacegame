@@ -34,7 +34,7 @@ public class SaveOrLoadButton : MonoBehaviour
 			sl.SaveGame(buttonNumber);
 			Debug.Log("setting text");
 		} else {
-            sl.LoadGame(buttonNumber);
+			sl.LoadGame(buttonNumber);
 		}
 	}
 

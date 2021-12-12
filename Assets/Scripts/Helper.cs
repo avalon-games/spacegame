@@ -1,7 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/**
+ * Helper for finding game objects in the scene through tags,
+ * much faster than unity's default find methods
+ * 
+ * Source: https://answers.unity.com/questions/893966/how-to-find-child-with-tag.html
+ * 
+ */
 public static class Helper {
     public static T[] FindComponentsInChildrenWithTag<T>(this GameObject parent, string tag, bool forceActive = false) where T : Component {
         if (parent == null) { throw new System.ArgumentNullException(); }

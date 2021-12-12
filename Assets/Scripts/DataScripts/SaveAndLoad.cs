@@ -18,6 +18,9 @@ public class SaveAndLoad : MonoBehaviour
 			PlayerData.volume = PlayerPrefs.GetFloat("Volume");
 		//set the text of savefiles
 		if (PlayerPrefs.HasKey("File0")) {
+			//this currently doesn't work in editor, as player prefs aren't preserved in editor after exiting play mode
+			//but should work in build
+			Debug.Log("Loading file names!!");
 			PlayerData.saveFileNames = new string[4];
 			PlayerData.saveFileNames[0] = PlayerPrefs.GetString("File0");
 			PlayerData.saveFileNames[1] = PlayerPrefs.GetString("File1");

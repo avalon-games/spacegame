@@ -107,8 +107,8 @@ public class UIMenus : MonoBehaviour {
     /**
      * For testing only, so player doesn't die
      */
-    public void FreeHeal() {
-        PlayerData.maxHealth = 5;
+    public void SetHp(int targetHealth) {
+        PlayerData.maxHealth = targetHealth;
         PlayerData.maxOxygen = 100;
         PlayerData.currHealth = PlayerData.maxHealth;
         PlayerData.currOxygen = PlayerData.maxOxygen;
