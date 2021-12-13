@@ -7887,8 +7887,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ee655c018185459d81b7ac9a38c6b18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  oxygenDepletionRate: 0
   volume: {fileID: 4006830547301573327}
+  oxygenUI: {fileID: 3456887208856152642}
+  timeToNoOxygen: 10
+  timeRemaining: 0
 --- !u!222 &4006830546966775812
 CanvasRenderer:
   m_ObjectHideFlags: 0

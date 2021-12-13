@@ -13,7 +13,7 @@ using UnityEngine;
  */
 public class PlayerController : MonoBehaviour
 {
-    public Rigidbody2D rb;
+    [HideInInspector] public Rigidbody2D rb;
     Collider2D coll;
     SpriteRenderer sprite;
     enum State { idle, running, jumping, falling, pushing, hurt }; //animation states, decides interactions
