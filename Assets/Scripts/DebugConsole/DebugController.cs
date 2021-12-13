@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
+// using UnityEngine.InputSystem;
 
 /**
  * Controller for the ingame debugging console
@@ -26,12 +26,12 @@ public class DebugController : MonoBehaviour
 	//objects to call functions from
 	public UIMenus menu;
 
-	public void OnToggleDebug(InputValue value) {
+	public void OnToggleDebug() {//InputValue value) {
 		showConsole = !showConsole;
 		input = "";
 	}
 
-	public void OnReturn(InputValue value) {
+	public void OnReturn() {//InputValue value) {
 		if (showConsole) {
 			HandleInput();
 			input = "";

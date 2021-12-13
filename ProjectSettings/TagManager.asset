@@ -15,6 +15,7 @@ TagManager:
   - SaveMenu
   - LoadMenu
   - Grappable
+  - PressureBlock
   layers:
   - Default
   - TransparentFX
