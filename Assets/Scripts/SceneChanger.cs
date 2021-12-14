@@ -19,6 +19,10 @@ public static class SceneChanger
     public static void GoToLevel(int target) {
         SceneManager.LoadScene(target);
     }
+
+    public static int GetCurrScene() {
+        return SceneManager.GetActiveScene().buildIndex;
+	}
 }
 //add scene change commands
 //lose hp should be taken care off in hazard script

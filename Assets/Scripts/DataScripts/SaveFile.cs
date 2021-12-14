@@ -35,7 +35,6 @@ public static class SaveFile
 			PlayerData.currUnlockedLevel = data.currUnlockedLevel;
 			PlayerData.currLevel = data.currLevel;
 			PlayerData.checkpoint = data.checkpoint;
-			Debug.Log("data loaded");
 
 			stream.Close();
 		} else {

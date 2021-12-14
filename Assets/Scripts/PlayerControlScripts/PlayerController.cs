@@ -64,6 +64,7 @@ public class PlayerController : MonoBehaviour
         if (PlayerData.checkpoint == null)
             PlayerData.checkpoint = new float[2] { transform.position.x, transform.position.y };  //initial checkpoint is set to initial position
         else {
+            //Debug.Log("Checkpoint load: " + PlayerData.checkpoint[0] + ", " + PlayerData.checkpoint[1]);
             transform.position = new Vector2(PlayerData.checkpoint[0], PlayerData.checkpoint[1]);
 		}
 
