@@ -20,13 +20,13 @@ public class SaveAndLoad : MonoBehaviour
 		if (PlayerPrefs.HasKey("File0")) {
 			//this currently doesn't work in editor, as player prefs aren't preserved in editor after exiting play mode
 			//but should work in build
-			Debug.Log("Loading file names!!");
 			PlayerData.saveFileNames = new string[4];
 			PlayerData.saveFileNames[0] = PlayerPrefs.GetString("File0");
 			PlayerData.saveFileNames[1] = PlayerPrefs.GetString("File1");
 			PlayerData.saveFileNames[2] = PlayerPrefs.GetString("File2");
 			PlayerData.saveFileNames[3] = PlayerPrefs.GetString("File3");
 		}
+		PlayerData.currLevel = SceneChanger.GetCurrScene();
 
 	}
 

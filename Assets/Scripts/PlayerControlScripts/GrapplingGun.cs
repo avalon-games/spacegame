@@ -4,16 +4,27 @@ using UnityEngine;
 
 public class GrapplingGun : MonoBehaviour
 {
-	public GameObject hook;
 	GrapplingHook hookScript;
+
+	public GameObject hook;
 	public PlayerController player;
 	bool grappleSwing;
 	bool grapplePull;
+	float initialGravity;
 
-	public float launchSpeed = 10f;
+	public float pullSpeed = 40f;
+	public float swingAngularFrequency = 10f;
+	bool swingRight; //if false, swing to the left
+
+	float initialPhase;
+	float currentPhase;
+	float swingRadius;
+	bool initializeSwing;
+	bool initializePull;
 
 	private void Start() {
 		hookScript = hook.GetComponent<GrapplingHook>();
+		initialGravity = player.rb.gravityScale;
 	}
 
 	void Update () {
@@ -21,11 +32,13 @@ public class GrapplingGun : MonoBehaviour
 			hookScript.Grapple();
 			grappleSwing = true;
 			player.ToggleMovementControl(false);
+			initializeSwing = true;
 
 		} else if (Input.GetButtonDown("GrapplePull") && hookScript.hasReturned) {
 			hookScript.Grapple();
 			grapplePull = true;
 			player.ToggleMovementControl(false);
+			initializePull = true;
 
 		} else if (Input.GetButtonUp("GrappleSwing") || Input.GetButtonUp("GrapplePull")) {
 			grappleSwing = false;
@@ -36,18 +49,30 @@ public class GrapplingGun : MonoBehaviour
 
 		if (hookScript.isAttached) {
 			if (grapplePull) {
-				if (Vector2.Distance(transform.position, hook.transform.position) >= 1f)
-					Pull();
-				else
-					player.rb.velocity = Vector2.zero;
+				if (initializePull) InitializePull();
+				if (Vector2.Distance(transform.position, hook.transform.position) >= 1f) Pull();
+				else player.rb.velocity = Vector2.zero;
 			}
 			else if (grappleSwing) {
+				if (initializeSwing) InitializeSwing();
 				Swing();
 			}
 		}
-		if (hookScript.grappleRelease)
+		if (hookScript.grappleRelease) {
 			player.ToggleMovementControl(true);
+			player.rb.gravityScale = initialGravity;
+		}
 
+	}
+
+	/**
+	 * Initialize pulling
+	 * set gravity scale to 0 while pulling
+	 */
+	void InitializePull () {
+		initializePull = false;
+		player.rb.gravityScale = 0;
+		hook.GetComponent<SpriteRenderer>().color = new Color(1, 0, 0, 1);
 	}
 
 	/**
@@ -55,10 +80,42 @@ public class GrapplingGun : MonoBehaviour
 	 */
 	void Pull () {
 		Vector2 direction = (hook.transform.position - transform.position).normalized;
-		player.rb.velocity = direction * launchSpeed;
+		player.rb.velocity = direction * pullSpeed;
+
 	}
+
+
+	/**
+	 * Initialize the pivot point for swinging once hook has attached and 
+	 * set the direction of swinging, initial phase
+	 */
+	private void InitializeSwing() {
+		initializeSwing = false;
+		float xPos = transform.position.x - hook.transform.position.x;
+		float yPos = transform.position.y - hook.transform.position.y;
+		if (xPos < 0) swingRight = true;
+		else swingRight = false;
+
+		initialPhase = Mathf.Atan(yPos / xPos);
+		currentPhase = initialPhase;
+		swingRadius = Mathf.Sqrt(xPos * xPos + yPos * yPos);
+		hook.GetComponent<SpriteRenderer>().color = new Color(0, 1, 0, 1);
+	}
+
 	void Swing() {
-		Debug.Log("Swinging!");
+		//enable swinging movement control
+		//swing
+
+		//phase should only change until you hit a wall
+		currentPhase += Time.deltaTime * swingAngularFrequency;
+
+		if (swingRight) {
+			player.transform.position = new Vector2(hook.transform.position.x + swingRadius*Mathf.Cos(currentPhase),
+				hook.transform.position.y + swingRadius*Mathf.Sin(currentPhase));
+		} else {
+			player.transform.position = new Vector2(hook.transform.position.x + swingRadius * Mathf.Cos(currentPhase),
+				hook.transform.position.y + -swingRadius*Mathf.Sin(currentPhase));
+		}
 	}
 
 	//instantiate hook on button press, launch in the direction of mouse with an initial velocity, decellerating over time
