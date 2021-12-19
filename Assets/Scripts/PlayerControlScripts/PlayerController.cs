@@ -13,7 +13,7 @@ using UnityEngine;
  */
 public class PlayerController : MonoBehaviour
 {
-    public Rigidbody2D rb;
+    [HideInInspector] public Rigidbody2D rb;
     Collider2D coll;
     SpriteRenderer sprite;
     enum State { idle, running, jumping, falling, pushing, hurt }; //animation states, decides interactions
@@ -64,6 +64,7 @@ public class PlayerController : MonoBehaviour
         if (PlayerData.checkpoint == null)
             PlayerData.checkpoint = new float[2] { transform.position.x, transform.position.y };  //initial checkpoint is set to initial position
         else {
+            //Debug.Log("Checkpoint load: " + PlayerData.checkpoint[0] + ", " + PlayerData.checkpoint[1]);
             transform.position = new Vector2(PlayerData.checkpoint[0], PlayerData.checkpoint[1]);
 		}
 
@@ -90,7 +91,10 @@ public class PlayerController : MonoBehaviour
 
     #region MainPlayerMovementControl
     void FixedUpdate() {
-        MovePlayer();
+        if (movementAllowed)
+        {
+            MovePlayer();
+        }
     }
 
     /**
