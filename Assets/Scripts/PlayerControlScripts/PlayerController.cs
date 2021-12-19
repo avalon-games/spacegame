@@ -91,7 +91,10 @@ public class PlayerController : MonoBehaviour
 
     #region MainPlayerMovementControl
     void FixedUpdate() {
-        MovePlayer();
+        if (movementAllowed)
+        {
+            MovePlayer();
+        }
     }
 
     /**
