@@ -28,7 +28,6 @@ public class GrapplingGun : MonoBehaviour
 	private void Start() {
 		pullHookScript = hookPull.GetComponent<GrapplingHook>();
 		swingHookScript = hookSwing.GetComponent<GrapplingHook>();
-
 		initialGravity = player.rb.gravityScale;
 	}
 
@@ -106,12 +105,21 @@ public class GrapplingGun : MonoBehaviour
 	}
 
 	/**
+	 * Initialize pulling
+	 * set gravity scale to 0 while pulling
+	 */
+	void InitializePull () {
+		initializePull = false;
+		player.rb.gravityScale = 0;
+		hook.GetComponent<SpriteRenderer>().color = new Color(1, 0, 0, 1);
+	}
+
+	/**
 	 * Translates the player towards the grapple point
 	 */
 	void Pull () {
 		Vector2 direction = (hookPull.transform.position - transform.position).normalized;
 		player.rb.velocity = direction * pullSpeed;
-
 	}
 
 

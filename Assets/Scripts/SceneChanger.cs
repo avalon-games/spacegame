@@ -36,6 +36,10 @@ public static class SceneChanger
         }
         return scenes;
     }
+
+    public static int GetCurrScene() {
+        return SceneManager.GetActiveScene().buildIndex;
+	}
 }
 //add scene change commands
 //lose hp should be taken care off in hazard script
