@@ -18,6 +18,9 @@ public class GrapplingHook : MonoBehaviour
     Rigidbody2D rb;
     [HideInInspector] public SpriteRenderer sprite;
     public Transform gunPoint;
+
+    [Range(0, 30)] public float maxRange = 10;
+    Vector2 initialPosition;
     
     public float velocity = 100f;
 
@@ -31,14 +34,22 @@ public class GrapplingHook : MonoBehaviour
 
     public void Grapple()
     {
+        Debug.Log("grapplign");
         hasReturned = false;
         sprite.enabled = true;
         transform.position = gunPoint.position;
+        initialPosition = transform.position;
         //upon enable launch in the direction of the mouse
         Vector2 distanceVector = (cam.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
         rb.velocity = distanceVector * velocity;
-
     }
+
+	private void Update() {
+        if (Vector2.Distance(transform.position, gunPoint.position) > maxRange) {
+            Debug.Log("release from max range");
+            grappleRelease = true;
+        }
+	}
 
 	private void OnTriggerEnter2D(Collider2D collision) {
         if (sprite.enabled && collision.gameObject.CompareTag("Grappable")) {
@@ -48,12 +59,13 @@ public class GrapplingHook : MonoBehaviour
     }
 
 	private void FixedUpdate() {
-		if (sprite.enabled && grappleRelease) {
+		if (grappleRelease) {
             ReturnHook();
 		}
 	}
 
 	void ReturnHook () {
+        Debug.Log("returning");
         isAttached = false;
         Vector2 distanceVector = (gunPoint.position - transform.position).normalized;
         rb.velocity = distanceVector * velocity;

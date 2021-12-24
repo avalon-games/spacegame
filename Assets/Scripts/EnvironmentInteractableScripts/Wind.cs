@@ -33,7 +33,7 @@ public class Wind : MonoBehaviour
      * - changing player velocity when exiting wind
      */
     void OnTriggerExit2D(Collider2D collision) {
-        if (collision.gameObject.CompareTag("Wind")) {
+        if (collision.gameObject.CompareTag("Player")) {
             player.maxSpeedLeft = -player.initialMaxSpeed;
             player.maxSpeedRight = player.initialMaxSpeed;
         }
