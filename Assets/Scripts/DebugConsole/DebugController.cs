@@ -13,13 +13,17 @@ public class DebugController : MonoBehaviour
 {
 	bool showConsole;
 	bool showHelp;
+	bool showLevelList;
 	string input;
 	public List<object> commandList;
+	List<string> levelList;
 
 	//list of available commands
 	public static DebugCommand<int> SET_HP;
 	public static DebugCommand HEAL;
 	public static DebugCommand HELP;
+	public static DebugCommand<int> LOAD_LEVEL;
+	public static DebugCommand LIST_LEVELS;
 
 
 	//objects to call functions from
@@ -45,14 +49,25 @@ public class DebugController : MonoBehaviour
 		SET_HP = new DebugCommand<int>("set_hp", "sets hp to the specified hp and heal to full oxygen, max is 8. ", "set_hp <target_hp>", (x) => {
 				menu.SetHp(x);
 		});
+		LIST_LEVELS = new DebugCommand("list_levels", "gets the list of levels in build settings", "list_levels", () => {
+			levelList = SceneChanger.GetBuildScenes();
+			showLevelList = true;
+			showHelp = false;
+		});
+		LOAD_LEVEL = new DebugCommand<int>("load_level", "loads the specified scene. ", "load_level <target_scene>", (x) => {
+			SceneChanger.GoToLevel(x);
+		});
 
 		HELP = new DebugCommand("help", "shows the list of commands", "help", () => {
 			showHelp = true;
+			showLevelList = false;
 		});
 
 		commandList = new List<object> {
 			SET_HP,
 			HEAL,
+			LOAD_LEVEL,
+			LIST_LEVELS,
 			HELP
 		};
 
@@ -71,7 +86,7 @@ public class DebugController : MonoBehaviour
 	Vector2 scroll;
 
 	private void OnGUI() {
-		if (!showConsole) { return; }
+		if (!showConsole) { showLevelList = false; showHelp = false; return; }
 		float y = 0f;
 
 		if (showHelp) {
@@ -85,6 +100,23 @@ public class DebugController : MonoBehaviour
 				DebugCommandBase command = commandList[i] as DebugCommandBase;
 
 				string label = $"{command.commandFormat} - {command.commandDescription}";
+
+				Rect labelRect = new Rect(5, 20 * i, viewport.width - 100, 20);
+				GUI.Label(labelRect, label);
+			}
+
+			GUI.EndScrollView();
+			y += 100;
+		}
+		else if (showLevelList) {
+			GUI.Box(new Rect(0, y, Screen.width, 100), "");
+
+			Rect viewport = new Rect(0, 0, Screen.width - 30, 20 * levelList.Count);
+
+			scroll = GUI.BeginScrollView(new Rect(0, y + 5f, Screen.width, 90), scroll, viewport);
+
+			for (int i = 0; i < levelList.Count; i++) {
+				string label = $"{i} - {levelList[i]}";
 
 				Rect labelRect = new Rect(5, 20 * i, viewport.width - 100, 20);
 				GUI.Label(labelRect, label);

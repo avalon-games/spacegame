@@ -33,8 +33,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Vertical:")]
     bool jumpButton;
-    bool isOnGround;
-    bool isInQuicksand;
+    [HideInInspector] public bool isOnGround;
+    [HideInInspector] public bool isInQuicksand;
     [Range(0, 30f)] [SerializeField] float jumpHeight = 10f;
 
     [Range(-5, 0f)] [SerializeField] float earlyJumpReleaseYVelocity = -1f;
@@ -120,11 +120,11 @@ public class PlayerController : MonoBehaviour
 				targetVelocity = new Vector2(maxSpeedRight, rb.velocity.y);
 			else
 				targetVelocity = new Vector2(0, rb.velocity.y);
-			if (isInQuicksand) {
-                rb.velocity = Vector2.zero;
-                if (jumpButton)
-                    rb.velocity = new Vector2(0f, jumpInitialVelocity/10);
-			} else if (isOnGround && jumpButton) {
+			//if (isInQuicksand) {
+   //             rb.velocity = Vector2.zero;
+   //             if (jumpButton)
+   //                 rb.velocity = new Vector2(0f, jumpInitialVelocity/10);
+			/* } else */ if (isOnGround && jumpButton) {
 				animator.Play("Jump");
 				rb.velocity = new Vector2(rb.velocity.x, jumpInitialVelocity);
 				isOnGround = false;
@@ -146,7 +146,7 @@ public class PlayerController : MonoBehaviour
 	}
 	public void ToggleMovementControl(bool toggle) {
 		movementAllowed = toggle;
-	}
+    }
 	#endregion
 
 	#region EnvironmentalDetectionFunctions
