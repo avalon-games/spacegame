@@ -21,7 +21,7 @@ public class GrapplingHook : MonoBehaviour
 
     [Range(0, 30)] public float maxRange = 10;
     
-    public float velocity = 100f;
+    public float launchSpeed = 100f;
 
     void Start() {
         rb = GetComponent<Rigidbody2D>();
@@ -37,8 +37,10 @@ public class GrapplingHook : MonoBehaviour
         sprite.enabled = true;
         transform.position = gunPoint.position;
         //upon enable launch in the direction of the mouse
-        Vector2 distanceVector = (cam.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
-        rb.velocity = distanceVector * velocity;
+        Vector2 distanceVector = (cam.ScreenToWorldPoint(Input.mousePosition) - transform.position);
+        distanceVector.Normalize();
+        Debug.Log(distanceVector.x + ",  " + distanceVector.y);
+        rb.velocity = distanceVector * launchSpeed;
     }
 
 	private void Update() {
@@ -63,7 +65,7 @@ public class GrapplingHook : MonoBehaviour
 	void ReturnHook () {
         isAttached = false;
         Vector2 distanceVector = (gunPoint.position - transform.position).normalized;
-        rb.velocity = distanceVector * velocity;
+        rb.velocity = distanceVector * launchSpeed;
 
         if (Vector2.Distance(transform.position,gunPoint.position) <= 3f) {
             transform.position = gunPoint.position;
