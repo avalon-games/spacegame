@@ -1815,7 +1815,7 @@ MonoBehaviour:
   sprite: {fileID: 0}
   gunPoint: {fileID: 1138187281}
   maxRange: 14.4
-  velocity: 100
+  launchSpeed: 50
 --- !u!58 &1282276661
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -10116,7 +10116,7 @@ MonoBehaviour:
   sprite: {fileID: 0}
   gunPoint: {fileID: 1138187281}
   maxRange: 14.4
-  velocity: 100
+  launchSpeed: 50
 --- !u!1 &5829803094539218442
 GameObject:
   m_ObjectHideFlags: 0

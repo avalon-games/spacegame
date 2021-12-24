@@ -39,7 +39,6 @@ public class GrapplingHook : MonoBehaviour
         //upon enable launch in the direction of the mouse
         Vector2 distanceVector = (cam.ScreenToWorldPoint(Input.mousePosition) - transform.position);
         distanceVector.Normalize();
-        Debug.Log(distanceVector.x + ",  " + distanceVector.y);
         rb.velocity = distanceVector * launchSpeed;
     }
 
