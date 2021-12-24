@@ -105,16 +105,6 @@ public class GrapplingGun : MonoBehaviour
 	}
 
 	/**
-	 * Initialize pulling
-	 * set gravity scale to 0 while pulling
-	 */
-	void InitializePull () {
-		initializePull = false;
-		player.rb.gravityScale = 0;
-		hook.GetComponent<SpriteRenderer>().color = new Color(1, 0, 0, 1);
-	}
-
-	/**
 	 * Translates the player towards the grapple point
 	 */
 	void Pull () {
