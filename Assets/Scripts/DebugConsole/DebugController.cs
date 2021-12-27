@@ -49,11 +49,15 @@ public class DebugController : MonoBehaviour
 		SET_HP = new DebugCommand<int>("set_hp", "sets hp to the specified hp and heal to full oxygen, max is 8. ", "set_hp <target_hp>", (x) => {
 				menu.SetHp(x);
 		});
+
+		#if UNITY_EDITOR
 		LIST_LEVELS = new DebugCommand("list_levels", "gets the list of levels in build settings", "list_levels", () => {
 			levelList = SceneChanger.GetBuildScenes();
 			showLevelList = true;
 			showHelp = false;
 		});
+		#endif
+
 		LOAD_LEVEL = new DebugCommand<int>("load_level", "loads the specified scene. ", "load_level <target_scene>", (x) => {
 			SceneChanger.GoToLevel(x);
 		});

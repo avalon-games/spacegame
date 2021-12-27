@@ -16,7 +16,7 @@ public class GrapplingHook : MonoBehaviour
     public bool hasReturned;
     Camera cam;
     Rigidbody2D rb;
-    [HideInInspector] public SpriteRenderer sprite;
+    SpriteRenderer sprite;
     public Transform gunPoint;
 
     [Range(0, 30)] public float maxRange = 10;
@@ -29,6 +29,8 @@ public class GrapplingHook : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         sprite.enabled = false;
         hasReturned = true;
+        grappleRelease = false;
+        isAttached = false;
     }
 
     public void Grapple()
@@ -43,10 +45,10 @@ public class GrapplingHook : MonoBehaviour
     }
 
 	private void Update() {
-        if (Vector2.Distance(transform.position, gunPoint.position) > maxRange) {
+        if (sprite.enabled && (Vector2.Distance(transform.position, gunPoint.position) > maxRange)) {
             grappleRelease = true;
         }
-	}
+    }
 
 	private void OnTriggerEnter2D(Collider2D collision) {
         if (sprite.enabled && collision.gameObject.CompareTag("Grappable")) {
@@ -56,7 +58,7 @@ public class GrapplingHook : MonoBehaviour
     }
 
 	private void FixedUpdate() {
-		if (grappleRelease) {
+        if (grappleRelease) {
             ReturnHook();
 		}
 	}
