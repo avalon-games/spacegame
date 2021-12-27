@@ -45,7 +45,7 @@ public class SaveAndLoad : MonoBehaviour
 	* Loads the current savefile values into PlayerData
 	*/
 	void Load(int i) {
-		if (PlayerPrefs.HasKey("MaxHealth")) {
+		if (!PlayerData.saveFileNames[i].Equals("Empty")) {
 			Time.timeScale = 1;
 			SaveFile.Load(i);
 			SceneChanger.GoToLevel(PlayerData.currLevel);

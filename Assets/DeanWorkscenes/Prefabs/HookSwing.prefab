@@ -27,7 +27,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7236650681042808204}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 4.19753, y: -2.5, z: 0}
   m_LocalScale: {x: 0.27940813, y: 0.27683014, z: 0.3051332}
   m_Children: []
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 100
   m_Sprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
   m_Color: {r: 0, g: 1, b: 0.09174347, a: 1}
   m_FlipX: 0
@@ -137,7 +137,6 @@ MonoBehaviour:
   isAttached: 0
   grappleRelease: 0
   hasReturned: 0
-  sprite: {fileID: 0}
   gunPoint: {fileID: 0}
-  maxRange: 14.4
-  launchSpeed: 50
+  maxRange: 11.5
+  launchSpeed: 31.9

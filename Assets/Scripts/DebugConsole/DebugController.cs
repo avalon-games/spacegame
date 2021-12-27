@@ -11,6 +11,10 @@ using UnityEngine;
  */
 public class DebugController : MonoBehaviour
 {
+	GUIStyle textStyle;
+	public int fontSize = 20;
+	public int consoleHeight = 110;
+
 	bool showConsole;
 	bool showHelp;
 	bool showLevelList;
@@ -42,6 +46,9 @@ public class DebugController : MonoBehaviour
 	}
 
 	private void Awake() {
+		textStyle = new GUIStyle();
+		textStyle.normal.textColor = Color.white;
+
 		CheckMissingObjects();
 		HEAL = new DebugCommand("heal", "heal player to max hp (8). ", "heal", () => {
 			menu.SetHp(8);
@@ -51,11 +58,11 @@ public class DebugController : MonoBehaviour
 		});
 
 		#if UNITY_EDITOR
-		LIST_LEVELS = new DebugCommand("list_levels", "gets the list of levels in build settings", "list_levels", () => {
-			levelList = SceneChanger.GetBuildScenes();
-			showLevelList = true;
-			showHelp = false;
-		});
+			LIST_LEVELS = new DebugCommand("list_levels", "gets the list of levels in build settings", "list_levels", () => {
+				levelList = SceneChanger.GetBuildScenes();
+				showLevelList = true;
+				showHelp = false;
+			});
 		#endif
 
 		LOAD_LEVEL = new DebugCommand<int>("load_level", "loads the specified scene. ", "load_level <target_scene>", (x) => {
@@ -71,7 +78,11 @@ public class DebugController : MonoBehaviour
 			SET_HP,
 			HEAL,
 			LOAD_LEVEL,
-			LIST_LEVELS,
+
+			#if UNITY_EDITOR
+				LIST_LEVELS,
+			#endif
+
 			HELP
 		};
 
@@ -90,50 +101,52 @@ public class DebugController : MonoBehaviour
 	Vector2 scroll;
 
 	private void OnGUI() {
+		textStyle.fontSize = this.fontSize;
 		if (!showConsole) { showLevelList = false; showHelp = false; return; }
 		float y = 0f;
 
 		if (showHelp) {
-			GUI.Box(new Rect(0, y, Screen.width, 100), "");
+			GUI.Box(new Rect(0, y, Screen.width, consoleHeight), "");
 
-			Rect viewport = new Rect(0, 0, Screen.width - 30, 20 * commandList.Count);
+			Rect viewport = new Rect(0, 0, Screen.width - 30, (fontSize * 1.5f) * commandList.Count);
 
-			scroll = GUI.BeginScrollView(new Rect(0, y + 5f, Screen.width, 90), scroll, viewport);
+			scroll = GUI.BeginScrollView(new Rect(0, y + 5f, Screen.width, (consoleHeight - 10)), scroll, viewport);
 
 			for (int i = 0; i < commandList.Count; i++) {
 				DebugCommandBase command = commandList[i] as DebugCommandBase;
 
 				string label = $"{command.commandFormat} - {command.commandDescription}";
 
-				Rect labelRect = new Rect(5, 20 * i, viewport.width - 100, 20);
-				GUI.Label(labelRect, label);
-			}
+				Rect labelRect = new Rect(10, (fontSize * 1.5f) * i, viewport.width - 90, (fontSize * 1.5f));
 
+				GUI.Label(labelRect, label, textStyle);
+			}
+		
 			GUI.EndScrollView();
-			y += 100;
+			y += consoleHeight;
 		}
 		else if (showLevelList) {
-			GUI.Box(new Rect(0, y, Screen.width, 100), "");
+			GUI.Box(new Rect(0, y, Screen.width, consoleHeight), "");
 
-			Rect viewport = new Rect(0, 0, Screen.width - 30, 20 * levelList.Count);
+			Rect viewport = new Rect(0, 0, Screen.width - 30, (fontSize * 1.5f) * levelList.Count);
 
-			scroll = GUI.BeginScrollView(new Rect(0, y + 5f, Screen.width, 90), scroll, viewport);
+			scroll = GUI.BeginScrollView(new Rect(0, y + 5f, Screen.width, (consoleHeight - 10)), scroll, viewport);
 
 			for (int i = 0; i < levelList.Count; i++) {
 				string label = $"{i} - {levelList[i]}";
 
-				Rect labelRect = new Rect(5, 20 * i, viewport.width - 100, 20);
-				GUI.Label(labelRect, label);
+				Rect labelRect = new Rect(5, (fontSize * 1.5f) * i, viewport.width - 90, (fontSize * 1.5f));
+				GUI.Label(labelRect, label,textStyle);
 			}
 
 			GUI.EndScrollView();
-			y += 100;
+			y += consoleHeight;
 		}
 
-		GUI.Box(new Rect(0, y, Screen.width, 30), "");
+		GUI.Box(new Rect(0, y, Screen.width, (fontSize * 2f)), "");
 		GUI.backgroundColor = new Color(0, 0, 0, 0);
 		GUI.SetNextControlName("InputField");
-		input = GUI.TextField(new Rect(10f, y + 5f, Screen.width - 20f, 20f), input);
+		input = GUI.TextField(new Rect(10f, y + 5f, Screen.width - 20f, (fontSize * 1.5f)), input, textStyle);
 		GUI.FocusControl("InputField"); //auto focuses the cursor onto the input field
 	}
 
