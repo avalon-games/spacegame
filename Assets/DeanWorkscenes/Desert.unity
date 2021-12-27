@@ -3381,6 +3381,10 @@ PrefabInstance:
       propertyPath: menu
       value: 
       objectReference: {fileID: 921570715}
+    - target: {fileID: 7297615086809227043, guid: 19ad177f18c974c009922835c12cf9aa, type: 3}
+      propertyPath: checkpoints
+      value: 
+      objectReference: {fileID: 907971052}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 19ad177f18c974c009922835c12cf9aa, type: 3}
 --- !u!1001 &630573040
@@ -3515,6 +3519,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 907971051}
+  - component: {fileID: 907971052}
   m_Layer: 0
   m_Name: Checkpoints
   m_TagString: Untagged
@@ -3540,6 +3545,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &907971052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 907971050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8efe6afefb2404150b520f1791a6cc8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &921570715 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 67542192559055627, guid: 10871b0790af5491eb5744a83a55f834, type: 3}
