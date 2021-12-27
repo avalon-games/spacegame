@@ -22,16 +22,18 @@ public class DebugController : MonoBehaviour
 	public List<object> commandList;
 	List<string> levelList;
 
-	//list of available commands
-	public static DebugCommand<int> SET_HP;
+	//list of available commands, listed in alphabetical order
 	public static DebugCommand HEAL;
 	public static DebugCommand HELP;
-	public static DebugCommand<int> LOAD_LEVEL;
 	public static DebugCommand LIST_LEVELS;
+	public static DebugCommand<int> LOAD_CHECKPOINT;
+	public static DebugCommand<int> LOAD_LEVEL;
+	public static DebugCommand<int> SET_HP;
 
 
 	//objects to call functions from
 	public UIMenus menu;
+	public CheckpointManager checkpoints;
 
 	public void OnToggleDebug() {
 		showConsole = !showConsole;
@@ -50,40 +52,40 @@ public class DebugController : MonoBehaviour
 		textStyle.normal.textColor = Color.white;
 
 		CheckMissingObjects();
-		HEAL = new DebugCommand("heal", "heal player to max hp (8). ", "heal", () => {
+		HEAL = new DebugCommand("h", "heal: heals player to max hp (8). ", "h", () => {
 			menu.SetHp(8);
 		});
-		SET_HP = new DebugCommand<int>("set_hp", "sets hp to the specified hp and heal to full oxygen, max is 8. ", "set_hp <target_hp>", (x) => {
-				menu.SetHp(x);
-		});
-
-		#if UNITY_EDITOR
-			LIST_LEVELS = new DebugCommand("list_levels", "gets the list of levels in build settings", "list_levels", () => {
-				levelList = SceneChanger.GetBuildScenes();
-				showLevelList = true;
-				showHelp = false;
-			});
-		#endif
-
-		LOAD_LEVEL = new DebugCommand<int>("load_level", "loads the specified scene. ", "load_level <target_scene>", (x) => {
-			SceneChanger.GoToLevel(x);
-		});
-
 		HELP = new DebugCommand("help", "shows the list of commands", "help", () => {
 			showHelp = true;
 			showLevelList = false;
 		});
+		#if UNITY_EDITOR
+		LIST_LEVELS = new DebugCommand("listl", "list levels: gets the list of levels in build settings (editor only)", "listl", () => {
+			levelList = SceneChanger.GetBuildScenes();
+			showLevelList = true;
+			showHelp = false;
+		});
+#endif
+		LOAD_CHECKPOINT = new DebugCommand<int>("loadc", "teleports the player to the specified checkpoint. ", "loadc <target>", (x) => {
+			if (checkpoints.CheckpointExists(x))
+				checkpoints.Teleport(x);
+		});
+		LOAD_LEVEL = new DebugCommand<int>("loadl", "load level: loads the specified scene. ", "loadl <target_scene>", (x) => {
+			SceneChanger.GoToLevel(x);
+		});
+		SET_HP = new DebugCommand<int>("sh", "set hp: sets hp to the specified amount and heal to full oxygen, max is 8. ", "sh <target_hp>", (x) => {
+				menu.SetHp(x);
+		});
 
 		commandList = new List<object> {
-			SET_HP,
 			HEAL,
-			LOAD_LEVEL,
-
+			HELP,
 			#if UNITY_EDITOR
 				LIST_LEVELS,
 			#endif
-
-			HELP
+			LOAD_CHECKPOINT,
+			LOAD_LEVEL,
+			SET_HP
 		};
 
 
@@ -95,6 +97,9 @@ public class DebugController : MonoBehaviour
 	private void CheckMissingObjects() {
 		if (menu == null) {
 			Debug.LogError("ERROR *** menu object not set");
+		}
+		if (checkpoints == null) {
+			Debug.LogError("ERROR *** checkpoints object not set");
 		}
 	}
 

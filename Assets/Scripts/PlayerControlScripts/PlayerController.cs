@@ -198,7 +198,7 @@ public class PlayerController : MonoBehaviour
      * Teleports the player to the last ground position that the player stood on
      * Used in: teleports player back to previous position on taking damage
      */
-    public void TeleportToCheckpoint() {
+    public void OnDamage() {
         transform.position = new Vector2(PlayerData.checkpoint[0], PlayerData.checkpoint[1]);
         rb.velocity = Vector2.zero;
 	}
