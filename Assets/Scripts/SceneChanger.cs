@@ -28,6 +28,7 @@ public static class SceneChanger
         return SceneManager.GetActiveScene().buildIndex;
 	}
 
+    #if UNITY_EDITOR
     public static List<string> GetBuildScenes() {
         List<string> scenes = new List<string>();
         foreach (EditorBuildSettingsScene scene in EditorBuildSettings.scenes) {
@@ -36,6 +37,8 @@ public static class SceneChanger
         }
         return scenes;
     }
+    #endif
 }
+
 //add scene change commands
 //lose hp should be taken care off in hazard script

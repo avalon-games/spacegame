@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class GrapplingGun : MonoBehaviour
 {
+	public GameObject pullHook;
+	public GameObject swingHook;
 	GrapplingHook pullHookScript;
 	GrapplingHook swingHookScript;
 
-	public GameObject hookPull;
-	public GameObject hookSwing;
 	public PlayerController player;
 	float initialGravity;
 
@@ -26,8 +26,8 @@ public class GrapplingGun : MonoBehaviour
 	public bool infiniteCharge;
 
 	private void Start() {
-		pullHookScript = hookPull.GetComponent<GrapplingHook>();
-		swingHookScript = hookSwing.GetComponent<GrapplingHook>();
+		pullHookScript = pullHook.GetComponent<GrapplingHook>();
+		swingHookScript = swingHook.GetComponent<GrapplingHook>();
 		initialGravity = player.rb.gravityScale;
 	}
 
@@ -53,7 +53,7 @@ public class GrapplingGun : MonoBehaviour
 		if (pullHookScript.isAttached) {
 			player.isOnGround = false;
 			if (initializePull) InitializePull();
-			if (Vector2.Distance(transform.position, hookPull.transform.position) >= 1f) Pull();
+			if (Vector2.Distance(transform.position, pullHook.transform.position) >= 1f) Pull();
 			else player.rb.velocity = Vector2.zero;
 		} else if (swingHookScript.isAttached) {
 			if (initializeSwing) InitializeSwing();
@@ -108,7 +108,7 @@ public class GrapplingGun : MonoBehaviour
 	 * Translates the player towards the grapple point
 	 */
 	void Pull () {
-		Vector2 direction = (hookPull.transform.position - transform.position).normalized;
+		Vector2 direction = (pullHook.transform.position - transform.position).normalized;
 		player.rb.velocity = direction * pullSpeed;
 	}
 
@@ -119,8 +119,8 @@ public class GrapplingGun : MonoBehaviour
 	 */
 	private void InitializeSwing() {
 		initializeSwing = false;
-		float xPos = transform.position.x - hookSwing.transform.position.x;
-		float yPos = transform.position.y - hookSwing.transform.position.y;
+		float xPos = transform.position.x - swingHook.transform.position.x;
+		float yPos = transform.position.y - swingHook.transform.position.y;
 
 		if (yPos > 0) swingHookScript.grappleRelease = true; //don't allow swing if above the grappled point
 		if (xPos < 0) swingRight = true;
@@ -143,8 +143,8 @@ public class GrapplingGun : MonoBehaviour
 	}
 
 	void GetSwingPhase() {
-		float xPos = transform.position.x - hookSwing.transform.position.x;
-		float yPos = transform.position.y - hookSwing.transform.position.y;
+		float xPos = transform.position.x - swingHook.transform.position.x;
+		float yPos = transform.position.y - swingHook.transform.position.y;
 		if (xPos > 0 && yPos > 0) currentPhase = Mathf.Atan(Mathf.Abs(yPos / xPos));
 		else if (xPos < 0 && yPos > 0) currentPhase = Mathf.PI - Mathf.Atan(Mathf.Abs(yPos / xPos));
 		else if (xPos < 0 && yPos < 0) currentPhase = Mathf.PI + Mathf.Atan(Mathf.Abs(yPos / xPos));
