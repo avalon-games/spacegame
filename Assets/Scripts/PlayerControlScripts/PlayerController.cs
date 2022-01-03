@@ -91,9 +91,18 @@ public class PlayerController : MonoBehaviour
 
     #region MainPlayerMovementControl
     void FixedUpdate() {
-        if (movementAllowed)
-        {
+        if (movementAllowed) {
             MovePlayer();
+        } else {
+            if (isOnGround) {
+                rb.velocity = Vector3.SmoothDamp(rb.velocity, Vector2.zero, ref m_Velocity, movementSmoothTime);
+            } else if (isInQuicksand) {
+                rb.velocity = Vector2.zero;
+            }
+            if (horizontalInput < 0)
+                sprite.flipX = true;
+            else if (horizontalInput > 0)
+                sprite.flipX = false;
         }
     }
 
@@ -104,9 +113,6 @@ public class PlayerController : MonoBehaviour
     void MovePlayer() {
         Vector2 targetVelocity = Vector2.zero;
         if (!movementAllowed) {
-            if (isOnGround || isInQuicksand) {
-                rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref m_Velocity, movementSmoothTime);
-            }
             return;
         }
 
@@ -118,13 +124,12 @@ public class PlayerController : MonoBehaviour
 				targetVelocity = new Vector2(maxSpeedLeft, rb.velocity.y);
 			else if (horizontalInput > 0)
 				targetVelocity = new Vector2(maxSpeedRight, rb.velocity.y);
-			else
+			else if (!isOnGround)
 				targetVelocity = new Vector2(0, rb.velocity.y);
-			//if (isInQuicksand) {
-   //             rb.velocity = Vector2.zero;
-   //             if (jumpButton)
-   //                 rb.velocity = new Vector2(0f, jumpInitialVelocity/10);
-			/* } else */ if (isOnGround && jumpButton) {
+            else
+                rb.velocity = new Vector2(0, rb.velocity.y);
+
+			if (isOnGround && jumpButton) {
 				animator.Play("Jump");
 				rb.velocity = new Vector2(rb.velocity.x, jumpInitialVelocity);
 				isOnGround = false;
@@ -154,7 +159,7 @@ public class PlayerController : MonoBehaviour
     /**
      * Detects what surface the player is currently standing on
      */
-	private void DetectBottomSurface() {
+	void DetectBottomSurface() {
         //detects standing on ground
 		RaycastHit2D groundHit = Physics2D.Raycast(coll.bounds.center, Vector2.down, groundDetectRadius, groundLayer);
 
@@ -169,7 +174,7 @@ public class PlayerController : MonoBehaviour
      * Drawing Gizmos in edit mode to display the raycast for detecting ground and jump height
      */
     [ExecuteInEditMode]
-    private void OnDrawGizmos() {
+    void OnDrawGizmos() {
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, new Vector2(transform.position.x,transform.position.y - groundDetectRadius));
         Gizmos.color = Color.yellow;
@@ -204,8 +209,10 @@ public class PlayerController : MonoBehaviour
 	}
 
     public IEnumerator InvincibilityFrames() {
-        invulnerable = true;
-        yield return new WaitForSeconds(invincibilityDuration);
-        invulnerable = false;
+        if (invulnerable == false) { 
+            invulnerable = true;
+            yield return new WaitForSeconds(invincibilityDuration);
+            invulnerable = false;
+        }
     }
 }

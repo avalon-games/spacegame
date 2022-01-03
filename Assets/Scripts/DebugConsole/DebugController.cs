@@ -12,8 +12,8 @@ using UnityEngine;
 public class DebugController : MonoBehaviour
 {
 	GUIStyle textStyle;
-	public int fontSize = 20;
-	public int consoleHeight = 110;
+	int fontSize = Screen.height / 25;
+	int consoleHeight = Screen.height/5;
 
 	bool showConsole;
 	bool showHelp;
@@ -23,17 +23,19 @@ public class DebugController : MonoBehaviour
 	List<string> levelList;
 
 	//list of available commands, listed in alphabetical order
-	public static DebugCommand HEAL;
 	public static DebugCommand HELP;
+	public static DebugCommand INFINITE_GRAPPLE;
 	public static DebugCommand LIST_LEVELS;
 	public static DebugCommand<int> LOAD_CHECKPOINT;
 	public static DebugCommand<int> LOAD_LEVEL;
 	public static DebugCommand<int> SET_HP;
+	public static DebugCommand TANK;
 
 
 	//objects to call functions from
 	public UIMenus menu;
 	public CheckpointManager checkpoints;
+	public GrapplingGun grapple;
 
 	public void OnToggleDebug() {
 		showConsole = !showConsole;
@@ -52,12 +54,13 @@ public class DebugController : MonoBehaviour
 		textStyle.normal.textColor = Color.white;
 
 		CheckMissingObjects();
-		HEAL = new DebugCommand("h", "heal: heals player to max hp (8). ", "h", () => {
-			menu.SetHp(8);
-		});
 		HELP = new DebugCommand("help", "shows the list of commands", "help", () => {
 			showHelp = true;
 			showLevelList = false;
+		});
+		INFINITE_GRAPPLE = new DebugCommand("inf", "toggle player infinite grapple charge.", "inf", () => {
+			if (grapple != null)
+				grapple.ToggleInfiniteCharge();
 		});
 		#if UNITY_EDITOR
 		LIST_LEVELS = new DebugCommand("listl", "list levels: gets the list of levels in build settings (editor only)", "listl", () => {
@@ -65,27 +68,33 @@ public class DebugController : MonoBehaviour
 			showLevelList = true;
 			showHelp = false;
 		});
-#endif
+		#endif
 		LOAD_CHECKPOINT = new DebugCommand<int>("loadc", "teleports the player to the specified checkpoint. ", "loadc <target>", (x) => {
-			if (checkpoints.CheckpointExists(x))
+			if (checkpoints != null && checkpoints.CheckpointExists(x))
 				checkpoints.Teleport(x);
 		});
 		LOAD_LEVEL = new DebugCommand<int>("loadl", "load level: loads the specified scene. ", "loadl <target_scene>", (x) => {
 			SceneChanger.GoToLevel(x);
 		});
 		SET_HP = new DebugCommand<int>("sh", "set hp: sets hp to the specified amount and heal to full oxygen, max is 8. ", "sh <target_hp>", (x) => {
+			if (menu != null)
 				menu.SetHp(x);
+		});
+		TANK = new DebugCommand("tank", "sets the player hp super high (1000). ", "tank", () => {
+			if (menu != null)
+				menu.SetHp(1000);
 		});
 
 		commandList = new List<object> {
-			HEAL,
 			HELP,
+			INFINITE_GRAPPLE,
 			#if UNITY_EDITOR
 				LIST_LEVELS,
 			#endif
 			LOAD_CHECKPOINT,
 			LOAD_LEVEL,
-			SET_HP
+			SET_HP,
+			TANK
 		};
 
 
@@ -100,6 +109,9 @@ public class DebugController : MonoBehaviour
 		}
 		if (checkpoints == null) {
 			Debug.LogError("ERROR *** checkpoints object not set");
+		}
+		if (grapple == null) {
+			Debug.LogError("ERROR *** grappling gun object not set");
 		}
 	}
 

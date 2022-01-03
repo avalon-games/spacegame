@@ -18,9 +18,10 @@ public static class SceneChanger
     }
 
     public static void GoToLevel(int target) {
-        if (target < SceneManager.sceneCountInBuildSettings && target >= 0)
+        if (target < SceneManager.sceneCountInBuildSettings && target >= 0) {
+            PlayerData.checkpoint = null;
             SceneManager.LoadScene(target);
-        else
+        } else
             Debug.LogError("Scene " + target + " is not in the build settings");
     }
 
