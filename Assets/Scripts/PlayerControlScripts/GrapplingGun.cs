@@ -86,11 +86,11 @@ public class GrapplingGun : MonoBehaviour
 			initializePull = true;
 
 			//when released, reenable movement
-		} else if (Input.GetButtonUp("GrappleSwing") || Input.GetButtonUp("GrapplePull")) {
-			if (!pullHookScript.hasReturned)
-				pullHookScript.grappleRelease = true;
-			if (!swingHookScript.hasReturned)
-				swingHookScript.grappleRelease = true;
+		} else if (Input.GetButtonUp("GrappleSwing")) {
+			if (!swingHookScript.hasReturned) swingHookScript.grappleRelease = true;
+		}
+		else if (Input.GetButtonUp("GrapplePull")) {
+			if (!pullHookScript.hasReturned) pullHookScript.grappleRelease = true;
 		}
 	}
 

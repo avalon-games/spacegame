@@ -176,7 +176,7 @@ MonoBehaviour:
   m_YDamping: 3.2
   m_ZDamping: 2.8
   m_TargetMovementOnly: 1
-  m_ScreenX: 0.5
+  m_ScreenX: 0.4
   m_ScreenY: 0.61
   m_CameraDistance: 10
   m_DeadZoneWidth: 0.16
@@ -185,7 +185,7 @@ MonoBehaviour:
   m_UnlimitedSoftZone: 0
   m_SoftZoneWidth: 0.73
   m_SoftZoneHeight: 0.5
-  m_BiasX: 0
+  m_BiasX: 0.00000031370863
   m_BiasY: -0.15
   m_CenterOnActivate: 1
   m_GroupFramingMode: 2
@@ -294,6 +294,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7236650681042808200, guid: 0acbc6ce050354dfe968b459afa3af1b, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7236650681042808203, guid: 0acbc6ce050354dfe968b459afa3af1b, type: 3}
       propertyPath: gunPoint
       value: 
@@ -369,7 +373,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 150311350}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 103.30926, y: 33.422264, z: -10}
+  m_LocalPosition: {x: -1.4798024, y: -2.2177346, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 35153782}
@@ -3466,6 +3470,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1679133118236956229, guid: d207acdbae6a944f0850d4a7295a7a2d, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4917594242865575782, guid: d207acdbae6a944f0850d4a7295a7a2d, type: 3}
       propertyPath: m_Name
       value: PullHook
@@ -5725,7 +5733,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1014387088}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 103.30926, y: 33.422264, z: -10}
+  m_LocalPosition: {x: -1.4798024, y: -2.2177346, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -5918,11 +5926,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6504014666467313939, guid: 01e9183d132f54bf688027e3c3664dbf, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 103.30926
+      value: -3.610753
       objectReference: {fileID: 0}
     - target: {fileID: 6504014666467313939, guid: 01e9183d132f54bf688027e3c3664dbf, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 31.532463
+      value: -4.1075354
       objectReference: {fileID: 0}
     - target: {fileID: 6504014666467313939, guid: 01e9183d132f54bf688027e3c3664dbf, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5959,6 +5967,10 @@ PrefabInstance:
     - target: {fileID: 6504014666467314024, guid: 01e9183d132f54bf688027e3c3664dbf, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 6504014666467314026, guid: 01e9183d132f54bf688027e3c3664dbf, type: 3}
+      propertyPath: initialMaxSpeed
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7233616039820712983, guid: 01e9183d132f54bf688027e3c3664dbf, type: 3}
       propertyPath: pullHook

@@ -8,13 +8,16 @@ using UnityEngine;
 public class CheckpointManager : MonoBehaviour
 {
 	List<Vector2> checkpoints;
+	List<Checkpoint> checkpointScripts;
 	Transform player;
 
 	void Start() {
 		player = GameObject.FindGameObjectWithTag("Player").transform;
 		checkpoints = new List<Vector2>();
+		checkpointScripts = new List<Checkpoint>();
 		foreach (Transform child in transform) {
 			checkpoints.Add(child.position);
+			checkpointScripts.Add(child.gameObject.GetComponent<Checkpoint>());
 		}
 	}
 	/**
@@ -29,5 +32,12 @@ public class CheckpointManager : MonoBehaviour
 	public bool CheckpointExists(int i ) {
 		return i >= 0 && i < checkpoints.Count;
 	}
+
+	public void ResetCheckpoints() {
+		foreach(Checkpoint c  in checkpointScripts) {
+			c.ResetCheckpoint();
+		}
+	}
+	
 
 }

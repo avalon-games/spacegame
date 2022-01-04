@@ -10,11 +10,9 @@ using UnityEngine;
 public class DamagingHazards : MonoBehaviour
 {
 	PlayerController player;
-	PlayerUI ui;
 
 	public void Start() {
 		GameObject p = GameObject.FindGameObjectWithTag("Player");
-		ui = GameObject.FindGameObjectWithTag("UI").GetComponent<PlayerUI>();
 		player = p.GetComponent<PlayerController>();
 	}
 
@@ -22,14 +20,6 @@ public class DamagingHazards : MonoBehaviour
 	 * Causes player to take damage, reducing current hp and causing player to teleport to the last safe tile
 	 */
 	public void DealDamage() {
-		if (!player.invulnerable) {
-			StartCoroutine(player.InvincibilityFrames());
-			PlayerData.currHealth -= 1;
-			ui.UpdateHealth();
-			if (PlayerData.currHealth > 0) { 
-				player.OnDamage();
-			} else
-				SceneChanger.GoToSpaceship();
-		}
+		player.TakeDamage();
 	}
 }
