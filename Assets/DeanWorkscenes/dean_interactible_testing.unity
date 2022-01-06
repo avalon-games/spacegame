@@ -2471,6 +2471,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menu: {fileID: 0}
+  checkpoints: {fileID: 0}
+  grapple: {fileID: 0}
 --- !u!4 &2094381671
 Transform:
   m_ObjectHideFlags: 0
@@ -2585,7 +2587,7 @@ GameObject:
   - component: {fileID: 2106425555}
   - component: {fileID: 2106425554}
   - component: {fileID: 2106425553}
-  - component: {fileID: 2106425552}
+  - component: {fileID: 653572927973655419}
   m_Layer: 6
   m_Name: OneWayDestructible
   m_TagString: Grappable
@@ -2593,18 +2595,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2106425552
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2106425551}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 327e2c51f5c174da7ab140469c77cc8d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!251 &2106425553
 PlatformEffector2D:
   m_ObjectHideFlags: 0
@@ -3739,6 +3729,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &653572927973655419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2106425551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f9238235ad254e09a37000f5473d6af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!61 &882609084396081405
 BoxCollider2D:
   m_ObjectHideFlags: 0

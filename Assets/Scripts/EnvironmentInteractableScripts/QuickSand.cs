@@ -13,7 +13,7 @@ public class QuickSand : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D collision) {
         if (collision.gameObject.CompareTag("Player")) {
-            player.ToggleMovementControl(false);
+            player.isInQuicksand = true;
         }
     }
     /**
@@ -22,8 +22,8 @@ public class QuickSand : MonoBehaviour
      * - changing player velocity when exiting wind
      */
     void OnTriggerExit2D(Collider2D collision) {
-        if (collision.gameObject.CompareTag("Player")) 
-                player.ToggleMovementControl(true);
+        if (collision.gameObject.CompareTag("Player"))
+            player.isInQuicksand = false;
             
     }
 }

@@ -138,5 +138,5 @@ MonoBehaviour:
   grappleRelease: 0
   hasReturned: 0
   gunPoint: {fileID: 0}
-  maxRange: 11.5
+  maxRange: 7
   launchSpeed: 31.9

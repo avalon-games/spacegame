@@ -47,6 +47,8 @@ MonoBehaviour:
   fontSize: 20
   consoleHeight: 120
   menu: {fileID: 0}
+  checkpoints: {fileID: 0}
+  grapple: {fileID: 0}
 --- !u!114 &7297615086809227053
 MonoBehaviour:
   m_ObjectHideFlags: 0

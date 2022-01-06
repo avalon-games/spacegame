@@ -21,8 +21,7 @@ public class GrapplingGun : MonoBehaviour
 	bool initializePull;
 
 	//defines how many times the player can grapple
-	public int pullCharge;
-	public int swingCharge;
+	public int totalCharge;
 	public bool infiniteCharge;
 
 	private void Start() {
@@ -34,8 +33,7 @@ public class GrapplingGun : MonoBehaviour
 	void Update () {
 		//replenish charge while on ground
 		if (player.isOnGround) {
-			pullCharge = 2;
-			swingCharge = 2;
+			totalCharge = 3;
 		}
 
 		ManageInput();
@@ -46,9 +44,10 @@ public class GrapplingGun : MonoBehaviour
 		}
 
 		//freeze movement during launch
-		if ((!pullHookScript.isAttached && !pullHookScript.hasReturned && !pullHookScript.grappleRelease) || (!swingHookScript.isAttached && !swingHookScript.hasReturned && !swingHookScript.grappleRelease))
+		if ((!pullHookScript.isAttached && !pullHookScript.hasReturned && !pullHookScript.grappleRelease) ||
+			(!swingHookScript.isAttached && !swingHookScript.hasReturned && !swingHookScript.grappleRelease)) { 
 			player.rb.velocity = Vector2.zero;
-
+		}
 		//while attached, translate the player
 		if (pullHookScript.isAttached) {
 			player.isOnGround = false;
@@ -64,17 +63,17 @@ public class GrapplingGun : MonoBehaviour
 
 	private void ManageInput() {
 		//assign action based on button press
-		if (Input.GetButtonDown("GrappleSwing") && swingHookScript.hasReturned && (swingCharge > 0 || infiniteCharge)) {
+		if (Input.GetButtonDown("GrappleSwing") && swingHookScript.hasReturned && (totalCharge > 0 || infiniteCharge)) {
 			swingHookScript.Grapple();
 			player.ToggleMovementControl(false);
 			initializeSwing = true;
-			swingCharge--;
+			totalCharge--;
 
 			if (!pullHookScript.hasReturned) {
 				pullHookScript.grappleRelease = true;
 			}
 
-		} else if (Input.GetButtonDown("GrapplePull") && pullHookScript.hasReturned && (pullCharge > 0 || infiniteCharge)) {
+		} else if (Input.GetButtonDown("GrapplePull") && pullHookScript.hasReturned && (totalCharge > 0 || infiniteCharge)) {
 			pullHookScript.Grapple();
 
 			if (!swingHookScript.hasReturned) {
@@ -83,15 +82,15 @@ public class GrapplingGun : MonoBehaviour
 
 			player.ToggleMovementControl(false);
 
-			pullCharge--;
+			totalCharge--;
 			initializePull = true;
 
 			//when released, reenable movement
-		} else if (Input.GetButtonUp("GrappleSwing") || Input.GetButtonUp("GrapplePull")) {
-			if (!pullHookScript.hasReturned)
-				pullHookScript.grappleRelease = true;
-			if (!swingHookScript.hasReturned)
-				swingHookScript.grappleRelease = true;
+		} else if (Input.GetButtonUp("GrappleSwing")) {
+			if (!swingHookScript.hasReturned) swingHookScript.grappleRelease = true;
+		}
+		else if (Input.GetButtonUp("GrapplePull")) {
+			if (!pullHookScript.hasReturned) pullHookScript.grappleRelease = true;
 		}
 	}
 
@@ -120,10 +119,10 @@ public class GrapplingGun : MonoBehaviour
 	private void InitializeSwing() {
 		initializeSwing = false;
 		float xPos = transform.position.x - swingHook.transform.position.x;
-		float yPos = transform.position.y - swingHook.transform.position.y;
+		GetSwingPhase();
 
-		if (yPos > 0) swingHookScript.grappleRelease = true; //don't allow swing if above the grappled point
-		if (xPos < 0) swingRight = true;
+		if (currentPhase > Mathf.PI/6 && currentPhase < 5*Mathf.PI / 6) swingHookScript.grappleRelease = true; //don't allow swing if above 30 degrees the grappled point
+		if (xPos < 0) swingRight = true; //swing based on where player is relative to grapple
 		else swingRight = false;
 	}
 
@@ -149,5 +148,9 @@ public class GrapplingGun : MonoBehaviour
 		else if (xPos < 0 && yPos > 0) currentPhase = Mathf.PI - Mathf.Atan(Mathf.Abs(yPos / xPos));
 		else if (xPos < 0 && yPos < 0) currentPhase = Mathf.PI + Mathf.Atan(Mathf.Abs(yPos / xPos));
 		else currentPhase = 2*Mathf.PI - Mathf.Atan(Mathf.Abs(yPos / xPos));
+	}
+
+	public void ToggleInfiniteCharge() {
+		infiniteCharge = !infiniteCharge;
 	}
 }
