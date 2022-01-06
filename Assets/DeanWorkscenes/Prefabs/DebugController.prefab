@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a52643e40d89147fd898a25dee5b3380, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fontSize: 20
+  consoleHeight: 120
   menu: {fileID: 0}
   checkpoints: {fileID: 0}
   grapple: {fileID: 0}
