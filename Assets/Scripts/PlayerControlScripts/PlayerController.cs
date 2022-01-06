@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
 {
     [HideInInspector] public Rigidbody2D rb;
     Collider2D coll;
-    SpriteRenderer sprite;
+    public SpriteRenderer sprite;
     PlayerUI ui;
     enum State { idle, running, jumping, falling, pushing, hurt }; //animation states, decides interactions
     State state;

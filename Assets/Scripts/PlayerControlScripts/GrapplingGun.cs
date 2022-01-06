@@ -119,10 +119,10 @@ public class GrapplingGun : MonoBehaviour
 	private void InitializeSwing() {
 		initializeSwing = false;
 		float xPos = transform.position.x - swingHook.transform.position.x;
-		float yPos = transform.position.y - swingHook.transform.position.y;
+		GetSwingPhase();
 
-		if (yPos > 0) swingHookScript.grappleRelease = true; //don't allow swing if above the grappled point
-		if (xPos < 0) swingRight = true;
+		if (currentPhase > Mathf.PI/6 && currentPhase < 5*Mathf.PI / 6) swingHookScript.grappleRelease = true; //don't allow swing if above 30 degrees the grappled point
+		if (xPos < 0) swingRight = true; //swing based on where player is relative to grapple
 		else swingRight = false;
 	}
 
