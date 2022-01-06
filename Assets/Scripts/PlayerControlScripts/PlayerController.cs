@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     enum State { idle, running, jumping, falling, pushing, hurt }; //animation states, decides interactions
     State state;
 
+
     [Header("Animation")]
     Animator animator;
 
@@ -31,6 +32,7 @@ public class PlayerController : MonoBehaviour
     [Range(0, .3f)] [SerializeField] float movementSmoothTime = .2f;
     Vector3 m_Velocity = Vector3.zero; //required for SmoothDamp
     private bool movementAllowed = true;
+    float initialScale;
 
     [Header("Vertical:")]
     bool jumpButton;
@@ -63,6 +65,7 @@ public class PlayerController : MonoBehaviour
         groundLayer = LayerMask.GetMask("Ground");
         sandLayer = LayerMask.GetMask("Sand");
         ui = GameObject.FindGameObjectWithTag("UI").GetComponent<PlayerUI>();
+        initialScale = transform.localScale.x;
 
         if (PlayerData.checkpoint == null)
             PlayerData.checkpoint = new float[2] { transform.position.x, transform.position.y };  //initial checkpoint is set to initial position
@@ -79,7 +82,7 @@ public class PlayerController : MonoBehaviour
         if (jumpButton == true && Input.GetButtonUp("Jump")) jumpButton = false;
         DetectBottomSurface();
 
-        AssignState();
+        //AssignState();
         animator.SetInteger("state", (int)state);
 
         sprite.color = (invulnerable) ? new Color(1, 1, 1, 0.5f) : new Color(1, 1, 1, 1);
@@ -111,23 +114,27 @@ public class PlayerController : MonoBehaviour
         }
 
         //v_0=2hv_x/x_h ----------   v_0= (h - 0.5gt_h^2) / t_h
-        float timeToMaxHeight = Mathf.Sqrt(2f*jumpHeight/(rb.gravityScale*9.81f));
-        float jumpInitialVelocity = (jumpHeight + 1f + 0.5f*rb.gravityScale*9.81f*timeToMaxHeight*timeToMaxHeight)/timeToMaxHeight;
-		if (!isInQuicksand) {
-			if (horizontalInput < 0)
-				targetVelocity = new Vector2(maxSpeedLeft, rb.velocity.y);
-			else if (horizontalInput > 0)
-				targetVelocity = new Vector2(maxSpeedRight, rb.velocity.y);
-			else if (!isOnGround)
-				targetVelocity = new Vector2(0, rb.velocity.y);
-            else
+        float timeToMaxHeight = Mathf.Sqrt(2f * jumpHeight / (rb.gravityScale * 9.81f));
+        float jumpInitialVelocity = (jumpHeight + 1f + 0.5f * rb.gravityScale * 9.81f * timeToMaxHeight * timeToMaxHeight) / timeToMaxHeight;
+        if (!isInQuicksand) {
+            if (horizontalInput < 0) {
+                targetVelocity = new Vector2(maxSpeedLeft, rb.velocity.y);
+            } else if (horizontalInput > 0) {
+                targetVelocity = new Vector2(maxSpeedRight, rb.velocity.y);
+            } else if (!isOnGround) {
+                targetVelocity = new Vector2(0, rb.velocity.y);
+                state = State.falling;
+            } else {
                 rb.velocity = new Vector2(0, rb.velocity.y);
-
+                state = State.idle;
+            }
             if (isOnGround && jumpButton) {
-				animator.Play("Jump");
-				rb.velocity = new Vector2(rb.velocity.x, jumpInitialVelocity);
-				isOnGround = false;
-			}
+                rb.velocity = new Vector2(rb.velocity.x, jumpInitialVelocity);
+                isOnGround = false;
+                state = State.jumping;
+            } else if (isOnGround && horizontalInput != 0) {
+                state = State.running;
+            }
 
             //variable jump height
             if (!jumpButton && rb.velocity.y > 0.5f && jumpReleaseActive)
@@ -140,13 +147,16 @@ public class PlayerController : MonoBehaviour
         }
         //if in quicksand
         else {
-            rb.velocity = new Vector2(0,-0.2f);
-		}
+            rb.velocity = new Vector2(0, -0.2f);
+        }
         //change player facing direction
-        if (horizontalInput < 0)
-            sprite.flipX = true;
-        else if (horizontalInput > 0)
-            sprite.flipX = false;
+        if (horizontalInput < 0) {
+            //sprite.flipX = true;
+            transform.localScale = new Vector3(-initialScale, initialScale, initialScale);
+        } else if (horizontalInput > 0) { 
+            //sprite.flipX = false;
+            transform.localScale = new Vector3(initialScale, initialScale, initialScale);
+        }
     }
 	public void ToggleMovementControl(bool toggle) {
 		movementAllowed = toggle;
@@ -186,8 +196,6 @@ public class PlayerController : MonoBehaviour
      *     works in conjunction with the state variable and enum State
      */
     void AssignState() {
-        //if (hurt)
-        //    state = State.hurt;
         if (rb.velocity.y > 0.5f)
             state = State.jumping;
         else if (rb.velocity.y < -0.5f)
