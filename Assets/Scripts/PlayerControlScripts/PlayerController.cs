@@ -123,10 +123,8 @@ public class PlayerController : MonoBehaviour
                 targetVelocity = new Vector2(maxSpeedRight, rb.velocity.y);
             } else if (!isOnGround) {
                 targetVelocity = new Vector2(0, rb.velocity.y);
-                state = State.falling;
             } else {
                 rb.velocity = new Vector2(0, rb.velocity.y);
-                state = State.idle;
             }
             if (isOnGround && jumpButton) {
                 rb.velocity = new Vector2(rb.velocity.x, jumpInitialVelocity);
@@ -134,7 +132,10 @@ public class PlayerController : MonoBehaviour
                 state = State.jumping;
             } else if (isOnGround && horizontalInput != 0) {
                 state = State.running;
-            }
+            } else if (rb.velocity.y < -0.1f) {
+                state = State.falling;
+            } else
+                state = State.idle;
 
             //variable jump height
             if (!jumpButton && rb.velocity.y > 0.5f && jumpReleaseActive)
