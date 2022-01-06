@@ -126,11 +126,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b0fdb2207f0f4b038143aa3eadbc8dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hookPull: {fileID: 0}
-  hookSwing: {fileID: 0}
+  pullHook: {fileID: 0}
+  swingHook: {fileID: 0}
   player: {fileID: 0}
-  pullSpeed: 40
-  swingSpeed: 20
-  pullCharge: 0
-  swingCharge: 0
+  pullSpeed: 30
+  swingSpeed: 12
+  totalCharge: 0
   infiniteCharge: 0
