@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/DeanWorkscenes/desert_remake.unity
+    guid: 1308b323515264429b3987e26e5462a9
+  - enabled: 1
     path: Assets/Scenes/Desert_L1.unity
     guid: 51f53694c9109f6469be68f22790ebc9
   - enabled: 1
@@ -14,11 +17,5 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Spaceship.unity
     guid: c70e8a48ecce54dbf802211e91415400
-  - enabled: 1
-    path: Assets/DeanWorkscenes/dean_interactible_testing.unity
-    guid: c647f8328e93a4c8c987f1e99f53d694
-  - enabled: 1
-    path: Assets/DeanWorkscenes/Desert.unity
-    guid: 7d22116e8be974af5bbadac55d2fa56c
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 9f164897e85094575ab2f6ccce7f68d4, type: 2}
