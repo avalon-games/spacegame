@@ -82,15 +82,9 @@ public class PlayerController : MonoBehaviour
         if (jumpButton == true && Input.GetButtonUp("Jump")) jumpButton = false;
         DetectBottomSurface();
 
-        //AssignState();
         animator.SetInteger("state", (int)state);
 
         sprite.color = (invulnerable) ? new Color(1, 1, 1, 0.5f) : new Color(1, 1, 1, 1);
-
-
-        /////////////Debugging
-        //if (Input.GetKeyDown(KeyCode.R))
-        //    TeleportToLastSafeTile();
     }
 
     #region MainPlayerMovementControl
@@ -191,21 +185,6 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawLine(transform.position, new Vector2(transform.position.x, transform.position.y + jumpHeight));
     }
     #endregion
-
-    /**
-     * AssignState - assigns player animation based on current player movement state
-     *     works in conjunction with the state variable and enum State
-     */
-    void AssignState() {
-        if (rb.velocity.y > 0.5f)
-            state = State.jumping;
-        else if (rb.velocity.y < -0.5f)
-            state = State.falling;
-        else if (Mathf.Abs(horizontalInput) > 0.5f)
-            state = State.running;
-        else
-            state = State.idle;
-    }
 
     /**
      * Teleports the player to the last ground position that the player stood on
