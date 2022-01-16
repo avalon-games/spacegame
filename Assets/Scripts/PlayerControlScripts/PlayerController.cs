@@ -52,6 +52,7 @@ public class PlayerController : MonoBehaviour
     //scene interactions
     bool invulnerable;
     [Range(0f, 5f)] [SerializeField] float invincibilityDuration = 2f;
+    public GrapplingGun grapple;
 
     void Start() {
         maxSpeedLeft = -initialMaxSpeed;
@@ -210,6 +211,7 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage() {
         if (!invulnerable) {
+            if (grapple) grapple.DisableGrapple();
             StartCoroutine(InvincibilityFrames());
             PlayerData.currHealth -= 1;
             ui.UpdateHealth();

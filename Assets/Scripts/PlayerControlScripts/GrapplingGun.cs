@@ -38,14 +38,14 @@ public class GrapplingGun : MonoBehaviour
 
 		ManageInput();
 
-		if (pullHookScript.hasReturned && swingHookScript.hasReturned) {
+		if (!pullHook.activeSelf && !swingHook.activeSelf) {
 			player.ToggleMovementControl(true);
 			player.rb.gravityScale = initialGravity;
 		}
 
 		//freeze movement during launch
-		if ((!pullHookScript.isAttached && !pullHookScript.hasReturned && !pullHookScript.grappleRelease) ||
-			(!swingHookScript.isAttached && !swingHookScript.hasReturned && !swingHookScript.grappleRelease)) { 
+		if ((!pullHookScript.isAttached && pullHook.activeSelf && !pullHookScript.grappleRelease) ||
+			(!swingHookScript.isAttached && swingHook.activeSelf && !swingHookScript.grappleRelease)) {
 			player.rb.velocity = Vector2.zero;
 		}
 		//while attached, translate the player
@@ -57,40 +57,36 @@ public class GrapplingGun : MonoBehaviour
 		} else if (swingHookScript.isAttached) {
 			if (initializeSwing) InitializeSwing();
 			if (!swingHookScript.grappleRelease) Swing();
-			//else player.rb.velocity = Vector2.right;
 		}
 	}
 
 	private void ManageInput() {
 		//assign action based on button press
-		if (Input.GetButtonDown("GrappleSwing") && swingHookScript.hasReturned && (totalCharge > 0 || infiniteCharge)) {
-			swingHookScript.Grapple();
+		if (Input.GetButtonDown("GrappleSwing") && !swingHook.activeSelf && (totalCharge > 0 || infiniteCharge)) {
+			swingHook.SetActive(true);
 			player.ToggleMovementControl(false);
 			initializeSwing = true;
 			totalCharge--;
 
-			if (!pullHookScript.hasReturned) {
+			if (pullHook.activeSelf) {
 				pullHookScript.grappleRelease = true;
 			}
 
-		} else if (Input.GetButtonDown("GrapplePull") && pullHookScript.hasReturned && (totalCharge > 0 || infiniteCharge)) {
-			pullHookScript.Grapple();
-
-			if (!swingHookScript.hasReturned) {
-				swingHookScript.grappleRelease = true;
-			}
-
+		} else if (Input.GetButtonDown("GrapplePull") && !pullHook.activeSelf && (totalCharge > 0 || infiniteCharge)) {
+			pullHook.SetActive(true);
 			player.ToggleMovementControl(false);
-
 			totalCharge--;
 			initializePull = true;
 
+			if (swingHook.activeSelf) {
+				swingHookScript.grappleRelease = true;
+			}
+
 			//when released, reenable movement
-		} else if (Input.GetButtonUp("GrappleSwing")) {
-			if (!swingHookScript.hasReturned) swingHookScript.grappleRelease = true;
-		}
-		else if (Input.GetButtonUp("GrapplePull")) {
-			if (!pullHookScript.hasReturned) pullHookScript.grappleRelease = true;
+  		} else if (Input.GetButtonUp("GrappleSwing")) {
+			if (swingHook.activeSelf) swingHookScript.grappleRelease = true;
+		} else if (Input.GetButtonUp("GrapplePull")) {
+			if (pullHook.activeSelf) pullHookScript.grappleRelease = true;
 		}
 	}
 
@@ -152,5 +148,10 @@ public class GrapplingGun : MonoBehaviour
 
 	public void ToggleInfiniteCharge() {
 		infiniteCharge = !infiniteCharge;
+	}
+
+	public void DisableGrapple() {
+		pullHook.SetActive(false);
+		swingHook.SetActive(false);
 	}
 }

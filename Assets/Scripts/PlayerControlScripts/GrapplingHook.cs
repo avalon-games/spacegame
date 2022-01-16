@@ -13,46 +13,41 @@ public class GrapplingHook : MonoBehaviour
 {
     public bool isAttached;
     public bool grappleRelease; //true if currently on the way back from attached point
-    public bool hasReturned;
     Camera cam;
     Rigidbody2D rb;
-    SpriteRenderer sprite;
     public Transform gunPoint;
 
     [Range(0, 30)] public float maxRange = 10;
     
     public float launchSpeed = 100f;
 
-    void Start() {
+    void Awake() {
         rb = GetComponent<Rigidbody2D>();
         cam = Camera.main;
-        sprite = GetComponent<SpriteRenderer>();
-        sprite.enabled = false;
-        hasReturned = true;
-        grappleRelease = false;
-        isAttached = false;
     }
 
-    public void Grapple()
+    public void OnEnable()
     {
-        hasReturned = false;
-        sprite.enabled = true;
+        isAttached = false;
         transform.position = gunPoint.position;
-        //upon enable launch in the direction of the mouse
         Vector2 distanceVector = (cam.ScreenToWorldPoint(Input.mousePosition) - transform.position);
         distanceVector.Normalize();
         rb.velocity = distanceVector * launchSpeed;
     }
 
-	private void Update() {
-        if (sprite.enabled && (Vector2.Distance(transform.position, gunPoint.position) > maxRange)) {
+	private void LateUpdate() {
+        if (!isAttached && (Vector2.Distance(transform.position, gunPoint.position) > maxRange)) {
             grappleRelease = true;
         }
     }
 
 	private void OnTriggerEnter2D(Collider2D collision) {
-        if (sprite.enabled && collision.gameObject.CompareTag("Grappable")) {
+        if (collision.gameObject.CompareTag("Grappable")) {
+            //snap position to centre of tile, each grid is 0.99 in size, /0.99 gets actual grid cell number, *0.99 translates it back to world coordinate
+            transform.position = new Vector2(Mathf.Floor(transform.position.x / 0.99f) * 0.99f + 0.495f,
+                                            Mathf.Floor(transform.position.y / 0.99f) * 0.99f + 0.495f);
             rb.velocity = Vector2.zero;
+           
             isAttached = true;
         }
     }
@@ -71,9 +66,8 @@ public class GrapplingHook : MonoBehaviour
         if (Vector2.Distance(transform.position,gunPoint.position) <= 3f) {
             transform.position = gunPoint.position;
             rb.velocity = Vector2.zero;
-            sprite.enabled = false;
-            hasReturned = true;
             grappleRelease = false;
+            this.gameObject.SetActive(false);
         }
     }
 }
