@@ -23,6 +23,7 @@ public class GrapplingGun : MonoBehaviour
 	//defines how many times the player can grapple
 	public int totalCharge;
 	public bool infiniteCharge;
+	bool slowMo;
 
 	private void Start() {
 		pullHookScript = pullHook.GetComponent<GrapplingHook>();
@@ -52,8 +53,10 @@ public class GrapplingGun : MonoBehaviour
 		if (pullHookScript.isAttached) {
 			player.isOnGround = false;
 			if (initializePull) InitializePull();
-			if (Vector2.Distance(transform.position, pullHook.transform.position) >= 1f) Pull();
-			else player.rb.velocity = Vector2.zero;
+			if (Vector2.Distance(transform.position, pullHook.transform.position) >= 1f) {
+				StartCoroutine(SlowMo(0.1f));
+				Pull();
+			} else player.rb.velocity = Vector2.zero;
 		} else if (swingHookScript.isAttached) {
 			if (initializeSwing) InitializeSwing();
 			if (!swingHookScript.grappleRelease) Swing();
@@ -153,5 +156,15 @@ public class GrapplingGun : MonoBehaviour
 	public void DisableGrapple() {
 		pullHook.SetActive(false);
 		swingHook.SetActive(false);
+	}
+
+	IEnumerator SlowMo(float seconds) {
+		if (!slowMo) {
+			Time.timeScale = 0.5f;
+			slowMo = true;
+		}
+		yield return new WaitForSecondsRealtime(seconds);
+		Time.timeScale = 1.0f;
+		slowMo = false;
 	}
 }

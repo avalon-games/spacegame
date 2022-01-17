@@ -16,6 +16,7 @@ public class GrapplingHook : MonoBehaviour
     Camera cam;
     Rigidbody2D rb;
     public Transform gunPoint;
+    LineRenderer rope;
 
     [Range(0, 30)] public float maxRange = 10;
     
@@ -24,6 +25,8 @@ public class GrapplingHook : MonoBehaviour
     void Awake() {
         rb = GetComponent<Rigidbody2D>();
         cam = Camera.main;
+        rope = GetComponent<LineRenderer>();
+        this.gameObject.SetActive(false);
     }
 
     public void OnEnable()
@@ -39,6 +42,8 @@ public class GrapplingHook : MonoBehaviour
         if (!isAttached && (Vector2.Distance(transform.position, gunPoint.position) > maxRange)) {
             grappleRelease = true;
         }
+        rope.SetPosition(0, gunPoint.position);
+        rope.SetPosition(1, transform.position);
     }
 
 	private void OnTriggerEnter2D(Collider2D collision) {
