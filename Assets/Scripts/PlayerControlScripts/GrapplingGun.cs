@@ -12,11 +12,10 @@ public class GrapplingGun : MonoBehaviour
 	public PlayerController player;
 	float initialGravity;
 
-	public float pullSpeed = 40f;
-	public float swingSpeed = 20f;
+	public float pullSpeed = 30f;
+	public float swingSpeedMultiplier = 2f;
 	bool swingRight; //if false, swing to the left
 
-	float currentPhase;
 	bool initializeSwing;
 	bool initializePull;
 
@@ -50,14 +49,14 @@ public class GrapplingGun : MonoBehaviour
 			player.rb.velocity = Vector2.zero;
 		}
 		//while attached, translate the player
-		if (pullHookScript.isAttached) {
+		if (pullHook.activeSelf && pullHookScript.isAttached) {
 			player.isOnGround = false;
 			if (initializePull) InitializePull();
 			if (Vector2.Distance(transform.position, pullHook.transform.position) >= 1f) {
 				StartCoroutine(SlowMo(0.1f));
 				Pull();
 			} else player.rb.velocity = Vector2.zero;
-		} else if (swingHookScript.isAttached) {
+		} else if (swingHook.activeSelf && swingHookScript.isAttached) {
 			if (initializeSwing) InitializeSwing();
 			if (!swingHookScript.grappleRelease) Swing();
 		}
@@ -118,7 +117,7 @@ public class GrapplingGun : MonoBehaviour
 	private void InitializeSwing() {
 		initializeSwing = false;
 		float xPos = transform.position.x - swingHook.transform.position.x;
-		GetSwingPhase();
+		float currentPhase = GetSwingPhase();
 
 		if (currentPhase > Mathf.PI/6 && currentPhase < 5*Mathf.PI / 6) swingHookScript.grappleRelease = true; //don't allow swing if above 30 degrees the grappled point
 		if (xPos < 0) swingRight = true; //swing based on where player is relative to grapple
@@ -126,10 +125,19 @@ public class GrapplingGun : MonoBehaviour
 	}
 
 	void Swing() {
-		GetSwingPhase();
+		float currentPhase = GetSwingPhase();
 
-		if (currentPhase > (0 + 0.5f) && currentPhase < (Mathf.PI- 0.5f)) swingHookScript.grappleRelease = true;
+		if (currentPhase > (0 + 0.5f) && currentPhase < (Mathf.PI - 0.5f)) swingHookScript.grappleRelease = true;
+		float xPos = transform.position.x - swingHook.transform.position.x;
+		float yPos = transform.position.y - swingHook.transform.position.y;
+		float length = new Vector2(xPos, yPos).magnitude;
 
+		float potentialEnergy = player.rb.mass * player.rb.gravityScale * 9.81f * (length + length * Mathf.Sin(currentPhase));
+		float totalEnergy = player.rb.mass * player.rb.gravityScale * 9.81f * (length*2f);
+		float kineticEnergy = totalEnergy - potentialEnergy;
+		float velocity = Mathf.Sqrt(2 * kineticEnergy / player.rb.mass);
+
+		
 		float velocityPhase;
 		if (swingRight)
 			velocityPhase = currentPhase + Mathf.PI / 2;
@@ -137,16 +145,18 @@ public class GrapplingGun : MonoBehaviour
 			velocityPhase = currentPhase - Mathf.PI / 2;
 
 		player.rb.velocity = new Vector2(Mathf.Cos(velocityPhase),
-										 Mathf.Sin(velocityPhase)).normalized * swingSpeed;
+										 Mathf.Sin(velocityPhase)).normalized * velocity * swingSpeedMultiplier;
 	}
 
-	void GetSwingPhase() {
+	float GetSwingPhase() {
+		float currentPhase;
 		float xPos = transform.position.x - swingHook.transform.position.x;
 		float yPos = transform.position.y - swingHook.transform.position.y;
 		if (xPos > 0 && yPos > 0) currentPhase = Mathf.Atan(Mathf.Abs(yPos / xPos));
 		else if (xPos < 0 && yPos > 0) currentPhase = Mathf.PI - Mathf.Atan(Mathf.Abs(yPos / xPos));
 		else if (xPos < 0 && yPos < 0) currentPhase = Mathf.PI + Mathf.Atan(Mathf.Abs(yPos / xPos));
 		else currentPhase = 2*Mathf.PI - Mathf.Atan(Mathf.Abs(yPos / xPos));
+		return currentPhase;
 	}
 
 	public void ToggleInfiniteCharge() {

@@ -653,7 +653,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 150311350}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -94.81414, y: -17.824398, z: -10}
+  m_LocalPosition: {x: -94.447624, y: -17.824398, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 35153782}
@@ -103695,7 +103695,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1014387088}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -94.81414, y: -17.824398, z: -10}
+  m_LocalPosition: {x: -94.447624, y: -17.824398, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -111404,6 +111404,10 @@ PrefabInstance:
       propertyPath: swingHook
       value: 
       objectReference: {fileID: 100760142}
+    - target: {fileID: 6475583435082176339, guid: 027a81b3c61e54705a4ac3d7bbd96743, type: 3}
+      propertyPath: swingSpeedMultiplier
+      value: 1.2
+      objectReference: {fileID: 0}
     - target: {fileID: 7293611368509710480, guid: 027a81b3c61e54705a4ac3d7bbd96743, type: 3}
       propertyPath: m_RootOrder
       value: 1
