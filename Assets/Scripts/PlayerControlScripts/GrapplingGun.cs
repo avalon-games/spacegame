@@ -14,6 +14,8 @@ public class GrapplingGun : MonoBehaviour
 
 	public float pullSpeed = 30f;
 	public float swingSpeedMultiplier = 2f;
+	public float pullReleaseMultiplier = 1 / 8f;
+	public float swingReleaseMultiplier = 1.5f;
 	bool swingRight; //if false, swing to the left
 
 	bool initializeSwing;
@@ -22,6 +24,8 @@ public class GrapplingGun : MonoBehaviour
 	//defines how many times the player can grapple
 	public int totalCharge;
 	public bool infiniteCharge;
+	bool pullRelease;
+	bool swingRelease;
 	bool slowMo;
 
 	private void Start() {
@@ -39,6 +43,14 @@ public class GrapplingGun : MonoBehaviour
 		ManageInput();
 
 		if (!pullHook.activeSelf && !swingHook.activeSelf) {
+			if (pullRelease) {
+				player.rb.velocity = pullReleaseMultiplier * player.rb.velocity;
+				pullRelease = false;
+			}
+			if (swingRelease) {
+				player.rb.velocity = swingReleaseMultiplier * player.rb.velocity;
+				swingRelease = false;
+			}
 			player.ToggleMovementControl(true);
 			player.rb.gravityScale = initialGravity;
 		}
@@ -53,7 +65,6 @@ public class GrapplingGun : MonoBehaviour
 			player.isOnGround = false;
 			if (initializePull) InitializePull();
 			if (Vector2.Distance(transform.position, pullHook.transform.position) >= 1f) {
-				StartCoroutine(SlowMo(0.1f));
 				Pull();
 			} else player.rb.velocity = Vector2.zero;
 		} else if (swingHook.activeSelf && swingHookScript.isAttached) {
@@ -85,10 +96,12 @@ public class GrapplingGun : MonoBehaviour
 			}
 
 			//when released, reenable movement
-  		} else if (Input.GetButtonUp("GrappleSwing")) {
-			if (swingHook.activeSelf) swingHookScript.grappleRelease = true;
-		} else if (Input.GetButtonUp("GrapplePull")) {
-			if (pullHook.activeSelf) pullHookScript.grappleRelease = true;
+  		} else if (Input.GetButtonUp("GrappleSwing") && swingHook.activeSelf) {
+			swingHookScript.grappleRelease = true;
+			swingRelease = true;
+		} else if (Input.GetButtonUp("GrapplePull") && pullHook.activeSelf) {
+			pullHookScript.grappleRelease = true;
+			pullRelease = true;
 		}
 	}
 
@@ -132,10 +145,10 @@ public class GrapplingGun : MonoBehaviour
 		float yPos = transform.position.y - swingHook.transform.position.y;
 		float length = new Vector2(xPos, yPos).magnitude;
 
-		float potentialEnergy = player.rb.mass * player.rb.gravityScale * 9.81f * (length + length * Mathf.Sin(currentPhase));
-		float totalEnergy = player.rb.mass * player.rb.gravityScale * 9.81f * (length*2f);
+		float potentialEnergy = player.rb.gravityScale * 9.81f * (length + length * Mathf.Sin(currentPhase));
+		float totalEnergy = player.rb.gravityScale * 9.81f * (length*2f);
 		float kineticEnergy = totalEnergy - potentialEnergy;
-		float velocity = Mathf.Sqrt(2 * kineticEnergy / player.rb.mass);
+		float velocity = Mathf.Sqrt(2 * kineticEnergy);
 
 		
 		float velocityPhase;
@@ -166,15 +179,5 @@ public class GrapplingGun : MonoBehaviour
 	public void DisableGrapple() {
 		pullHook.SetActive(false);
 		swingHook.SetActive(false);
-	}
-
-	IEnumerator SlowMo(float seconds) {
-		if (!slowMo) {
-			Time.timeScale = 0.5f;
-			slowMo = true;
-		}
-		yield return new WaitForSecondsRealtime(seconds);
-		Time.timeScale = 1.0f;
-		slowMo = false;
 	}
 }

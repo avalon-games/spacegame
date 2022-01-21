@@ -1,0 +1,22 @@
+Player Movement Controls:
+
+
+Basic: 
+a / d - left and right movement
+
+space - jump
+
+left click - launch a grapple to pull yourself towards the grappled point when it collides, release button to release grapple
+- once you reach the desired position, the player will stop moving, often it is desired to release the hook early so you preserve the vertical momentum while pulling
+
+right click - launch a grapple to swing yourself in a circular path around the grappled point when it collides, release button to release grapple
+
+left shift - enter slowMo mode, playing the game at 0.5 speed, allows player to specify the grapple direction more easily while moving, release button to exit
+
+---------------------------------------------------
+
+Advanced movements:
+- hold down a direction key (a/d) after releasing grapple to preserve the horizontal momentum before grapple was released if the direction key held is the same as the current movement direction
+
+
+Note: there can only be one instance of each type of grapple in the air at a time (ex. you can't swing again until the swing's hook has returned back to you, but you can launch the pull hook while the swing's hook is released)

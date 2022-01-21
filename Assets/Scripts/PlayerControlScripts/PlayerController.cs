@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
 {
     [HideInInspector] public Rigidbody2D rb;
     Collider2D coll;
-    public SpriteRenderer sprite;
+    SpriteRenderer sprite;
     PlayerUI ui;
     enum State { idle, running, jumping, falling, pushing, hurt }; //animation states, decides interactions
     State state;
@@ -99,23 +99,25 @@ public class PlayerController : MonoBehaviour
     }
 
     void Update() {
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        if (Input.GetButtonDown("Jump")) { jumpButton = true; }
-        else if (Input.GetButtonUp("Jump")) { jumpButton = false; OnJumpUp(); }
-        DetectBottomSurface();
+        if (Input.GetButtonDown("SlowMo")) ToggleSlowMo(true);
+        else if (Input.GetButtonUp("SlowMo")) ToggleSlowMo(false);
 
-        if (lastGroundedTime > 0 && lastJumpTime > 0 && jumpButton) //checks if was last grounded within coyoteTime and that jump has been pressed within bufferTime
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        if (Input.GetButtonDown("Jump")) { OnJump(); jumpButton = true; }
+        else if (Input.GetButtonUp("Jump")) { OnJumpUp(); jumpButton = false; }
+		DetectBottomSurface();
+
+        if (isOnGround) lastGroundedTime = jumpCoyoteTime;
+        if (rb.velocity.y < 0) isJumping = false;
+
+        if (lastGroundedTime > 0 && lastJumpTime > 0 && !isJumping) //checks if was last grounded within coyoteTime and that jump has been pressed within bufferTime
         {
             Jump();
         }
         #region Timer
-        if (isOnGround) lastGroundedTime = jumpCoyoteTime;
-        else lastGroundedTime -= Time.deltaTime;
-        if (jumpButton) lastJumpTime = jumpBufferTime;
-        else lastJumpTime -= Time.deltaTime;
+        lastGroundedTime -= Time.deltaTime;
+        lastJumpTime -= Time.deltaTime;
         #endregion
-
-        print(lastGroundedTime + "," + lastJumpTime);
 
         animator.SetInteger("state", (int)state);
 
@@ -160,8 +162,13 @@ public class PlayerController : MonoBehaviour
             float speedDif = targetSpeed - rb.velocity.x;
             float accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? acceleration : decceleration;
             float movement = Mathf.Pow(Mathf.Abs(speedDif) * accelRate, velPower) * Mathf.Sign(speedDif);
-            if (isOnGround) rb.AddForce(movement * Vector2.right);
-			else rb.AddForce(movement * Vector2.right * airControl);
+
+            //checks if current speed doesn't exceed max speed, if it does just preserve the previous velocity
+            if (!(targetSpeed != 0 && Mathf.Sign(rb.velocity.x) == Mathf.Sign(targetSpeed) && Mathf.Sign(targetSpeed) != Mathf.Sign(speedDif))) {
+                if (isOnGround) rb.AddForce(movement * Vector2.right);
+                else rb.AddForce(movement * Vector2.right * airControl);
+            }
+            
             #endregion
             #region Friction
             if (lastGroundedTime > 0 && Mathf.Abs(horizontalInput) < 0.01f) {
@@ -170,20 +177,12 @@ public class PlayerController : MonoBehaviour
                 rb.AddForce(Vector2.right * -amount, ForceMode2D.Impulse);
             }
             #endregion
-            if (isOnGround && jumpButton) {
-				Jump();
-			} else if (isOnGround && horizontalInput != 0) {
+            if (isOnGround && horizontalInput != 0) {
 				state = State.running;
 			} else if (rb.velocity.y < -0.1f) {
 				state = State.falling;
 			} else
 				state = State.idle;
-
-			//variable jump height
-			if (!jumpButton && rb.velocity.y > 0 && jumpReleaseActive) { 
-                rb.AddForce(Vector2.down * rb.velocity.y * jumpCutMultiplier, ForceMode2D.Impulse);
-                //disable until next touch ground
-            }
 		}
 		//if in quicksand
 		else {
@@ -201,6 +200,7 @@ public class PlayerController : MonoBehaviour
 
 	private void Jump() {
 		rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        isJumping = true;
 		isOnGround = false;
 		state = State.jumping;
 	}
@@ -282,6 +282,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    
+    void ToggleSlowMo(bool toggle) {
+        if (toggle) Time.timeScale = 0.5f;
+        else Time.timeScale = 1.0f;
+    }
 
 }
