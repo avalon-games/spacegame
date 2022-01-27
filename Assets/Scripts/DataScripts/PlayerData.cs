@@ -20,6 +20,8 @@ public static class PlayerData
 	public static string[] saveFileNames { get; set; }
 	public static float inGameTime { get; set; }
 
+	public static List<JournalEntry> entries { get; set; }
+
 	//options settings
 	public static float volume { get; set; }
 }
