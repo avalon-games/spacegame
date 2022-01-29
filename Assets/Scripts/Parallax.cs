@@ -10,22 +10,24 @@ using UnityEngine;
  */
 public class Parallax : MonoBehaviour
 {
-    float length, startpos;
+    float length, startPosX, startPosY;
     [SerializeField] GameObject cam;
     [SerializeField] float parallaxEffect; 
 
     void Start() {
-        startpos = transform.position.x;
+        startPosX = transform.position.x;
+        startPosY = transform.position.y;
         length = GetComponent<SpriteRenderer>().bounds.size.x;
     }
 
     void FixedUpdate() {
-        float temp = (cam.transform.position.x * (1 - parallaxEffect));
-        float dist = (cam.transform.position.x * parallaxEffect);
+        float tempX = (cam.transform.position.x * (1 - parallaxEffect));
+        float distX = (cam.transform.position.x * parallaxEffect);
+        float distY = (cam.transform.position.y * parallaxEffect);
         //parallax scrolling
-        transform.position = new Vector3(startpos + dist, transform.position.y, transform.position.z);
+        transform.position = new Vector3(startPosX + distX, startPosY + distY, transform.position.z);
         //repeat pattern at end of sprite - infinite scrolling
-        if (temp > startpos + length) startpos += (length-2);
-        else if (temp < startpos - length) startpos -= (length-2);
+        if (tempX > startPosX + length) startPosX += (length-2);
+        else if (tempX < startPosX - length) startPosX -= (length-2);
     }
 }
