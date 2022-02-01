@@ -102,7 +102,7 @@ Rigidbody2D:
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
-  m_Interpolate: 0
+  m_Interpolate: 2
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
@@ -136,7 +136,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isAttached: 0
   grappleRelease: 0
-  hasReturned: 0
   gunPoint: {fileID: 0}
   maxRange: 7
   launchSpeed: 31.9
