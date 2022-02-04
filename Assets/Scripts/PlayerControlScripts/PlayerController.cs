@@ -59,6 +59,7 @@ public class PlayerController : MonoBehaviour
     [Header("Vertical:")]
     bool jumpButton;
     [HideInInspector] public bool isOnGround;
+    Rigidbody2D groundHitRB;
     [HideInInspector] public bool isInQuicksand;
     [Range(0, 30f)] [SerializeField] float jumpHeight = 2f;
 
@@ -153,18 +154,20 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-		if (!isInQuicksand) {
+        Vector2 relativeVelocity = (transform.parent != null && groundHitRB != null) ? rb.velocity - groundHitRB.velocity : rb.velocity;
+
+        if (!isInQuicksand) {
             #region Run
             float targetSpeed;
             if (horizontalInput > 0) targetSpeed = horizontalInput * maxSpeedRight;
             else if (horizontalInput == 0) targetSpeed = 0f;
             else targetSpeed = horizontalInput * -maxSpeedLeft;
-            float speedDif = targetSpeed - rb.velocity.x;
+            float speedDif = targetSpeed - relativeVelocity.x;
             float accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? acceleration : decceleration;
             float movement = Mathf.Pow(Mathf.Abs(speedDif) * accelRate, velPower) * Mathf.Sign(speedDif);
 
             //checks if current speed doesn't exceed max speed, if it does just preserve the previous velocity
-            if (!(targetSpeed != 0 && Mathf.Sign(rb.velocity.x) == Mathf.Sign(targetSpeed) && Mathf.Sign(targetSpeed) != Mathf.Sign(speedDif))) {
+            if (!(targetSpeed != 0 && Mathf.Sign(relativeVelocity.x) == Mathf.Sign(targetSpeed) && Mathf.Sign(targetSpeed) != Mathf.Sign(speedDif))) {
                 if (isOnGround) rb.AddForce(movement * Vector2.right);
                 else rb.AddForce(movement * Vector2.right * airControl);
             }
@@ -172,14 +175,14 @@ public class PlayerController : MonoBehaviour
             #endregion
             #region Friction
             if (lastGroundedTime > 0 && Mathf.Abs(horizontalInput) < 0.01f) {
-                float amount = Mathf.Min(Mathf.Abs(rb.velocity.x), Mathf.Abs(frictionAmount));
-                amount *= Mathf.Sign(rb.velocity.x);
+                float amount = Mathf.Min(Mathf.Abs(relativeVelocity.x), Mathf.Abs(frictionAmount));
+                amount *= Mathf.Sign(relativeVelocity.x);
                 rb.AddForce(Vector2.right * -amount, ForceMode2D.Impulse);
             }
             #endregion
             if (isOnGround && horizontalInput != 0) {
 				state = State.running;
-			} else if (rb.velocity.y < -0.1f) {
+			} else if (relativeVelocity.y < -0.1f) {
 				state = State.falling;
 			} else
 				state = State.idle;
@@ -229,6 +232,7 @@ public class PlayerController : MonoBehaviour
 		RaycastHit2D groundHit = Physics2D.Raycast(coll.bounds.center, Vector2.down, groundDetectRadius, groundLayer);
 
 		isOnGround = groundHit.collider != null;
+        if (isOnGround) { groundHitRB = groundHit.collider.GetComponent<Rigidbody2D>(); }
 
         //detects standing on quicksand
         RaycastHit2D sandHit = Physics2D.Raycast(coll.bounds.center, Vector2.down, groundDetectRadius, sandLayer);
