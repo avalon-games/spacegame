@@ -66,7 +66,10 @@ public class GrapplingGun : MonoBehaviour
 			if (initializePull) InitializePull();
 			if (Vector2.Distance(transform.position, pullHook.transform.position) >= 1f) {
 				Pull();
-			} else player.rb.velocity = Vector2.zero;
+			} else {
+				Rigidbody2D playerParentRB = player.transform.parent ? player.transform.parent.GetComponent<Rigidbody2D>() : null;
+				player.rb.velocity = playerParentRB ? playerParentRB.velocity : Vector2.zero;
+			}
 		} else if (swingHook.activeSelf && swingHookScript.isAttached) {
 			if (initializeSwing) InitializeSwing();
 			if (!swingHookScript.grappleRelease) Swing();

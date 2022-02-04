@@ -30,7 +30,6 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public float maxSpeedLeft;
     [HideInInspector] public float maxSpeedRight;
     private bool movementAllowed = true;
-    float initialScale;
 
     /// New
 	public float acceleration = 5f;
@@ -88,7 +87,6 @@ public class PlayerController : MonoBehaviour
         groundLayer = LayerMask.GetMask("Ground");
         sandLayer = LayerMask.GetMask("Sand");
         ui = GameObject.FindGameObjectWithTag("UI").GetComponent<PlayerUI>();
-        initialScale = transform.localScale.x;
 
         if (PlayerData.checkpoint == null)
             PlayerData.checkpoint = new float[2] { transform.position.x, transform.position.y };  //initial checkpoint is set to initial position
@@ -194,11 +192,11 @@ public class PlayerController : MonoBehaviour
 		//change player facing direction
 		if (horizontalInput < 0) {
 			//sprite.flipX = true;
-			transform.localScale = new Vector3(-initialScale, initialScale, initialScale);
+			transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
 		} else if (horizontalInput > 0) {
-			//sprite.flipX = false;
-			transform.localScale = new Vector3(initialScale, initialScale, initialScale);
-		}
+            //sprite.flipX = false;
+            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
 	}
 
 	private void Jump() {
