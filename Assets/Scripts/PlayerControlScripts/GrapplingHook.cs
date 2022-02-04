@@ -17,7 +17,8 @@ public class GrapplingHook : MonoBehaviour
     Rigidbody2D rb;
     public Transform gunPoint;
     LineRenderer rope;
-    Transform anchorPoint;
+    Transform hitDynamic;
+    Vector2 hitStatic;
     public Sprite attachedSprite;
     Sprite detachedSprite;
     SpriteRenderer sp;
@@ -45,16 +46,21 @@ public class GrapplingHook : MonoBehaviour
         rb.velocity = launchDirection * launchSpeed;
 
         GetHitObject(launchDirection);
-        if (anchorPoint != null) {
-            float timeToHit = Vector2.Distance(gunPoint.position, anchorPoint.position)/launchSpeed;
+        if (hitDynamic != null) {
+            float timeToHit = Vector2.Distance(gunPoint.position, hitDynamic.position)/launchSpeed;
             StartCoroutine(AttachAfterTime(timeToHit));
-        }  
+        }  else if (hitStatic != Vector2.negativeInfinity) {
+            float timeToHit = Vector2.Distance(gunPoint.position, hitStatic) / launchSpeed;
+            StartCoroutine(AttachAfterTime(timeToHit));
+        }
     }
 
 	private void LateUpdate() {
 		if (!isAttached && (Vector2.Distance(transform.position, gunPoint.position) > maxRange)) {
 			grappleRelease = true;
 			ClearAnchorPoint();
+		} else if (isAttached) {
+            PositionAtHitPoint();
 		}
 		SetRopeEndpoints();
 		SetRotation();
@@ -67,8 +73,8 @@ public class GrapplingHook : MonoBehaviour
 	}
 
 	private void SetRotation() {
-		if (anchorPoint) {
-			transform.eulerAngles = new Vector3(0, 0, Mathf.Atan2(anchorPoint.position.y - gunPoint.position.y, anchorPoint.position.x - gunPoint.position.x) * 180 / Mathf.PI - 45);
+		if (hitDynamic) {
+			transform.eulerAngles = new Vector3(0, 0, Mathf.Atan2(hitDynamic.position.y - gunPoint.position.y, hitDynamic.position.x - gunPoint.position.x) * 180 / Mathf.PI - 45);
 		} else {
 			transform.eulerAngles = new Vector3(0, 0, Mathf.Atan2(launchDirection.y, launchDirection.x) * 180 / Mathf.PI - 45);
 		}
@@ -87,24 +93,41 @@ public class GrapplingHook : MonoBehaviour
 
         foreach(RaycastHit2D hit in hits) {
             if(hit.collider.CompareTag("Grappable")) {
-                anchorPoint = hit.collider.transform;
+                //if on grappable tilemap, return a static position
+                Rigidbody2D hitRb = hit.collider.GetComponent<Rigidbody2D>();
+                if (hitRb == null || hitRb.bodyType == RigidbodyType2D.Static) {
+                    print(hit.point);
+                    hitStatic = new Vector2(Mathf.Floor(hit.point.x / 0.99f) * 0.99f + 0.495f,
+                                         Mathf.Floor(hit.point.y / 0.99f) * 0.99f + 0.495f);
+                    hitDynamic = null;
+                } else {
+                    hitDynamic = hit.collider.transform;
+                    hitStatic = Vector2.negativeInfinity;
+                }
                 break;
 			}
 		}
      }
     public void ClearAnchorPoint() {
-        anchorPoint = null;
+        hitDynamic = null;
+        hitStatic = Vector2.negativeInfinity;
     }
 
     void Attach() {
-        transform.position = anchorPoint.position;
-        rb.velocity = Vector2.zero;
+		PositionAtHitPoint();
+       rb.velocity = Vector2.zero;
 
-        isAttached = true;
-    }
-    IEnumerator AttachAfterTime(float time) {
+		isAttached = true;
+	}
+
+	private void PositionAtHitPoint() {
+        if (hitDynamic) transform.position = hitDynamic.position;
+        else transform.position = hitStatic;
+	}
+
+	IEnumerator AttachAfterTime(float time) {
         yield return new WaitForSeconds(time);
-        if (anchorPoint != null) Attach();
+        if (hitDynamic != null || hitStatic != Vector2.negativeInfinity) Attach();
 	}
 
     //private void OnTriggerEnter2D(Collider2D collision) {
