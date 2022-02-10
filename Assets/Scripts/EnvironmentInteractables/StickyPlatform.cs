@@ -31,16 +31,24 @@ public class StickyPlatform : MonoBehaviour
 		if(collision.gameObject.CompareTag("Hook")) {
 			GrapplingHook hook = collision.GetComponent<GrapplingHook>();
 			if (hook && hook.isAttached) {
-				player.SetParent(transform);
-				isHooked = true;
+				AttachPlayer();
 			}
 		}
 	}
 
+	private void AttachPlayer() {
+		player.SetParent(transform);
+		isHooked = true;
+	}
+
 	private void OnTriggerExit2D(Collider2D collision) {
-		if (collision.gameObject.CompareTag("Hook") && isHooked) {	
-			player.SetParent(null);
-			isHooked = false;
+		if (collision.gameObject.CompareTag("Hook") && isHooked) {
+			DetachPlayer();
 		}
+	}
+
+	private void DetachPlayer() {
+		player.SetParent(null);
+		isHooked = false;
 	}
 }

@@ -101,7 +101,6 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("SlowMo")) ToggleSlowMo(true);
         else if (Input.GetButtonUp("SlowMo")) ToggleSlowMo(false);
 
-        horizontalInput = Input.GetAxisRaw("Horizontal");
         if (Input.GetButtonDown("Jump")) { OnJump(); jumpButton = true; }
         else if (Input.GetButtonUp("Jump")) { OnJumpUp(); jumpButton = false; }
 		DetectBottomSurface();
@@ -128,75 +127,96 @@ public class PlayerController : MonoBehaviour
         if (rb.velocity.y < maxDownVelocity) rb.velocity = new Vector2(rb.velocity.x, maxDownVelocity);
         //movement control
         if (movementAllowed) {
-            MovePlayer();
+			MovePlayer();
 
-            #region Jump Gravity
-            if (rb.velocity.y < 0) {
-                rb.gravityScale = gravityScale * fallGravityMultiplier;
-            } else {
-                rb.gravityScale = gravityScale;
-            }
+			#region Jump Gravity
+			if (Falling()) {
+				rb.gravityScale = gravityScale * fallGravityMultiplier;
+			} else {
+				rb.gravityScale = gravityScale;
+			}
 			#endregion
 		}
 
-
 	}
 
-    /**
+	private bool Falling() {
+		return rb.velocity.y < 0;
+	}
+
+	/**
      * Player's movement controller
      * Includes: vertical/horizontal movement
      */
-    void MovePlayer() {
-
-        if (!movementAllowed) {
-            return;
-        }
-
-        Vector2 relativeVelocity = (transform.parent != null && groundHitRB != null) ? rb.velocity - groundHitRB.velocity : rb.velocity;
-
-        if (!isInQuicksand) {
-            #region Run
-            float targetSpeed;
-            if (horizontalInput > 0) targetSpeed = horizontalInput * maxSpeedRight;
-            else if (horizontalInput == 0) targetSpeed = 0f;
-            else targetSpeed = horizontalInput * -maxSpeedLeft;
-            float speedDif = targetSpeed - relativeVelocity.x;
-            float accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? acceleration : decceleration;
-            float movement = Mathf.Pow(Mathf.Abs(speedDif) * accelRate, velPower) * Mathf.Sign(speedDif);
-
-            //checks if current speed doesn't exceed max speed, if it does just preserve the previous velocity
-            if (!(targetSpeed != 0 && Mathf.Sign(relativeVelocity.x) == Mathf.Sign(targetSpeed) && Mathf.Sign(targetSpeed) != Mathf.Sign(speedDif))) {
-                if (isOnGround) rb.AddForce(movement * Vector2.right);
-                else rb.AddForce(movement * Vector2.right * airControl);
-            }
-            
-            #endregion
-            #region Friction
-            if (lastGroundedTime > 0 && Mathf.Abs(horizontalInput) < 0.01f) {
-                float amount = Mathf.Min(Mathf.Abs(relativeVelocity.x), Mathf.Abs(frictionAmount));
-                amount *= Mathf.Sign(relativeVelocity.x);
-                rb.AddForce(Vector2.right * -amount, ForceMode2D.Impulse);
-            }
-            #endregion
-            if (isOnGround && horizontalInput != 0) {
-				state = State.running;
-			} else if (relativeVelocity.y < -0.1f) {
-				state = State.falling;
-			} else
-				state = State.idle;
+	void MovePlayer() {
+		if (!movementAllowed) {
+			return;
 		}
-		//if in quicksand
-		else {
+
+		horizontalInput = Input.GetAxisRaw("Horizontal");
+		SetFacingDirection(horizontalInput);
+
+		Vector2 relativeVelocity = GetRelativeVelocityToGround();
+
+		if (isInQuicksand) {
 			rb.velocity = new Vector2(0, -0.2f);
+			return;
 		}
-		//change player facing direction
-		if (horizontalInput < 0) {
-			//sprite.flipX = true;
-			transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-		} else if (horizontalInput > 0) {
-            //sprite.flipX = false;
-            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+
+        #region Run
+        float targetSpeed;
+        if (horizontalInput > 0) targetSpeed = horizontalInput * maxSpeedRight;
+        else if (horizontalInput == 0) targetSpeed = 0f;
+        else targetSpeed = horizontalInput * -maxSpeedLeft;
+        float speedDif = targetSpeed - relativeVelocity.x;
+        float accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? acceleration : decceleration;
+        float movement = Mathf.Pow(Mathf.Abs(speedDif) * accelRate, velPower) * Mathf.Sign(speedDif);
+
+        //checks if current speed doesn't exceed max speed, if it does just preserve the previous velocity
+        if (!(targetSpeed != 0 && Mathf.Sign(relativeVelocity.x) == Mathf.Sign(targetSpeed) && Mathf.Sign(targetSpeed) != Mathf.Sign(speedDif))) {
+            if (isOnGround) rb.AddForce(movement * Vector2.right);
+            else rb.AddForce(movement * Vector2.right * airControl);
         }
+
+        #endregion
+        #region Friction
+        if (lastGroundedTime > 0 && Mathf.Abs(horizontalInput) < 0.01f) {
+			ApplyFriction(relativeVelocity);
+		}
+		#endregion
+		if (isOnGround && horizontalInput != 0) {
+			state = State.running;
+		} else if (relativeVelocity.y < -0.1f) {
+			state = State.falling;
+		} else
+			state = State.idle;
+
+	}
+
+	private Vector2 GetRelativeVelocityToGround() {
+		return (transform.parent != null && groundHitRB != null) ? rb.velocity - groundHitRB.velocity : rb.velocity;
+	}
+
+	private void SetFacingDirection(float horizontalInput) {
+		if (horizontalInput < 0) {
+			FaceLeft();
+		} else if (horizontalInput > 0) {
+			FaceRight();
+		}
+	}
+
+	private void FaceRight() {
+		transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+	}
+
+	private void FaceLeft() {
+		transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+	}
+
+	private void ApplyFriction(Vector2 relativeVelocity) {
+		float amount = Mathf.Min(Mathf.Abs(relativeVelocity.x), Mathf.Abs(frictionAmount));
+		amount *= Mathf.Sign(relativeVelocity.x);
+		rb.AddForce(Vector2.right * -amount, ForceMode2D.Impulse);
 	}
 
 	private void Jump() {
