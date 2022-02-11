@@ -46,8 +46,6 @@ public class PlayerController : MonoBehaviour
     [Space(10)]
     public float jumpCoyoteTime;
     private float lastGroundedTime;
-    public float jumpBufferTime;
-    private float lastJumpTime;
     [Space(10)]
     public float fallGravityMultiplier;
     private float gravityScale;
@@ -75,6 +73,15 @@ public class PlayerController : MonoBehaviour
     [Range(0f, 5f)] [SerializeField] float invincibilityDuration = 2f;
     public GrapplingGun grapple;
 
+
+    /// <summary>
+	/// //////
+	/// 
+	/// </summary>
+    PlayerMovement mover;
+
+
+
     void Start() {
         maxSpeedLeft = -initialMaxSpeed;
         maxSpeedRight = initialMaxSpeed;
@@ -87,6 +94,8 @@ public class PlayerController : MonoBehaviour
         groundLayer = LayerMask.GetMask("Ground");
         sandLayer = LayerMask.GetMask("Sand");
         ui = GameObject.FindGameObjectWithTag("UI").GetComponent<PlayerUI>();
+
+        mover = GetComponent<PlayerMovement>();
 
         if (PlayerData.checkpoint == null)
             PlayerData.checkpoint = new float[2] { transform.position.x, transform.position.y };  //initial checkpoint is set to initial position
@@ -101,20 +110,20 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("SlowMo")) ToggleSlowMo(true);
         else if (Input.GetButtonUp("SlowMo")) ToggleSlowMo(false);
 
-        if (Input.GetButtonDown("Jump")) { OnJump(); jumpButton = true; }
-        else if (Input.GetButtonUp("Jump")) { OnJumpUp(); jumpButton = false; }
+        if (Input.GetButtonDown("Jump")) { mover.SetJumpBuffer(); }
+        else if (Input.GetButtonUp("Jump")) { ApplyJumpCut(); }
 		DetectBottomSurface();
 
         if (isOnGround) lastGroundedTime = jumpCoyoteTime;
         if (rb.velocity.y < 0) isJumping = false;
 
-        if (lastGroundedTime > 0 && lastJumpTime > 0 && !isJumping) //checks if was last grounded within coyoteTime and that jump has been pressed within bufferTime
+        if (lastGroundedTime > 0 && mover.GetLastJumpTime() > 0 && !isJumping) //checks if was last grounded within coyoteTime and that jump has been pressed within bufferTime
         {
             Jump();
         }
         #region Timer
         lastGroundedTime -= Time.deltaTime;
-        lastJumpTime -= Time.deltaTime;
+
         #endregion
 
         animator.SetInteger("state", (int)state);
@@ -230,11 +239,9 @@ public class PlayerController : MonoBehaviour
 		movementAllowed = toggle;
     }
 
-    public void OnJump() {
-        lastJumpTime = jumpBufferTime;
-    }
 
-    public void OnJumpUp() {
+
+    public void ApplyJumpCut() {
         if (rb.velocity.y > 0 && isJumping) {
             rb.AddForce(Vector2.down * rb.velocity.y * jumpCutMultiplier, ForceMode2D.Impulse);
         }
