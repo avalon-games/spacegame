@@ -10,6 +10,7 @@ public class GrapplingGun : MonoBehaviour
 	GrapplingHook swingHookScript;
 
 	public PlayerController player;
+	public PlayerMovement mover;
 	float initialGravity;
 
 	public float pullSpeed = 30f;
@@ -28,15 +29,22 @@ public class GrapplingGun : MonoBehaviour
 	bool swingRelease;
 	bool slowMo;
 
+
+	Rigidbody2D rb;
+
 	private void Start() {
 		pullHookScript = pullHook.GetComponent<GrapplingHook>();
 		swingHookScript = swingHook.GetComponent<GrapplingHook>();
-		initialGravity = player.rb.gravityScale;
+		rb = player.GetComponent<Rigidbody2D>();
+		mover = player.GetComponent<PlayerMovement>();
+		initialGravity = rb.gravityScale;
+
+
 	}
 
 	void Update () {
 		//replenish charge while on ground
-		if (player.isOnGround) {
+		if (mover.isOnGround) {
 			totalCharge = 3;
 		}
 
@@ -44,31 +52,31 @@ public class GrapplingGun : MonoBehaviour
 
 		if (!pullHook.activeSelf && !swingHook.activeSelf) {
 			if (pullRelease) {
-				player.rb.velocity = pullReleaseMultiplier * player.rb.velocity;
+				rb.velocity = pullReleaseMultiplier * rb.velocity;
 				pullRelease = false;
 			}
 			if (swingRelease) {
-				player.rb.velocity = swingReleaseMultiplier * player.rb.velocity;
+				rb.velocity = swingReleaseMultiplier * rb.velocity;
 				swingRelease = false;
 			}
 			player.ToggleMovementControl(true);
-			player.rb.gravityScale = initialGravity;
+			rb.gravityScale = initialGravity;
 		}
 
 		//freeze movement during launch
 		if ((!pullHookScript.isAttached && pullHook.activeSelf && !pullHookScript.grappleRelease) ||
 			(!swingHookScript.isAttached && swingHook.activeSelf && !swingHookScript.grappleRelease)) {
-			player.rb.velocity = Vector2.zero;
+			rb.velocity = Vector2.zero;
 		}
 		//while attached, translate the player
 		if (pullHook.activeSelf && pullHookScript.isAttached) {
-			player.isOnGround = false;
+			mover.isOnGround = false;
 			if (initializePull) InitializePull();
 			if (Vector2.Distance(transform.position, pullHook.transform.position) >= 1f) {
 				Pull();
 			} else {
 				Rigidbody2D playerParentRB = player.transform.parent ? player.transform.parent.GetComponent<Rigidbody2D>() : null;
-				player.rb.velocity = playerParentRB ? playerParentRB.velocity : Vector2.zero;
+				rb.velocity = playerParentRB ? playerParentRB.velocity : Vector2.zero;
 			}
 		} else if (swingHook.activeSelf && swingHookScript.isAttached) {
 			if (initializeSwing) InitializeSwing();
@@ -114,7 +122,7 @@ public class GrapplingGun : MonoBehaviour
 	 */
 	void InitializePull () {
 		initializePull = false;
-		player.rb.gravityScale = 0;
+		rb.gravityScale = 0;
 	}
 
 	/**
@@ -122,7 +130,7 @@ public class GrapplingGun : MonoBehaviour
 	 */
 	void Pull () {
 		Vector2 direction = (pullHook.transform.position - transform.position).normalized;
-		player.rb.velocity = direction * pullSpeed;
+		rb.velocity = direction * pullSpeed;
 	}
 
 
@@ -148,8 +156,8 @@ public class GrapplingGun : MonoBehaviour
 		float yPos = transform.position.y - swingHook.transform.position.y;
 		float length = new Vector2(xPos, yPos).magnitude;
 
-		float potentialEnergy = player.rb.gravityScale * 9.81f * (length + length * Mathf.Sin(currentPhase));
-		float totalEnergy = player.rb.gravityScale * 9.81f * (length*2f);
+		float potentialEnergy = rb.gravityScale * 9.81f * (length + length * Mathf.Sin(currentPhase));
+		float totalEnergy = rb.gravityScale * 9.81f * (length*2f);
 		float kineticEnergy = totalEnergy - potentialEnergy;
 		float velocity = Mathf.Sqrt(2 * kineticEnergy);
 
@@ -160,7 +168,7 @@ public class GrapplingGun : MonoBehaviour
 		else
 			velocityPhase = currentPhase - Mathf.PI / 2;
 
-		player.rb.velocity = new Vector2(Mathf.Cos(velocityPhase),
+		rb.velocity = new Vector2(Mathf.Cos(velocityPhase),
 										 Mathf.Sin(velocityPhase)).normalized * velocity * swingSpeedMultiplier;
 	}
 

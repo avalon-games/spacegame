@@ -8,12 +8,14 @@ using UnityEngine;
 public class QuickSand : MonoBehaviour
 {
     PlayerController player;
+    public PlayerMovement mover;
     void Start() {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        mover = player.GetComponent<PlayerMovement>();
     }
     void OnTriggerEnter2D(Collider2D collision) {
         if (collision.gameObject.CompareTag("Player")) {
-            player.isInQuicksand = true;
+            mover.isInQuicksand = true;
         }
     }
     /**
@@ -23,7 +25,7 @@ public class QuickSand : MonoBehaviour
      */
     void OnTriggerExit2D(Collider2D collision) {
         if (collision.gameObject.CompareTag("Player"))
-            player.isInQuicksand = false;
+            mover.isInQuicksand = false;
             
     }
 }

@@ -13,7 +13,6 @@ using UnityEngine;
  */
 public class PlayerController : MonoBehaviour
 {
-    [HideInInspector] public Rigidbody2D rb;
     Collider2D coll;
     SpriteRenderer sprite;
     PlayerUI ui;
@@ -26,51 +25,14 @@ public class PlayerController : MonoBehaviour
     
     [Header("Horizontal:")]
     float horizontalInput;
-    [Range(0, 20f)] public float initialMaxSpeed = 5;
-    [HideInInspector] public float maxSpeedLeft;
-    [HideInInspector] public float maxSpeedRight;
     private bool movementAllowed = true;
 
-    /// New
-	public float acceleration = 5f;
-    public float decceleration = 5f;
-    public float velPower = 2;
 
 
-    public float frictionAmount;
-
-    [Header("Jump")]
-    public float jumpForce;
-    [Range(0, 1)]
-    public float jumpCutMultiplier;
-    [Space(10)]
-    public float jumpCoyoteTime;
-    private float lastGroundedTime;
-    [Space(10)]
-    public float fallGravityMultiplier;
-    private float gravityScale;
-    [Space(10)]
-    private bool isJumping;
-    /// EndNew
-
-    [Header("Vertical:")]
-    bool jumpButton;
-    [HideInInspector] public bool isOnGround;
-    Rigidbody2D groundHitRB;
-    [HideInInspector] public bool isInQuicksand;
-    [Range(0, 30f)] [SerializeField] float jumpHeight = 2f;
-
-    [Range(-15f, 0)] [SerializeField] float maxDownVelocity = -10f;
-    [Range(0, 1f)] [SerializeField] float airControl = 0.8f;
-    //[SerializeField] float hurtForce = 2f;
-    [Range(0, 5f)] [SerializeField] float groundDetectRadius = 1.08f;
-    [HideInInspector] public bool jumpReleaseActive = true;
-    LayerMask groundLayer;
-    LayerMask sandLayer;
 
     //scene interactions
     bool invulnerable;
-    [Range(0f, 5f)] [SerializeField] float invincibilityDuration = 2f;
+    [Range(0f, 5f)] [SerializeField] float invincibilityDuration = 0f;
     public GrapplingGun grapple;
 
 
@@ -83,19 +45,17 @@ public class PlayerController : MonoBehaviour
 
 
     void Start() {
-        maxSpeedLeft = -initialMaxSpeed;
-        maxSpeedRight = initialMaxSpeed;
-
+        mover = GetComponent<PlayerMovement>();
         sprite = GetComponent<SpriteRenderer>();
         state = State.idle;
-        rb = GetComponent<Rigidbody2D>();
+        mover.rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         coll = GetComponent<CapsuleCollider2D>();
-        groundLayer = LayerMask.GetMask("Ground");
-        sandLayer = LayerMask.GetMask("Sand");
-        ui = GameObject.FindGameObjectWithTag("UI").GetComponent<PlayerUI>();
 
-        mover = GetComponent<PlayerMovement>();
+        ui = GameObject.FindGameObjectWithTag("UI").GetComponent<PlayerUI>();
+        mover.groundLayer = LayerMask.GetMask("Ground");
+        mover.sandLayer = LayerMask.GetMask("Sand");
+
 
         if (PlayerData.checkpoint == null)
             PlayerData.checkpoint = new float[2] { transform.position.x, transform.position.y };  //initial checkpoint is set to initial position
@@ -103,7 +63,7 @@ public class PlayerController : MonoBehaviour
             //print("Checkpoint load: " + PlayerData.checkpoint[0] + ", " + PlayerData.checkpoint[1]);
             transform.position = new Vector2(PlayerData.checkpoint[0], PlayerData.checkpoint[1]);
 		}
-        gravityScale = rb.gravityScale;
+        mover.gravityScale = mover.rb.gravityScale;
     }
 
     void Update() {
@@ -114,15 +74,15 @@ public class PlayerController : MonoBehaviour
         else if (Input.GetButtonUp("Jump")) { ApplyJumpCut(); }
 		DetectBottomSurface();
 
-        if (isOnGround) lastGroundedTime = jumpCoyoteTime;
-        if (rb.velocity.y < 0) isJumping = false;
+        if (mover.isOnGround) mover.lastGroundedTime = mover.jumpCoyoteTime;
+        if (mover.rb.velocity.y < 0) mover.isJumping = false;
 
-        if (lastGroundedTime > 0 && mover.GetLastJumpTime() > 0 && !isJumping) //checks if was last grounded within coyoteTime and that jump has been pressed within bufferTime
+        if (mover.lastGroundedTime > 0 && mover.GetLastJumpTime() > 0 && !mover.isJumping) //checks if was last grounded within coyoteTime and that jump has been pressed within bufferTime
         {
             Jump();
         }
         #region Timer
-        lastGroundedTime -= Time.deltaTime;
+        mover.lastGroundedTime -= Time.deltaTime;
 
         #endregion
 
@@ -133,16 +93,16 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate() {
         //limit downward velocity
-        if (rb.velocity.y < maxDownVelocity) rb.velocity = new Vector2(rb.velocity.x, maxDownVelocity);
+        if (mover.rb.velocity.y < mover.maxDownVelocity) mover.rb.velocity = new Vector2(mover.rb.velocity.x, mover.maxDownVelocity);
         //movement control
         if (movementAllowed) {
 			MovePlayer();
 
 			#region Jump Gravity
 			if (Falling()) {
-				rb.gravityScale = gravityScale * fallGravityMultiplier;
+                mover.rb.gravityScale = mover.gravityScale * mover.fallGravityMultiplier;
 			} else {
-				rb.gravityScale = gravityScale;
+                mover.rb.gravityScale = mover.gravityScale;
 			}
 			#endregion
 		}
@@ -150,7 +110,7 @@ public class PlayerController : MonoBehaviour
 	}
 
 	private bool Falling() {
-		return rb.velocity.y < 0;
+		return mover.rb.velocity.y < 0;
 	}
 
 	/**
@@ -167,33 +127,33 @@ public class PlayerController : MonoBehaviour
 
 		Vector2 relativeVelocity = GetRelativeVelocityToGround();
 
-		if (isInQuicksand) {
-			rb.velocity = new Vector2(0, -0.2f);
+		if (mover.isInQuicksand) {
+            mover.rb.velocity = new Vector2(0, -0.2f);
 			return;
 		}
 
         #region Run
         float targetSpeed;
-        if (horizontalInput > 0) targetSpeed = horizontalInput * maxSpeedRight;
+        if (horizontalInput > 0) targetSpeed = horizontalInput * mover.maxSpeed;
         else if (horizontalInput == 0) targetSpeed = 0f;
-        else targetSpeed = horizontalInput * -maxSpeedLeft;
+        else targetSpeed = horizontalInput * mover.maxSpeed;
         float speedDif = targetSpeed - relativeVelocity.x;
-        float accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? acceleration : decceleration;
-        float movement = Mathf.Pow(Mathf.Abs(speedDif) * accelRate, velPower) * Mathf.Sign(speedDif);
+        float accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? mover.acceleration : mover.decceleration;
+        float movement = Mathf.Pow(Mathf.Abs(speedDif) * accelRate, mover.velPower) * Mathf.Sign(speedDif);
 
         //checks if current speed doesn't exceed max speed, if it does just preserve the previous velocity
         if (!(targetSpeed != 0 && Mathf.Sign(relativeVelocity.x) == Mathf.Sign(targetSpeed) && Mathf.Sign(targetSpeed) != Mathf.Sign(speedDif))) {
-            if (isOnGround) rb.AddForce(movement * Vector2.right);
-            else rb.AddForce(movement * Vector2.right * airControl);
+            if (mover.isOnGround) mover.rb.AddForce(movement * Vector2.right);
+            else mover.rb.AddForce(movement * Vector2.right * mover.airControl);
         }
 
         #endregion
         #region Friction
-        if (lastGroundedTime > 0 && Mathf.Abs(horizontalInput) < 0.01f) {
+        if (mover.lastGroundedTime > 0 && Mathf.Abs(horizontalInput) < 0.01f) {
 			ApplyFriction(relativeVelocity);
 		}
 		#endregion
-		if (isOnGround && horizontalInput != 0) {
+		if (mover.isOnGround && horizontalInput != 0) {
 			state = State.running;
 		} else if (relativeVelocity.y < -0.1f) {
 			state = State.falling;
@@ -203,7 +163,7 @@ public class PlayerController : MonoBehaviour
 	}
 
 	private Vector2 GetRelativeVelocityToGround() {
-		return (transform.parent != null && groundHitRB != null) ? rb.velocity - groundHitRB.velocity : rb.velocity;
+		return (transform.parent != null && mover.groundHitRB != null) ? mover.rb.velocity - mover.groundHitRB.velocity : mover.rb.velocity;
 	}
 
 	private void SetFacingDirection(float horizontalInput) {
@@ -223,15 +183,15 @@ public class PlayerController : MonoBehaviour
 	}
 
 	private void ApplyFriction(Vector2 relativeVelocity) {
-		float amount = Mathf.Min(Mathf.Abs(relativeVelocity.x), Mathf.Abs(frictionAmount));
+		float amount = Mathf.Min(Mathf.Abs(relativeVelocity.x), Mathf.Abs(mover.frictionAmount));
 		amount *= Mathf.Sign(relativeVelocity.x);
-		rb.AddForce(Vector2.right * -amount, ForceMode2D.Impulse);
+        mover.rb.AddForce(Vector2.right * -amount, ForceMode2D.Impulse);
 	}
 
 	private void Jump() {
-		rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-        isJumping = true;
-		isOnGround = false;
+        mover.rb.AddForce(Vector2.up * mover.jumpForce, ForceMode2D.Impulse);
+        mover.isJumping = true;
+        mover.isOnGround = false;
 		state = State.jumping;
 	}
 
@@ -242,8 +202,8 @@ public class PlayerController : MonoBehaviour
 
 
     public void ApplyJumpCut() {
-        if (rb.velocity.y > 0 && isJumping) {
-            rb.AddForce(Vector2.down * rb.velocity.y * jumpCutMultiplier, ForceMode2D.Impulse);
+        if (mover.rb.velocity.y > 0 && mover.isJumping) {
+            mover.rb.AddForce(Vector2.down * mover.rb.velocity.y * mover.jumpCutMultiplier, ForceMode2D.Impulse);
         }
     }
 
@@ -253,28 +213,21 @@ public class PlayerController : MonoBehaviour
      * Detects what surface the player is currently standing on
      */
     void DetectBottomSurface() {
-        //detects standing on ground
-		RaycastHit2D groundHit = Physics2D.Raycast(coll.bounds.center, Vector2.down, groundDetectRadius, groundLayer);
+		//detects standing on ground
+		RaycastHit2D groundHit = Physics2D.Raycast(coll.bounds.center, Vector2.down, mover.groundDetectRadius, mover.groundLayer);
 
-		isOnGround = groundHit.collider != null;
-        if (isOnGround) { groundHitRB = groundHit.collider.GetComponent<Rigidbody2D>(); }
+		mover.isOnGround = groundHit.collider != null;
+		if (mover.isOnGround) { mover.groundHitRB = groundHit.collider.GetComponent<Rigidbody2D>(); }
 
-        //detects standing on quicksand
-        RaycastHit2D sandHit = Physics2D.Raycast(coll.bounds.center, Vector2.down, groundDetectRadius, sandLayer);
-        isInQuicksand = sandHit.collider != null;
+		//detects standing on quicksand
+		RaycastHit2D sandHit = Physics2D.Raycast(coll.bounds.center, Vector2.down, mover.groundDetectRadius, mover.sandLayer);
+        mover.isInQuicksand = sandHit.collider != null;
     }
 
-    /**
-     * Drawing Gizmos in edit mode to display the raycast for detecting ground and jump height
-     */
-    [ExecuteInEditMode]
-    void OnDrawGizmos() {
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, new Vector2(transform.position.x,transform.position.y - groundDetectRadius));
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(transform.position, new Vector2(transform.position.x, transform.position.y + jumpHeight));
-    }
+
     #endregion
+
+
 
     /**
      * Teleports the player to the last ground position that the player stood on
@@ -282,7 +235,7 @@ public class PlayerController : MonoBehaviour
      */
     public void OnDamage() {
         transform.position = new Vector2(PlayerData.checkpoint[0], PlayerData.checkpoint[1]);
-        rb.velocity = Vector2.zero;
+        mover.rb.velocity = Vector2.zero;
 	}
 
     public void Die() {
