@@ -32,41 +32,122 @@ public class PlayerMovement : MonoBehaviour
 
     [HideInInspector] public Rigidbody2D rb;
     public Rigidbody2D groundHitRB;
+    public Collider2D coll;
     public LayerMask groundLayer;
     public LayerMask sandLayer;
 
+    public float targetSpeed;
 
 
+    //animation states
+    enum State { idle, running, jumping, falling, pushing, hurt }; 
+    State state;
 
 
+    private void Awake() {
+        rb = GetComponent<Rigidbody2D>();
+        coll = GetComponent<CapsuleCollider2D>();
+        groundLayer = LayerMask.GetMask("Ground");
+        sandLayer = LayerMask.GetMask("Sand");
+    }
+
+	private void Start() {
+        gravityScale = rb.gravityScale;
+    }
 
 
-
-
-
-
-    void Update() {
-        UpdateTimers();
+    private void FixedUpdate() {
+		LimitDownVelocity();
+		SetGravityScale();
 	}
 
-    public void SetJumpBuffer() {
+	private void SetGravityScale() {
+		if (IsFalling()) {
+			rb.gravityScale = gravityScale * fallGravityMultiplier;
+		} else {
+			rb.gravityScale = gravityScale;
+		}
+	}
+
+	private void LimitDownVelocity() {
+		if (rb.velocity.y < maxDownVelocity)
+            rb.velocity = new Vector2(rb.velocity.x, maxDownVelocity);
+	}
+
+	void Update() {
+        DetectBottomSurface();
+		if (isOnGround) lastGroundedTime = jumpCoyoteTime;
+		if (IsFalling()) isJumping = false;
+
+		if (BufferingJump()) {
+			Jump();
+		}
+
+		UpdateTimers();
+	}
+
+	public bool IsFalling() {
+		return rb.velocity.y < 0;
+	}
+
+	private bool BufferingJump() {
+		return lastGroundedTime > 0 && lastJumpTime > 0 && !isJumping;
+	}
+
+	public void SetJumpBuffer() {
         lastJumpTime = jumpBufferTime;
     }
 
 
     private void UpdateTimers() {
+        lastGroundedTime -= Time.deltaTime;
         lastJumpTime -= Time.deltaTime;
     }
 
-    public float GetLastJumpTime() { return lastJumpTime; }
+    private void Jump() {
+        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        isJumping = true;
+        isOnGround = false;
+        state = State.jumping;
+    }
 
-    /**
-     * Drawing Gizmos in edit mode to display the raycast for detecting ground and jump height
-     */
-    [ExecuteInEditMode]
+    void DetectBottomSurface() {
+        RaycastHit2D groundHit = Physics2D.Raycast(coll.bounds.center, Vector2.down, groundDetectRadius, groundLayer);
+
+        isOnGround = groundHit.collider != null;
+        if (isOnGround) { groundHitRB = groundHit.collider.GetComponent<Rigidbody2D>(); }
+
+        //detects standing on quicksand
+        RaycastHit2D sandHit = Physics2D.Raycast(coll.bounds.center, Vector2.down, groundDetectRadius, sandLayer);
+        isInQuicksand = sandHit.collider != null;
+    }
+
+    public void SetToRun(float direction) {
+        targetSpeed = direction * maxSpeed;
+    }
+
+    public Vector2 GetRelativeVelocityToGround() {
+        return (transform.parent != null && groundHitRB != null) ? rb.velocity - groundHitRB.velocity : rb.velocity;
+    }
+
+
+    public void ApplyJumpCut() {
+        if (rb.velocity.y > 0 && isJumping) {
+            rb.AddForce(Vector2.down * rb.velocity.y * jumpCutMultiplier, ForceMode2D.Impulse);
+        }
+    }
+
+    public void ApplyFriction(Vector2 relativeVelocity) {
+        float amount = Mathf.Min(Mathf.Abs(relativeVelocity.x), Mathf.Abs(frictionAmount));
+        amount *= Mathf.Sign(relativeVelocity.x);
+        rb.AddForce(Vector2.right * -amount, ForceMode2D.Impulse);
+    }
+
+    //Called by Unity
     void OnDrawGizmos() {
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, new Vector2(transform.position.x, transform.position.y - groundDetectRadius));
     }
+
 
 }

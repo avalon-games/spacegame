@@ -329,6 +329,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SwingHook
       objectReference: {fileID: 0}
+    - target: {fileID: 7236650681042808204, guid: 0acbc6ce050354dfe968b459afa3af1b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0acbc6ce050354dfe968b459afa3af1b, type: 3}
 --- !u!1 &100760142 stripped
