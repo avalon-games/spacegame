@@ -2,15 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/**
- * PlayerController - controls player movement and animation states
- * Includes:
- * - player input monitoring
- * - horizontal and vertical movement speed control
- * - ground collision detection
- * - player teleportation
- * - player animation state assignment - an animator can set the animation based on current state
- */
+[RequireComponent(typeof(PlayerMovement))]
 public class PlayerController : MonoBehaviour
 {
     SpriteRenderer sprite;
