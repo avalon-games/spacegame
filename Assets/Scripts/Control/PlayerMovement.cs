@@ -26,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
     public float lastGroundedTime;
     public float gravityScale;
     public bool isJumping;
+    Vector2 relativeVelocity;
     [HideInInspector] public bool isOnGround;
     [HideInInspector] public bool isInQuicksand;
 
@@ -33,6 +34,7 @@ public class PlayerMovement : MonoBehaviour
     [HideInInspector] public Rigidbody2D rb;
     public Rigidbody2D groundHitRB;
     public Collider2D coll;
+    Animator anim;
     public LayerMask groundLayer;
     public LayerMask sandLayer;
 
@@ -47,12 +49,14 @@ public class PlayerMovement : MonoBehaviour
     private void Awake() {
         rb = GetComponent<Rigidbody2D>();
         coll = GetComponent<CapsuleCollider2D>();
+        anim = GetComponent<Animator>();
         groundLayer = LayerMask.GetMask("Ground");
         sandLayer = LayerMask.GetMask("Sand");
     }
 
 	private void Start() {
         gravityScale = rb.gravityScale;
+        state = State.idle;
     }
 
 
@@ -80,10 +84,46 @@ public class PlayerMovement : MonoBehaviour
 		if (IsFalling()) isJumping = false;
 
 		if (BufferingJump()) {
-			Jump();
+			JumpBehavior();
 		}
 
 		UpdateTimers();
+
+        anim.SetInteger("state", (int)state);
+    }
+
+    public void MovementBehavior(float horizontalInput) {
+		relativeVelocity = GetRelativeVelocityToGround();
+
+		RunBehavior(horizontalInput);
+
+		if (lastGroundedTime > 0 && Mathf.Abs(horizontalInput) < 0.01f) {
+			ApplyFriction(relativeVelocity);
+		}
+		if (isOnGround && horizontalInput != 0) {
+			state = State.running;
+		} else if (relativeVelocity.y < -0.1f) {
+			state = State.falling;
+		} else
+			state = State.idle;
+	}
+
+	private void RunBehavior(float horizontalInput) {
+		SetToRun(horizontalInput);
+		float speedDif = targetSpeed - relativeVelocity.x;
+		float accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? acceleration : decceleration;
+		float movement = Mathf.Pow(Mathf.Abs(speedDif) * accelRate, velPower) * Mathf.Sign(speedDif);
+
+		if (WithinSpeedLimit(relativeVelocity, speedDif)) {
+			if (isOnGround) rb.AddForce(movement * Vector2.right);
+			else rb.AddForce(movement * Vector2.right * airControl);
+		}
+	}
+
+	private bool WithinSpeedLimit(Vector2 relativeVelocity, float speedDif) {
+		return targetSpeed == 0 ||
+            Mathf.Sign(relativeVelocity.x) != Mathf.Sign(targetSpeed) ||
+            Mathf.Sign(targetSpeed) == Mathf.Sign(speedDif);
 	}
 
 	public bool IsFalling() {
@@ -104,7 +144,7 @@ public class PlayerMovement : MonoBehaviour
         lastJumpTime -= Time.deltaTime;
     }
 
-    private void Jump() {
+    private void JumpBehavior() {
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         isJumping = true;
         isOnGround = false;
@@ -143,8 +183,16 @@ public class PlayerMovement : MonoBehaviour
         rb.AddForce(Vector2.right * -amount, ForceMode2D.Impulse);
     }
 
-    //Called by Unity
-    void OnDrawGizmos() {
+    public bool QuicksandBehavior() {
+		if (!isInQuicksand) {
+			return false;
+		}
+		rb.velocity = new Vector2(0, -0.2f);
+		return true;
+	}
+
+	//Called by Unity
+	void OnDrawGizmos() {
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, new Vector2(transform.position.x, transform.position.y - groundDetectRadius));
     }

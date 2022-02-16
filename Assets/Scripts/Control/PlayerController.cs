@@ -15,8 +15,6 @@ public class PlayerController : MonoBehaviour
 {
     SpriteRenderer sprite;
     PlayerUI ui;
-    enum State { idle, running, jumping, falling, pushing, hurt };
-    State state;
 
     Animator animator;
     
@@ -37,8 +35,6 @@ public class PlayerController : MonoBehaviour
         ui = GameObject.FindGameObjectWithTag("UI").GetComponent<PlayerUI>();
     }
 	void Start() {
-        state = State.idle;
-
         if (PlayerData.checkpoint == null)
 			SetCheckpointToStart();
 		else {
@@ -61,58 +57,25 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Jump")) { mover.SetJumpBuffer(); }
         else if (Input.GetButtonUp("Jump")) { mover.ApplyJumpCut(); }
 
-        animator.SetInteger("state", (int)state);
-
         sprite.color = (invulnerable) ? new Color(1, 1, 1, 0.5f) : new Color(1, 1, 1, 1);
     }
 
     void FixedUpdate() {
-        //movement control
-        if (movementAllowed) {
-			MovePlayer();
-		}
+        if (!movementAllowed) {
+            return;
+        }
+        //if (InteractWithTime()) { return; } 
+        //if(InteractWithGrapple()) {return;}
+        if (InteractWithMovement()) {return;}
 	}
 
-	void MovePlayer() {
-		if (!movementAllowed) {
-			return;
-		}
-
+	bool InteractWithMovement() {
 		horizontalInput = Input.GetAxisRaw("Horizontal");
 		SetFacingDirection(horizontalInput);
 
-		Vector2 relativeVelocity = mover.GetRelativeVelocityToGround();
-
-		if (mover.isInQuicksand) {
-            mover.rb.velocity = new Vector2(0, -0.2f);
-			return;
-		}
-
-        #region Run
-        mover.SetToRun(horizontalInput);
-        float speedDif = mover.targetSpeed - relativeVelocity.x;
-        float accelRate = (Mathf.Abs(mover.targetSpeed) > 0.01f) ? mover.acceleration : mover.decceleration;
-        float movement = Mathf.Pow(Mathf.Abs(speedDif) * accelRate, mover.velPower) * Mathf.Sign(speedDif);
-
-        //checks if current speed doesn't exceed max speed, if it does just preserve the previous velocity
-        if (!(mover.targetSpeed != 0 && Mathf.Sign(relativeVelocity.x) == Mathf.Sign(mover.targetSpeed) && Mathf.Sign(mover.targetSpeed) != Mathf.Sign(speedDif))) {
-            if (mover.isOnGround) mover.rb.AddForce(movement * Vector2.right);
-            else mover.rb.AddForce(movement * Vector2.right * mover.airControl);
-        }
-
-        #endregion
-        #region Friction
-        if (mover.lastGroundedTime > 0 && Mathf.Abs(horizontalInput) < 0.01f) {
-			mover.ApplyFriction(relativeVelocity);
-		}
-		#endregion
-		if (mover.isOnGround && horizontalInput != 0) {
-			state = State.running;
-		} else if (relativeVelocity.y < -0.1f) {
-			state = State.falling;
-		} else
-			state = State.idle;
-
+        if(mover.QuicksandBehavior()) { return true; }
+        mover.MovementBehavior(horizontalInput);
+        return true;
 	}
 
 	private void SetFacingDirection(float horizontalInput) {
