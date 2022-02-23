@@ -128,8 +128,11 @@ public class PlayerController : MonoBehaviour
     }
 
     void ToggleSlowMo(bool toggle) {
-        if (toggle) Time.timeScale = 0.5f;
-        else Time.timeScale = 1.0f;
+        if (toggle && ui.GetSlowmoCharge() > 0) {
+            ui.ActivateSlowmo();
+        } else {
+            ui.DeactivateSlowmo();
+        }
     }
 
 }

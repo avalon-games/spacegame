@@ -15,26 +15,33 @@ using UnityEngine.UI;
  */
 public class PlayerUI : MonoBehaviour
 {
-	Image[] healthUI;
+
 	public Slider volume;
+	[SerializeField] private Slider slowmoSlider;
+	[SerializeField] GameObject screenTint;
+
+	public float timeToNoSlowmo = 1f;
+	//public float timeRemaining;
 
 	#region OXYGEN
-	[SerializeField]
-	private Slider oxygenUI;
+	
+	Image[] healthUI;
+	
 	// [Range(0,10)] public int oxygenDepletionRate; //how much the oxygen depletes each second
-	public float timeToNoOxygen = 10f;
-	public float timeRemaining;
-	private bool oxygenLossCoroutineActive;
-	private bool oxygenGainCoroutineActive;
+
+	private bool slowmoOnCoroutineActive;
+	private bool slowmoOffCoroutineActive;
+	private bool tintOnCoroutineActive;
+	private bool tintOffCoroutineActive;
     #endregion
 
     void Start()
 	{
 		healthUI = this.gameObject.FindComponentsInChildrenWithTag<Image>("Heart"); //make sure to tag the heart images
 		// oxygenUI = this.gameObject.FindComponentInChildWithTag<Slider>("Oxygen"); //make sure to tag the oxygen UI
-		oxygenLossCoroutineActive = false;
-		oxygenGainCoroutineActive = false;
-		timeRemaining = timeToNoOxygen;
+		slowmoOnCoroutineActive = false;
+		slowmoOffCoroutineActive = false;
+		//timeRemaining = timeToNoOxygen;
 
 		volume.value = PlayerData.volume;
 		// UpdateHealth();
@@ -65,8 +72,8 @@ public class PlayerUI : MonoBehaviour
 	 * Updates Oxygen Level to match the current oxygen level
 	 */
 	public void UpdateOxygen() {
-		oxygenUI.maxValue = PlayerData.maxOxygen;
-		oxygenUI.value = PlayerData.currOxygen;
+		slowmoSlider.maxValue = PlayerData.maxOxygen;
+		slowmoSlider.value = PlayerData.currOxygen;
 	}
 
 	/*
@@ -76,74 +83,135 @@ public class PlayerUI : MonoBehaviour
 	*/
 
 	// requires trigger
-	public void ActivateOxygenLoss()
+	public void ActivateSlowmo()
     {
-		if (oxygenGainCoroutineActive)
+		Time.timeScale = 0.4f;
+		ToggleScreenTint(true);
+		if (slowmoOffCoroutineActive)
         {
-			StopCoroutine("IncreaseOxygen");
-			oxygenGainCoroutineActive = false;
+			StopCoroutine("IncreaseSlowmoMeter");
+			slowmoOffCoroutineActive = false;
         }
 
-		if (!oxygenLossCoroutineActive)
+		if (!slowmoOnCoroutineActive)
         {
-			float totalTime = (oxygenUI.value / oxygenUI.maxValue) * timeToNoOxygen;
-			StartCoroutine("DecreaseOxygen", totalTime);
+			float totalTime = (slowmoSlider.value / slowmoSlider.maxValue) * timeToNoSlowmo;
+			StartCoroutine("DecreaseSlowmoMeter", totalTime);
         }
     }
 
 	// requires trigger
-	public void StopOxygenLoss()
+	public void DeactivateSlowmo()
     {
-		if (oxygenLossCoroutineActive)
+		Time.timeScale = 1f;
+		ToggleScreenTint(false);
+		if (slowmoOnCoroutineActive)
 		{
-			StopCoroutine("DecreaseOxygen");
-			oxygenLossCoroutineActive = false;
+			StopCoroutine("DecreaseSlowmoMeter");
+			slowmoOnCoroutineActive = false;
 		}
 
-		if (!oxygenGainCoroutineActive)
+		if (!slowmoOffCoroutineActive)
 		{
-			float totalTime = timeToNoOxygen - ((oxygenUI.value / oxygenUI.maxValue) * timeToNoOxygen);
-			StartCoroutine("IncreaseOxygen", totalTime);
+			float totalTime = timeToNoSlowmo - ((slowmoSlider.value / slowmoSlider.maxValue) * timeToNoSlowmo);
+			StartCoroutine("IncreaseSlowmoMeter", totalTime*2);
 		}
 	}
 
 	/**
 	 * Depletes the oxygen by a certain amount every second
 	 */
-	IEnumerator DecreaseOxygen(float totalTime) 
+	IEnumerator DecreaseSlowmoMeter(float totalTime) 
 	{
-		oxygenLossCoroutineActive = true;
+		slowmoOnCoroutineActive = true;
 
 		float startTime = Time.time;
-		float startValue = oxygenUI.value;
+		float startValue = slowmoSlider.value;
 		float endValue = 0;
 
 		while (Time.time < startTime + totalTime)
 		{
-			oxygenUI.value = Mathf.Lerp(startValue, endValue, (Time.time - startTime) / totalTime);
+			slowmoSlider.value = Mathf.Lerp(startValue, endValue, (Time.time - startTime) / totalTime);
 			yield return null;
 		}
 
-		oxygenLossCoroutineActive = false;
-		oxygenUI.value = endValue;
-		SceneChanger.GoToSpaceship();
+		slowmoOnCoroutineActive = false;
+		slowmoSlider.value = endValue;
+		DeactivateSlowmo();
 	}
 
-	IEnumerator IncreaseOxygen(float totalTime)
+	IEnumerator IncreaseSlowmoMeter(float totalTime)
 	{
-		oxygenGainCoroutineActive = true;
+		slowmoOffCoroutineActive = true;
 
 		float startTime = Time.time;
-		float startValue = oxygenUI.value;
+		float startValue = slowmoSlider.value;
 		float endValue = 1;
 
 		while (Time.time < startTime + totalTime)
 		{
-			oxygenUI.value = Mathf.Lerp(startValue, endValue, (Time.time - startTime) / totalTime);
+			slowmoSlider.value = Mathf.Lerp(startValue, endValue, (Time.time - startTime) / totalTime);
 			yield return null;
 		}
 
-		oxygenGainCoroutineActive = false;
-		oxygenUI.value = endValue;
+		slowmoOffCoroutineActive = false;
+		slowmoSlider.value = endValue;
+	}
+
+	public float GetSlowmoCharge() {
+		return slowmoSlider.value;
+	}
+	void ToggleScreenTint(bool toggle) {
+		if (toggle) {
+			if (tintOffCoroutineActive) {
+				StopCoroutine("TintTransitionOff");
+				tintOffCoroutineActive = false;
+			}
+			if (!tintOnCoroutineActive) {
+				StartCoroutine("TintTransitionOn", 0.1f);
+			}
+		} else {
+			if (tintOnCoroutineActive) {
+				StopCoroutine("TintTransitionOn");
+				tintOnCoroutineActive = false;
+			}
+			if (!tintOffCoroutineActive) {
+				StartCoroutine("TintTransitionOff", 0.1f);
+			}
+		}
+		
+	}
+
+	IEnumerator TintTransitionOn(float totalTime) {
+		tintOnCoroutineActive = true;
+		Image img = screenTint.GetComponent<Image>();
+		float startValue = img.color.a;
+		float endValue = 0.3f;
+		float startTime = Time.time;
+
+		while (Time.time < startTime + totalTime) {
+			img.color = new Color(0,0,0,Mathf.Lerp(startValue, endValue, (Time.time - startTime) / totalTime));
+			yield return null;
+		}
+
+		tintOnCoroutineActive = false;
+		img.color = new Color(0, 0, 0, endValue);
+	}
+
+	IEnumerator TintTransitionOff(float totalTime) {
+		tintOffCoroutineActive = true;
+
+		Image img = screenTint.GetComponent<Image>();
+		float startValue = img.color.a;
+		float endValue = 0;
+		float startTime = Time.time;
+
+		while (Time.time < startTime + totalTime) {
+			img.color = new Color(0, 0, 0, Mathf.Lerp(startValue, endValue, (Time.time - startTime) / totalTime));
+			yield return null;
+		}
+
+		tintOffCoroutineActive = false;
+		img.color = new Color(0, 0, 0, endValue);
 	}
 }
