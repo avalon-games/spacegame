@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     Animator animator;
     
     float horizontalInput;
-    private bool movementAllowed = true;
+    private bool controlAllowed = true;
 
     bool invulnerable;
     [Range(0f, 5f)] [SerializeField] float invincibilityDuration = 0f;
@@ -53,9 +53,11 @@ public class PlayerController : MonoBehaviour
     }
 
     void FixedUpdate() {
-        if (!movementAllowed) {
+        if (!controlAllowed) {
             return;
         }
+
+        if (grapple.IsAttached()) { return; }
         //if (InteractWithTime()) { return; } 
         //if(InteractWithGrapple()) {return;}
         if (InteractWithMovement()) {return;}
@@ -66,6 +68,8 @@ public class PlayerController : MonoBehaviour
 		SetFacingDirection(horizontalInput);
 
         if(mover.QuicksandBehavior()) { return true; }
+        mover.LimitDownVelocity();
+        mover.SetGravityScale();
         mover.MovementBehavior(horizontalInput);
         return true;
 	}
@@ -88,8 +92,8 @@ public class PlayerController : MonoBehaviour
 
 
 
-	public void ToggleMovementControl(bool toggle) {
-		movementAllowed = toggle;
+	public void ToggleControl(bool toggle) {
+		controlAllowed = toggle;
     }
 
     /**

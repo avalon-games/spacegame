@@ -60,12 +60,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
-    private void FixedUpdate() {
-		LimitDownVelocity();
-		SetGravityScale();
-	}
-
-	private void SetGravityScale() {
+	public void SetGravityScale() {
 		if (IsFalling()) {
 			rb.gravityScale = gravityScale * fallGravityMultiplier;
 		} else {
@@ -73,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
 		}
 	}
 
-	private void LimitDownVelocity() {
+	public void LimitDownVelocity() {
 		if (rb.velocity.y < maxDownVelocity)
             rb.velocity = new Vector2(rb.velocity.x, maxDownVelocity);
 	}

@@ -59,7 +59,6 @@ public class GrapplingGun : MonoBehaviour
 				rb.velocity = swingReleaseMultiplier * rb.velocity;
 				swingRelease = false;
 			}
-			player.ToggleMovementControl(true);
 			rb.gravityScale = initialGravity;
 		}
 
@@ -88,7 +87,6 @@ public class GrapplingGun : MonoBehaviour
 		//assign action based on button press
 		if (Input.GetButtonDown("GrappleSwing") && !swingHook.activeSelf && (totalCharge > 0 || infiniteCharge)) {
 			swingHook.SetActive(true);
-			player.ToggleMovementControl(false);
 			initializeSwing = true;
 			totalCharge--;
 
@@ -98,7 +96,6 @@ public class GrapplingGun : MonoBehaviour
 
 		} else if (Input.GetButtonDown("GrapplePull") && !pullHook.activeSelf && (totalCharge > 0 || infiniteCharge)) {
 			pullHook.SetActive(true);
-			player.ToggleMovementControl(false);
 			totalCharge--;
 			initializePull = true;
 
@@ -190,5 +187,9 @@ public class GrapplingGun : MonoBehaviour
 	public void DisableGrapple() {
 		pullHook.SetActive(false);
 		swingHook.SetActive(false);
+	}
+
+	public bool IsAttached() {
+		return pullHookScript.isAttached || swingHookScript.isAttached;
 	}
 }
