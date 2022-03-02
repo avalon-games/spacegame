@@ -28,6 +28,8 @@ public class GrapplingGun : MonoBehaviour
 	bool pullRelease;
 	bool swingRelease;
 	bool slowMo;
+	private Vector3 refVel = Vector3.zero;
+
 
 
 	Rigidbody2D rb;
@@ -74,6 +76,7 @@ public class GrapplingGun : MonoBehaviour
 			if (Vector2.Distance(transform.position, pullHook.transform.position) >= 1f) {
 				Pull();
 			} else {
+				//print(Vector2.Distance(transform.position, pullHook.transform.position));
 				Rigidbody2D playerParentRB = player.transform.parent ? player.transform.parent.GetComponent<Rigidbody2D>() : null;
 				rb.velocity = playerParentRB ? playerParentRB.velocity : Vector2.zero;
 			}
@@ -85,7 +88,8 @@ public class GrapplingGun : MonoBehaviour
 
 	private void ManageInput() {
 		//assign action based on button press
-		if (Input.GetButtonDown("GrappleSwing") && !swingHook.activeSelf && (totalCharge > 0 || infiniteCharge)) {
+		if (Input.GetButtonDown("GrappleSwing") && (totalCharge > 0 || infiniteCharge)) {
+			swingHook.SetActive(false);
 			swingHook.SetActive(true);
 			initializeSwing = true;
 			totalCharge--;
@@ -94,7 +98,8 @@ public class GrapplingGun : MonoBehaviour
 				pullHookScript.grappleRelease = true;
 			}
 
-		} else if (Input.GetButtonDown("GrapplePull") && !pullHook.activeSelf && (totalCharge > 0 || infiniteCharge)) {
+		} else if (Input.GetButtonDown("GrapplePull") &&  (totalCharge > 0 || infiniteCharge)) {
+			pullHook.SetActive(false);
 			pullHook.SetActive(true);
 			totalCharge--;
 			initializePull = true;
@@ -127,7 +132,8 @@ public class GrapplingGun : MonoBehaviour
 	 */
 	void Pull () {
 		Vector2 direction = (pullHook.transform.position - transform.position).normalized;
-		rb.velocity = direction * pullSpeed;
+		Vector3 targetVel = direction * this.pullSpeed;
+		rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVel, ref refVel, 0.05f);
 	}
 
 
@@ -191,5 +197,14 @@ public class GrapplingGun : MonoBehaviour
 
 	public bool IsAttached() {
 		return pullHookScript.isAttached || swingHookScript.isAttached;
+	}
+
+	public Vector2 GetAnchorPoint() {
+		if (pullHookScript.isAttached) {
+			return pullHookScript.GetAnchorPoint();
+		} else if (swingHookScript.isAttached) {
+			return swingHookScript.GetAnchorPoint();
+		} else
+			return Vector2.negativeInfinity;
 	}
 }

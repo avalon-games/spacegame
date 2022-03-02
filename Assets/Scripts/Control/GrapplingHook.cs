@@ -26,7 +26,7 @@ public class GrapplingHook : MonoBehaviour
     [Range(0, 30)] public float maxRange = 10;
 
     Vector2 launchDirection;
-    public float launchSpeed = 100f;
+    [SerializeField] float launchSpeed = 31.9f;
 
     void Awake() {
         rb = GetComponent<Rigidbody2D>();
@@ -108,21 +108,28 @@ public class GrapplingHook : MonoBehaviour
 			}
 		}
      }
-    public void ClearAnchorPoint() {
+    void ClearAnchorPoint() {
         hitDynamic = null;
         hitStatic = Vector2.negativeInfinity;
+    }
+    public Vector2 GetAnchorPoint() {
+        if(hitDynamic) {
+            return hitDynamic.position;
+		} else {
+            return hitStatic;
+		}
     }
 
     void Attach() {
 		PositionAtHitPoint();
-       rb.velocity = Vector2.zero;
+        rb.velocity = Vector2.zero;
 
 		isAttached = true;
 	}
 
 	private void PositionAtHitPoint() {
         if (hitDynamic) transform.position = hitDynamic.position;
-        else transform.position = hitStatic;
+        else if (hitStatic != Vector2.negativeInfinity) transform.position = hitStatic;
 	}
 
 	IEnumerator AttachAfterTime(float time) {
@@ -162,6 +169,10 @@ public class GrapplingHook : MonoBehaviour
     }
 
 	private void OnDisable() {
+        transform.position = gunPoint.position;
+        rb.velocity = Vector2.zero;
+        grappleRelease = false;
+        isAttached = false;
         ClearAnchorPoint();
 	}
 }
