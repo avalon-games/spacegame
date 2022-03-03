@@ -54,7 +54,6 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -2878,131 +2877,75 @@ TextureImporter:
       tessellationDetail: 0
       bones:
       - name: Chest
-        guid: 
         position: {x: 88.59146, y: 10.838043, z: 0}
         rotation: {x: 0, y: 0, z: 0.712443, w: 0.70173}
         length: 209.17725
         parentId: -1
-        color:
-          serializedVersion: 2
-          rgba: 0
       - name: R_upper_arm
-        guid: 
         position: {x: 191.50975, y: -120.167786, z: 0}
         rotation: {x: 0, y: 0, z: -0.9877813, w: 0.15584683}
         length: 157.33636
         parentId: 0
-        color:
-          serializedVersion: 2
-          rgba: 0
       - name: R_forearm
-        guid: 
         position: {x: 206.10106, y: 25.243942, z: 0}
         rotation: {x: 0, y: 0, z: 0.0048790374, w: 0.99998814}
         length: 124.2793
         parentId: 1
-        color:
-          serializedVersion: 2
-          rgba: 0
       - name: R_hand
-        guid: 
         position: {x: 124.2793, y: -0.000008505149, z: 0}
         rotation: {x: 0, y: 0, z: -0.014912382, w: 0.99988884}
         length: 36.580894
         parentId: 2
-        color:
-          serializedVersion: 2
-          rgba: 0
       - name: L_upper_arm
-        guid: 
         position: {x: 163.54431, y: 125.880775, z: 0}
         rotation: {x: 0, y: 0, z: -0.9784356, w: -0.2065525}
         length: 158.33055
         parentId: 0
-        color:
-          serializedVersion: 2
-          rgba: 0
       - name: L_forearm
-        guid: 
         position: {x: 231.70018, y: -18.806162, z: 0}
         rotation: {x: 0, y: 0, z: 0.020294445, w: 0.9997941}
         length: 116.83438
         parentId: 4
-        color:
-          serializedVersion: 2
-          rgba: 0
       - name: L_hand
-        guid: 
         position: {x: 116.83439, y: -0.0000013113277, z: 0}
         rotation: {x: 0, y: 0, z: 0.024677515, w: 0.9996955}
         length: 46.60135
         parentId: 5
-        color:
-          serializedVersion: 2
-          rgba: 0
       - name: L_thigh
-        guid: 
         position: {x: -51.034065, y: 83.17642, z: 0}
         rotation: {x: 0, y: 0, z: -0.9993852, w: -0.03506337}
         length: 172.97133
         parentId: 0
-        color:
-          serializedVersion: 2
-          rgba: 0
       - name: L_lower_leg
-        guid: 
         position: {x: 207.51622, y: 6.6623015, z: 0}
         rotation: {x: 0, y: 0, z: -0.018293766, w: 0.9998327}
         length: 155.93394
         parentId: 7
-        color:
-          serializedVersion: 2
-          rgba: 0
       - name: L_foot
-        guid: 
         position: {x: 155.93396, y: 0.000021051348, z: 0}
         rotation: {x: 0, y: 0, z: 0.60662067, w: 0.7949915}
         length: 54.151733
         parentId: 8
-        color:
-          serializedVersion: 2
-          rgba: 0
       - name: R_thigh
-        guid: 
         position: {x: -57.587387, y: -35.575005, z: 0}
         rotation: {x: 0, y: 0, z: -0.9970732, w: 0.076453336}
         length: 170.3608
         parentId: 0
-        color:
-          serializedVersion: 2
-          rgba: 0
       - name: R_lower_leg
-        guid: 
         position: {x: 201.10234, y: 1.208429, z: 0}
         rotation: {x: 0, y: 0, z: -0.008917415, w: 0.99996024}
         length: 158.65543
         parentId: 10
-        color:
-          serializedVersion: 2
-          rgba: 0
       - name: R_foot
-        guid: 
         position: {x: 158.65546, y: 0.000006921542, z: 0}
         rotation: {x: 0, y: 0, z: 0.5833741, w: 0.81220365}
         length: 54.70524
         parentId: 11
-        color:
-          serializedVersion: 2
-          rgba: 0
       - name: Head
-        guid: 
         position: {x: 266.2605, y: 2.3043652, z: 0}
         rotation: {x: 0, y: 0, z: -0.0075752223, w: 0.9999714}
         length: 160.03392
         parentId: 0
-        color:
-          serializedVersion: 2
-          rgba: 0
       spriteID: a74659838cd8f1f60800000000000000
       internalID: 8007274553570321530
       vertices:
@@ -15487,17 +15430,6 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      MultiPlayerSprite_0: -4084198980657950425
-      MultiPlayerSprite_4: -7599527185410439942
-      MultiPlayerSprite_3: 4560277505387467576
-      MultiPlayerSprite_9: -3966003787988246933
-      MultiPlayerSprite_11: 588771172095044702
-      MultiPlayerSprite_10: 3431722245859150574
-      MultiPlayerSprite_8: 7632264221825646784
-      MultiPlayerSprite_12: 7677366540036515469
-      MultiPlayerSprite_2: 8007274553570321530
-      MultiPlayerSprite_1: -1264732771469434097
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

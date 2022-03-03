@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Experimental.Rendering.Universal;
 
 
 /**
@@ -9,10 +9,10 @@ using UnityEngine;
  */
 public class LightingControl : MonoBehaviour
 {
-    public UnityEngine.Rendering.Universal.Light2D undergroundLight;
-    public UnityEngine.Rendering.Universal.Light2D surfaceLight;
-    public UnityEngine.Rendering.Universal.Light2D playerLight;
-    public UnityEngine.Rendering.Universal.Light2D bgLight;
+    public Light2D undergroundLight;
+    public Light2D surfaceLight;
+    public Light2D playerLight;
+    public Light2D bgLight;
     Collider2D coll;
 
     bool isOnSurface;

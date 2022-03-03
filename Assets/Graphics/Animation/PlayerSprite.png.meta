@@ -54,7 +54,6 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -2878,131 +2877,75 @@ TextureImporter:
       tessellationDetail: 0
       bones:
       - name: chest
-        guid: 
         position: {x: 86.27487, y: 54.207306, z: 0}
         rotation: {x: 0, y: 0, z: 0.71053094, w: 0.70366603}
         length: 163.94658
         parentId: -1
-        color:
-          serializedVersion: 2
-          rgba: 0
       - name: R_upper_arm
-        guid: 
         position: {x: 140.50581, y: -119.151024, z: 0}
         rotation: {x: 0, y: 0, z: -0.9859672, w: 0.16693929}
         length: 150.5341
         parentId: 0
-        color:
-          serializedVersion: 2
-          rgba: 0
       - name: R_forearm
-        guid: 
         position: {x: 201.5592, y: 29.01293, z: 0}
         rotation: {x: 0, y: 0, z: -0.011703482, w: 0.9999315}
         length: 120.797005
         parentId: 1
-        color:
-          serializedVersion: 2
-          rgba: 0
       - name: R_hand
-        guid: 
         position: {x: 120.79702, y: 0.000120564895, z: 0}
         rotation: {x: 0, y: 0, z: -0.02172333, w: 0.999764}
         length: 34.761932
         parentId: 2
-        color:
-          serializedVersion: 2
-          rgba: 0
       - name: R_upper_leg
-        guid: 
         position: {x: -110.18879, y: -37.13132, z: 0}
         rotation: {x: 0, y: 0, z: -0.99691874, w: 0.07844194}
         length: 163.01683
         parentId: 0
-        color:
-          serializedVersion: 2
-          rgba: 0
       - name: R_lower_leg
-        guid: 
         position: {x: 194.42361, y: 4.3979254, z: 0}
         rotation: {x: 0, y: 0, z: -0.024508487, w: 0.99969965}
         length: 149.05435
         parentId: 4
-        color:
-          serializedVersion: 2
-          rgba: 0
       - name: R_foot
-        guid: 
         position: {x: 149.05437, y: 0.00008881377, z: 0}
         rotation: {x: 0, y: 0, z: 0.52854526, w: 0.8489051}
         length: 57.387394
         parentId: 5
-        color:
-          serializedVersion: 2
-          rgba: 0
       - name: L_upper_leg
-        guid: 
         position: {x: -109.04532, y: 80.64446, z: 0}
         rotation: {x: 0, y: 0, z: -0.99917966, w: -0.040496875}
         length: 156.37805
         parentId: 0
-        color:
-          serializedVersion: 2
-          rgba: 0
       - name: L_lower_leg
-        guid: 
         position: {x: 194.1402, y: 7.4843783, z: 0}
         rotation: {x: 0, y: 0, z: -0.006354695, w: 0.9999798}
         length: 151.74095
         parentId: 7
-        color:
-          serializedVersion: 2
-          rgba: 0
       - name: L_foot
-        guid: 
         position: {x: 151.74094, y: 0.0006546332, z: 0}
         rotation: {x: 0, y: 0, z: 0.5451807, w: 0.8383186}
         length: 56.27298
         parentId: 8
-        color:
-          serializedVersion: 2
-          rgba: 0
       - name: L_upper_arm
-        guid: 
         position: {x: 111.0851, y: 129.44211, z: 0}
         rotation: {x: 0, y: 0, z: -0.98141426, w: -0.19190161}
         length: 147.19011
         parentId: 0
-        color:
-          serializedVersion: 2
-          rgba: 0
       - name: L_forearm
-        guid: 
         position: {x: 224.53717, y: -22.477808, z: 0}
         rotation: {x: 0, y: 0, z: 0.018597204, w: 0.9998271}
         length: 114.77479
         parentId: 10
-        color:
-          serializedVersion: 2
-          rgba: 0
       - name: L_hand
-        guid: 
         position: {x: 114.77478, y: 0.00011406689, z: 0}
         rotation: {x: 0, y: 0, z: -0.027744636, w: 0.99961513}
         length: 41.38261
         parentId: 11
-        color:
-          serializedVersion: 2
-          rgba: 0
       - name: Head
-        guid: 
         position: {x: 221.22755, y: -2.147857, z: 0}
         rotation: {x: 0, y: 0, z: -0.0048542214, w: 0.99998826}
         length: 157.57231
         parentId: 0
-        color:
-          serializedVersion: 2
-          rgba: 0
       spriteID: c172618ddf227c510800000000000000
       internalID: 1569261468809307932
       vertices:
@@ -15445,131 +15388,75 @@ TextureImporter:
     physicsShape: []
     bones:
     - name: chest
-      guid: 
       position: {x: 319.27487, y: 504.3906, z: 6}
       rotation: {x: 0, y: 0, z: 0.71056443, w: 0.70363224}
       length: 162.35504
       parentId: -1
-      color:
-        serializedVersion: 2
-        rgba: 0
     - name: L_upper_arm
-      guid: 
       position: {x: 114.24931, y: 126.21716, z: 8}
       rotation: {x: 0, y: 0, z: -0.9817397, w: -0.19022925}
       length: 157.24237
       parentId: 0
-      color:
-        serializedVersion: 2
-        rgba: 0
     - name: L_forearm
-      guid: 
       position: {x: 230.96593, y: -22.426418, z: 9}
       rotation: {x: 0, y: 0, z: 0.0038909614, w: 0.99999243}
       length: 115.872856
       parentId: 1
-      color:
-        serializedVersion: 2
-        rgba: 0
     - name: L_hand
-      guid: 
       position: {x: 115.87283, y: 0.00046572182, z: 9}
       rotation: {x: 0, y: 0, z: 0.033347715, w: 0.9994438}
       length: 43.297337
       parentId: 2
-      color:
-        serializedVersion: 2
-        rgba: 0
     - name: head
-      guid: 
       position: {x: 216.45256, y: -2.122146, z: 7}
       rotation: {x: 0, y: 0, z: 0.000098119155, w: 1}
       length: 159.17195
       parentId: 0
-      color:
-        serializedVersion: 2
-        rgba: 0
     - name: R_upper_arm
-      guid: 
       position: {x: 143.66194, y: -120.78721, z: 0}
       rotation: {x: 0, y: 0, z: -0.9873612, w: 0.15848671}
       length: 158.04587
       parentId: 0
-      color:
-        serializedVersion: 2
-        rgba: 0
     - name: R_forearm
-      guid: 
       position: {x: 212.09552, y: 30.358982, z: 1}
       rotation: {x: 0, y: 0, z: -0.013819309, w: 0.9999045}
       length: 118.30708
       parentId: 5
-      color:
-        serializedVersion: 2
-        rgba: 0
     - name: R_hand
-      guid: 
       position: {x: 118.30708, y: -0.00021345836, z: 1}
       rotation: {x: 0, y: 0, z: 0.07190705, w: 0.9974114}
       length: 37.020607
       parentId: 6
-      color:
-        serializedVersion: 2
-        rgba: 0
     - name: R_upper_leg
-      guid: 
       position: {x: -108.61639, y: -38.728024, z: 2}
       rotation: {x: 0, y: 0, z: -0.9968028, w: 0.07990194}
       length: 169.56007
       parentId: 0
-      color:
-        serializedVersion: 2
-        rgba: 0
     - name: R_lower_leg
-      guid: 
       position: {x: 193.89812, y: 0.67233163, z: 3}
       rotation: {x: 0, y: 0, z: -0.01894648, w: 0.99982053}
       length: 157.34709
       parentId: 8
-      color:
-        serializedVersion: 2
-        rgba: 0
     - name: R_foot
-      guid: 
       position: {x: 157.34709, y: 0.00003597343, z: 3}
       rotation: {x: 0, y: 0, z: 0.5816527, w: 0.8134372}
       length: 56.810623
       parentId: 9
-      color:
-        serializedVersion: 2
-        rgba: 0
     - name: L_upper_leg
-      guid: 
       position: {x: -102.73383, y: 74.22614, z: 4}
       rotation: {x: 0, y: 0, z: -0.9983985, w: -0.05657333}
       length: 169.61983
       parentId: 0
-      color:
-        serializedVersion: 2
-        rgba: 0
     - name: L_lower_leg
-      guid: 
       position: {x: 206.95795, y: 10.275411, z: 5}
       rotation: {x: 0, y: 0, z: 0.0039743227, w: 0.99999213}
       length: 150.29834
       parentId: 11
-      color:
-        serializedVersion: 2
-        rgba: 0
     - name: L_foot
-      guid: 
       position: {x: 150.29834, y: 0.0001478112, z: 5}
       rotation: {x: 0, y: 0, z: 0.5607393, w: 0.8279925}
       length: 59.083927
       parentId: 12
-      color:
-        serializedVersion: 2
-        rgba: 0
     spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices:
@@ -22179,17 +22066,6 @@ TextureImporter:
       boneIndex[2]: 0
       boneIndex[3]: 0
     secondaryTextures: []
-    nameFileIdTable:
-      PlayerSprite_1: 6349069617109316163
-      PlayerSprite_9: 8418022784724838117
-      PlayerSprite_4: -6386507142686429062
-      PlayerSprite_10: -2538726712721353921
-      PlayerSprite_12: -7296453262851215269
-      PlayerSprite_8: -4844168726572069635
-      PlayerSprite_0: -8868272330977153355
-      PlayerSprite_11: 7846627329634974132
-      PlayerSprite_2: 1569261468809307932
-      PlayerSprite_3: 8916896056068427944
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
