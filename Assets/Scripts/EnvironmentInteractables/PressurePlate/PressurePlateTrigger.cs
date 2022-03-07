@@ -7,8 +7,7 @@ public class PressurePlateTrigger : MonoBehaviour
 {
     public List<GameObject> pressureBlocks;
 
-    [SerializeField]
-    private GameObject text;
+    [SerializeField] private GameObject text;
     private bool textActive;
 
     private Animation animation;
@@ -17,14 +16,14 @@ public class PressurePlateTrigger : MonoBehaviour
     private Vector2 floatY;
     private float floatStrength = 3f;
     private bool blocksActive;
-    private float timeToDeactivate = 5f;
+    [SerializeField] float timeToDeactivate = 5f;
 
     // Start is called before the first frame update
     void Start()
     {
         foreach(Transform pressureBlock in transform.parent)
         {
-            if (pressureBlock.gameObject.tag == "PressureBlock")
+            if (pressureBlock.GetComponent<PressurePlateBlock>())
             {
                 pressureBlocks.Add(pressureBlock.gameObject);
             }
@@ -42,14 +41,15 @@ public class PressurePlateTrigger : MonoBehaviour
         text.transform.position = new Vector2(transform.position.x,
                                         originalY + ((float)Mathf.Sin(Time.time * 2) / floatStrength));
 
-        if (!blocksActive && Input.GetKeyDown(KeyCode.P))
+        if (textActive && !blocksActive && Input.GetKeyDown(KeyCode.P))
         {
             ActivateBlocks();
         }
     }
 
-    private void ActivateBlocks()
+    public void ActivateBlocks()
     {
+        CancelInvoke();
         Debug.Log("Activate Blocks");
         blocksActive = true;
         foreach (GameObject block in pressureBlocks)
@@ -59,8 +59,9 @@ public class PressurePlateTrigger : MonoBehaviour
         Invoke("DeactivateBlocks", timeToDeactivate);
     }
 
-    private void DeactivateBlocks()
+    public void DeactivateBlocks()
     {
+        CancelInvoke();
         foreach (GameObject block in pressureBlocks)
         {
             block.GetComponent<PressurePlateBlock>().Deactivate();
@@ -85,4 +86,10 @@ public class PressurePlateTrigger : MonoBehaviour
             textActive = false;
         }
     }
+
+	private void OnTriggerEnter2D(Collider2D collision) {
+		if (collision.CompareTag("MechanismHook")) {
+            ActivateBlocks();
+		}
+	}
 }

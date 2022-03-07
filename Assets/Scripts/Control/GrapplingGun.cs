@@ -4,30 +4,33 @@ using UnityEngine;
 
 public class GrapplingGun : MonoBehaviour
 {
-	public GameObject pullHook;
-	public GameObject swingHook;
+	[SerializeField] GameObject pullHook;
+	[SerializeField] GameObject swingHook;
+	[SerializeField] GameObject mechanismHook;
+	[SerializeField] PlayerController player;
+
+	[SerializeField] float pullSpeed = 30f;
+	[SerializeField] float swingSpeedMultiplier = 2f;
+	[SerializeField] float pullReleaseMultiplier = 1 / 8f;
+	[SerializeField] float swingReleaseMultiplier = 1.5f;
+
 	GrapplingHook pullHookScript;
 	GrapplingHook swingHookScript;
+	PlayerMovement mover;
 
-	public PlayerController player;
-	public PlayerMovement mover;
 	float initialGravity;
-
-	public float pullSpeed = 30f;
-	public float swingSpeedMultiplier = 2f;
-	public float pullReleaseMultiplier = 1 / 8f;
-	public float swingReleaseMultiplier = 1.5f;
 	bool swingRight; //if false, swing to the left
-
 	bool initializeSwing;
 	bool initializePull;
 
 	//defines how many times the player can grapple
 	public int totalCharge;
-	public bool infiniteCharge;
+	[SerializeField] bool infiniteCharge;
 	bool pullRelease;
 	bool swingRelease;
 	bool slowMo;
+	private Vector3 refVel = Vector3.zero;
+
 
 
 	Rigidbody2D rb;
@@ -59,7 +62,6 @@ public class GrapplingGun : MonoBehaviour
 				rb.velocity = swingReleaseMultiplier * rb.velocity;
 				swingRelease = false;
 			}
-			player.ToggleMovementControl(true);
 			rb.gravityScale = initialGravity;
 		}
 
@@ -75,6 +77,7 @@ public class GrapplingGun : MonoBehaviour
 			if (Vector2.Distance(transform.position, pullHook.transform.position) >= 1f) {
 				Pull();
 			} else {
+				//print(Vector2.Distance(transform.position, pullHook.transform.position));
 				Rigidbody2D playerParentRB = player.transform.parent ? player.transform.parent.GetComponent<Rigidbody2D>() : null;
 				rb.velocity = playerParentRB ? playerParentRB.velocity : Vector2.zero;
 			}
@@ -86,9 +89,9 @@ public class GrapplingGun : MonoBehaviour
 
 	private void ManageInput() {
 		//assign action based on button press
-		if (Input.GetButtonDown("GrappleSwing") && !swingHook.activeSelf && (totalCharge > 0 || infiniteCharge)) {
+		if (Input.GetButtonDown("GrappleSwing") && (totalCharge > 0 || infiniteCharge)) {
+			swingHook.SetActive(false);
 			swingHook.SetActive(true);
-			player.ToggleMovementControl(false);
 			initializeSwing = true;
 			totalCharge--;
 
@@ -96,9 +99,9 @@ public class GrapplingGun : MonoBehaviour
 				pullHookScript.grappleRelease = true;
 			}
 
-		} else if (Input.GetButtonDown("GrapplePull") && !pullHook.activeSelf && (totalCharge > 0 || infiniteCharge)) {
+		} else if (Input.GetButtonDown("GrapplePull") &&  (totalCharge > 0 || infiniteCharge)) {
+			pullHook.SetActive(false);
 			pullHook.SetActive(true);
-			player.ToggleMovementControl(false);
 			totalCharge--;
 			initializePull = true;
 
@@ -113,6 +116,12 @@ public class GrapplingGun : MonoBehaviour
 		} else if (Input.GetButtonUp("GrapplePull") && pullHook.activeSelf) {
 			pullHookScript.grappleRelease = true;
 			pullRelease = true;
+		}
+
+		if (Input.GetButtonDown("MechanismHook")) {
+			totalCharge--;
+			GameObject bullet = Instantiate(mechanismHook);
+			bullet.GetComponent<MechanismHook>().gunPoint = transform.parent;
 		}
 	}
 
@@ -130,7 +139,8 @@ public class GrapplingGun : MonoBehaviour
 	 */
 	void Pull () {
 		Vector2 direction = (pullHook.transform.position - transform.position).normalized;
-		rb.velocity = direction * pullSpeed;
+		Vector3 targetVel = direction * this.pullSpeed;
+		rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVel, ref refVel, 0.05f);
 	}
 
 
@@ -190,5 +200,18 @@ public class GrapplingGun : MonoBehaviour
 	public void DisableGrapple() {
 		pullHook.SetActive(false);
 		swingHook.SetActive(false);
+	}
+
+	public bool IsAttached() {
+		return pullHookScript.isAttached || swingHookScript.isAttached;
+	}
+
+	public Vector2 GetAnchorPoint() {
+		if (pullHookScript.isAttached) {
+			return pullHookScript.GetAnchorPoint();
+		} else if (swingHookScript.isAttached) {
+			return swingHookScript.GetAnchorPoint();
+		} else
+			return Vector2.negativeInfinity;
 	}
 }

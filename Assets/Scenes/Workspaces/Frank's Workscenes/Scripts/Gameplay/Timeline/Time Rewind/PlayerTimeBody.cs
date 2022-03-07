@@ -12,13 +12,13 @@ public class PlayerTimeBody : TimeBody
 
     protected override IEnumerator Rewind()
     {
-        GetComponent<PlayerController>().ToggleMovementControl(false);
+        GetComponent<PlayerController>().ToggleControl(false);
         return base.Rewind();
     }
 
     protected override void OnTimeLoopEnd()
     {
-        GetComponent<PlayerController>().ToggleMovementControl(true);
+        GetComponent<PlayerController>().ToggleControl(true);
         rb.isKinematic = false;
     }
 }
