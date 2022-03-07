@@ -15,7 +15,7 @@ using UnityEngine.UI;
  */
 public class PlayerUI : MonoBehaviour
 {
-
+	[SerializeField] const float slowMoTintAmount = 0.3f;
 	public Slider volume;
 	[SerializeField] private Slider slowmoSlider;
 	[SerializeField] GameObject screenTint;
@@ -188,7 +188,7 @@ public class PlayerUI : MonoBehaviour
 		tintOnCoroutineActive = true;
 		Image img = screenTint.GetComponent<Image>();
 		float startValue = img.color.a;
-		float endValue = 0.3f;
+		float endValue = slowMoTintAmount;
 		float startTime = Time.time;
 
 		while (Time.time < startTime + totalTime) {

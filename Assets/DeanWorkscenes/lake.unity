@@ -1168,6 +1168,18 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Untagged
       objectReference: {fileID: 0}
+    - target: {fileID: 4201649481019743272, guid: 19122134f41c44019b4b5c1f9f095a2f, type: 3}
+      propertyPath: m_Color.b
+      value: 0.7446413
+      objectReference: {fileID: 0}
+    - target: {fileID: 4201649481019743272, guid: 19122134f41c44019b4b5c1f9f095a2f, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4201649481019743272, guid: 19122134f41c44019b4b5c1f9f095a2f, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4201649481019743273, guid: 19122134f41c44019b4b5c1f9f095a2f, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -1180,5 +1192,9 @@ PrefabInstance:
       propertyPath: checkpoints
       value: 
       objectReference: {fileID: 907971052}
+    - target: {fileID: 6614960941237690905, guid: 19122134f41c44019b4b5c1f9f095a2f, type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 19122134f41c44019b4b5c1f9f095a2f, type: 3}
