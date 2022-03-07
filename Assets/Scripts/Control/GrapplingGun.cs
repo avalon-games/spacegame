@@ -118,7 +118,7 @@ public class GrapplingGun : MonoBehaviour
 			pullRelease = true;
 		}
 
-		if (Input.GetButtonDown("MechanismHook")) {
+		if (Input.GetButtonDown("MechanismHook") && (totalCharge > 0 || infiniteCharge)) {
 			totalCharge--;
 			GameObject bullet = Instantiate(mechanismHook);
 			bullet.GetComponent<MechanismHook>().gunPoint = transform.parent;
