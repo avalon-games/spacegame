@@ -47,8 +47,9 @@ public class PressurePlateTrigger : MonoBehaviour
         }
     }
 
-    private void ActivateBlocks()
+    public void ActivateBlocks()
     {
+        CancelInvoke();
         Debug.Log("Activate Blocks");
         blocksActive = true;
         foreach (GameObject block in pressureBlocks)
@@ -58,8 +59,9 @@ public class PressurePlateTrigger : MonoBehaviour
         Invoke("DeactivateBlocks", timeToDeactivate);
     }
 
-    private void DeactivateBlocks()
+    public void DeactivateBlocks()
     {
+        CancelInvoke();
         foreach (GameObject block in pressureBlocks)
         {
             block.GetComponent<PressurePlateBlock>().Deactivate();
