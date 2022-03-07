@@ -4,27 +4,28 @@ using UnityEngine;
 
 public class GrapplingGun : MonoBehaviour
 {
-	public GameObject pullHook;
-	public GameObject swingHook;
+	[SerializeField] GameObject pullHook;
+	[SerializeField] GameObject swingHook;
+	[SerializeField] GameObject mechanismHook;
+	[SerializeField] PlayerController player;
+
+	[SerializeField] float pullSpeed = 30f;
+	[SerializeField] float swingSpeedMultiplier = 2f;
+	[SerializeField] float pullReleaseMultiplier = 1 / 8f;
+	[SerializeField] float swingReleaseMultiplier = 1.5f;
+
 	GrapplingHook pullHookScript;
 	GrapplingHook swingHookScript;
+	PlayerMovement mover;
 
-	public PlayerController player;
-	public PlayerMovement mover;
 	float initialGravity;
-
-	public float pullSpeed = 30f;
-	public float swingSpeedMultiplier = 2f;
-	public float pullReleaseMultiplier = 1 / 8f;
-	public float swingReleaseMultiplier = 1.5f;
 	bool swingRight; //if false, swing to the left
-
 	bool initializeSwing;
 	bool initializePull;
 
 	//defines how many times the player can grapple
 	public int totalCharge;
-	public bool infiniteCharge;
+	[SerializeField] bool infiniteCharge;
 	bool pullRelease;
 	bool swingRelease;
 	bool slowMo;
@@ -115,6 +116,12 @@ public class GrapplingGun : MonoBehaviour
 		} else if (Input.GetButtonUp("GrapplePull") && pullHook.activeSelf) {
 			pullHookScript.grappleRelease = true;
 			pullRelease = true;
+		}
+
+		if (Input.GetButtonDown("MechanismHook")) {
+			totalCharge--;
+			GameObject bullet = Instantiate(mechanismHook);
+			bullet.GetComponent<MechanismHook>().gunPoint = transform.parent;
 		}
 	}
 

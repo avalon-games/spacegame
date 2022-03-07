@@ -92,7 +92,7 @@ public class GrapplingHook : MonoBehaviour
         RaycastHit2D[] hits = Physics2D.RaycastAll(gunPoint.position, direction, maxRange);
 
         foreach(RaycastHit2D hit in hits) {
-            if(hit.collider.CompareTag("Grappable")) {
+            if(hit.collider.CompareTag("Grappable") || hit.collider.GetComponent<Grappable>()) {
                 //if on grappable tilemap, return a static position
                 Rigidbody2D hitRb = hit.collider.GetComponent<Rigidbody2D>();
                 if (hitRb == null || hitRb.bodyType == RigidbodyType2D.Static) {

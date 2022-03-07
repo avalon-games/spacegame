@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class PressurePlateBlock : MonoBehaviour
 {
-    private BoxCollider2D collider;
+    Collider2D collider;
+    [SerializeField] bool enableMovementToggle; //for moving platforms
+    [SerializeField] bool enableColliderToggle;
 
     // Start is called before the first frame update
     void Start()
@@ -12,28 +14,30 @@ public class PressurePlateBlock : MonoBehaviour
         collider = GetComponent<BoxCollider2D>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void Activate()
     {
-        collider.enabled = true;
+        if (enableColliderToggle) collider.enabled = true;
+        if (enableMovementToggle && GetComponent<LinearMovingPlatform>()) {
+            GetComponent<LinearMovingPlatform>().enabled = true;
+        }
         StartCoroutine("FadeInColour");
+        
     }
 
     public void Deactivate()
     {
-        collider.enabled = false;
+        if (enableColliderToggle) { collider.enabled = false; }
+        if (enableMovementToggle && GetComponent<LinearMovingPlatform>()) {
+            GetComponent<LinearMovingPlatform>().enabled = false;
+        }
         StartCoroutine("FadeOutColour");
+        
     }
 
     public IEnumerator FadeInColour()
     {
         float startTime = Time.time;
-        float startValue = 0.5f;
+        float startValue = 0.2f;
         float endValue = 1f;
         float totalTime = 1f;
         Color currentColor = GetComponent<SpriteRenderer>().color;
@@ -52,7 +56,7 @@ public class PressurePlateBlock : MonoBehaviour
     {
         float startTime = Time.time;
         float startValue = 1f;
-        float endValue = 0.5f;
+        float endValue = 0.2f;
         float totalTime = 1f;
         Color currentColor = GetComponent<SpriteRenderer>().color;
 
@@ -63,6 +67,6 @@ public class PressurePlateBlock : MonoBehaviour
             yield return null;
         }
 
-        GetComponent<SpriteRenderer>().color = new Color(currentColor.r, currentColor.g, currentColor.b, 0.5f);
+        GetComponent<SpriteRenderer>().color = new Color(currentColor.r, currentColor.g, currentColor.b, 0.2f);
     }
 }
