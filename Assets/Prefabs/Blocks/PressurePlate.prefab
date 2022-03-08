@@ -252,6 +252,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pressureBlocks: []
   text: {fileID: 7354310731081125063}
+  timeToDeactivate: 5
 --- !u!61 &7354310731958486329
 BoxCollider2D:
   m_ObjectHideFlags: 0
