@@ -154,8 +154,20 @@ public class GrapplingGun : MonoBehaviour
 		float currentPhase = GetSwingPhase();
 
 		if (currentPhase > Mathf.PI/6 && currentPhase < 5*Mathf.PI / 6) swingHookScript.grappleRelease = true; //don't allow swing if above 30 degrees the grappled point
-		if (xPos < 0) swingRight = true; //swing based on where player is relative to grapple
-		else swingRight = false;
+
+		//arrow key to control direction of swing, if no key pressed, default
+		switch (Input.GetAxisRaw("Horizontal")) {
+			case 1:
+				swingRight = true;
+				break;
+			case -1:
+				swingRight = false;
+				break;
+			case 0:
+				if (xPos < 0) { swingRight = true; } //swing based on where player is relative to grapple
+				else { swingRight = false; }
+				break;
+		}
 	}
 
 	void Swing() {

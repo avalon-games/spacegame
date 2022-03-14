@@ -5,9 +5,10 @@ using UnityEngine;
 public class TitleBgScroll : MonoBehaviour
 {
     [SerializeField] float scrollTime = 10f;
-    float yStart = -359.8591f;
-    float yEnd = 0f;
+    [SerializeField] float yStart = 0f;
+    [SerializeField] float yEnd = 696.7002f;
     float timer = 0;
+    //[SerializeField] float y = 0f;
 
     RectTransform rect;
     // Start is called before the first frame update
@@ -20,11 +21,12 @@ public class TitleBgScroll : MonoBehaviour
 	private void Update() {
         float fraction = timer / scrollTime;
 
-        if (fraction <= 1) {
-            float yPos = Mathf.Lerp(yStart, yEnd, fraction);
-            rect.anchoredPosition = new Vector2(0f, yPos);
-            timer += Time.deltaTime;
-        }
-        
+		if (fraction <= 1) {
+			float yPos = Mathf.Lerp(yStart, yEnd, fraction);
+			rect.anchoredPosition = new Vector2(0f, yPos);
+			timer += Time.deltaTime;
+		}
+		//rect.anchoredPosition = new Vector2(0f, y);
+
 	}
 }
