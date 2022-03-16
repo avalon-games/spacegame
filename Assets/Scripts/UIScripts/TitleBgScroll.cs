@@ -5,17 +5,21 @@ using UnityEngine;
 public class TitleBgScroll : MonoBehaviour
 {
     [SerializeField] float scrollTime = 10f;
-    [SerializeField] float yStart = 0f;
-    [SerializeField] float yEnd = 696.7002f;
+    [SerializeField] RectTransform canvas;
+    float yStart = 0f;
+    float yEnd;
     float timer = 0;
     //[SerializeField] float y = 0f;
 
-    RectTransform rect;
+    RectTransform bg;
     // Start is called before the first frame update
     void Awake()
     {
-        rect = GetComponent<RectTransform>();
-        rect.anchoredPosition = Vector2.zero;
+        bg = GetComponent<RectTransform>();
+        bg.anchoredPosition = Vector2.zero;
+    }
+	private void Start() {
+        yEnd = bg.rect.height - canvas.rect.height;
     }
 
 	private void Update() {
@@ -23,7 +27,7 @@ public class TitleBgScroll : MonoBehaviour
 
 		if (fraction <= 1) {
 			float yPos = Mathf.Lerp(yStart, yEnd, fraction);
-			rect.anchoredPosition = new Vector2(0f, yPos);
+			bg.anchoredPosition = new Vector2(0f, yPos);
 			timer += Time.deltaTime;
 		}
 		//rect.anchoredPosition = new Vector2(0f, y);

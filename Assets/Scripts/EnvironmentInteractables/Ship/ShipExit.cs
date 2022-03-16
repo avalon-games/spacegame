@@ -6,6 +6,6 @@ public class ShipExit : MonoBehaviour
 {
 	private void OnTriggerEnter2D(Collider2D collision) {
         if (collision.gameObject.CompareTag("Player"))
-            SceneChanger.GoToLevel(0);
+            FindObjectOfType<SceneChanger>().Transition(PlayerData.currUnlockedLevel);
 	}
 }

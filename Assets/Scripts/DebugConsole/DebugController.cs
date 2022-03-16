@@ -36,6 +36,7 @@ public class DebugController : MonoBehaviour
 	public UIMenus menu;
 	public CheckpointManager checkpoints;
 	public GrapplingGun grapple;
+	SceneChanger sceneChanger;
 
 	public void OnToggleDebug() {
 		showConsole = !showConsole;
@@ -49,7 +50,8 @@ public class DebugController : MonoBehaviour
 		}
 	}
 
-	private void Awake() {
+	private void Start() {
+		sceneChanger = FindObjectOfType<SceneChanger>();
 		textStyle = new GUIStyle();
 		textStyle.normal.textColor = Color.white;
 
@@ -64,7 +66,7 @@ public class DebugController : MonoBehaviour
 		});
 		#if UNITY_EDITOR
 		LIST_LEVELS = new DebugCommand("listl", "list levels: gets the list of levels in build settings (editor only)", "listl", () => {
-			levelList = SceneChanger.GetBuildScenes();
+			levelList = sceneChanger.GetBuildScenes();
 			showLevelList = true;
 			showHelp = false;
 		});
@@ -74,7 +76,7 @@ public class DebugController : MonoBehaviour
 				checkpoints.Teleport(x);
 		});
 		LOAD_LEVEL = new DebugCommand<int>("loadl", "load level: loads the specified scene. ", "loadl <target_scene>", (x) => {
-			SceneChanger.GoToLevel(x);
+			sceneChanger.GoToLevel(x);
 		});
 		SET_HP = new DebugCommand<int>("sh", "set hp: sets hp to the specified amount and heal to full oxygen, max is 8. ", "sh <target_hp>", (x) => {
 			if (menu != null)

@@ -26,21 +26,6 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         ui = GameObject.FindGameObjectWithTag("UI").GetComponent<PlayerUI>();
     }
-	void Start() {
-        if (PlayerData.checkpoint == null)
-			SetCheckpointToStart();
-		else {
-			SpawnAtCheckpoint();
-		}
-    }
-
-	private void SpawnAtCheckpoint() {
-		transform.position = new Vector2(PlayerData.checkpoint[0], PlayerData.checkpoint[1]);
-	}
-
-	private void SetCheckpointToStart() {
-		PlayerData.checkpoint = new float[2] { transform.position.x, transform.position.y };
-	}
 
 	void Update() {
         if (Input.GetButtonDown("SlowMo")) ToggleSlowMo(true);
@@ -106,7 +91,7 @@ public class PlayerController : MonoBehaviour
 	}
 
     public void Die() {
-        SceneChanger.GoToSpaceship();
+        StartCoroutine(FindObjectOfType<SceneChanger>().Transition(1));
     }
 
     IEnumerator InvincibilityFrames() {

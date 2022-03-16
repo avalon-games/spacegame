@@ -4,33 +4,78 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEditor;
 
+
 /**
  * Manages transition between scenes
  */
-public static class SceneChanger
-{
-    public static void GoToMainMenu() {
+public class SceneChanger : MonoBehaviour {
+    [SerializeField] float fadeOutTime = 1f;
+    [SerializeField] float fadeInTime = 2f;
+    [SerializeField] float fadeWaitTime = 0.5f;
+
+    public void GoToMainMenu() {
         SceneManager.LoadScene("TitleScene");
     }
 
-    public static void GoToSpaceship() {
+    public void GoToSpaceship() {
         SceneManager.LoadScene("Spaceship");
     }
 
-    public static void GoToLevel(int target) {
+    public void GoToLevel(int target) {
         if (target < SceneManager.sceneCountInBuildSettings && target >= 0) {
             PlayerData.checkpoint = null;
-            SceneManager.LoadScene(target);
+            SceneManager.LoadSceneAsync(target);
         } else
             Debug.LogError("Scene " + target + " is not in the build settings");
     }
 
-    public static int GetCurrScene() {
+    public int GetCurrScene() {
         return SceneManager.GetActiveScene().buildIndex;
 	}
 
-    #if UNITY_EDITOR
-    public static List<string> GetBuildScenes() {
+    // Change scene with transition effects
+    public IEnumerator Transition(int sceneToLoad) {
+        print("Loading Level...");
+        if (sceneToLoad < 0) {
+            Debug.LogError("SceneToLoad not set");
+            yield break;
+        }
+
+        Fader fader = FindObjectOfType<Fader>();
+        yield return fader.FadeOut(fadeOutTime);
+        SaveAndLoad sal = FindObjectOfType<SaveAndLoad>();
+        sal.SaveGame(0);
+
+        DontDestroyOnLoad(gameObject);
+        yield return SceneManager.LoadSceneAsync(sceneToLoad);
+        UpdatePlayer();
+
+        yield return new WaitForSeconds(fadeWaitTime);
+        yield return fader.FadeIn(fadeInTime);
+    }
+
+    void UpdatePlayer() {
+        if (PlayerData.checkpoint == null)
+            SetCheckpointToStart();
+        else {
+            SpawnAtCheckpoint();
+        }
+    }
+
+    private void SpawnAtCheckpoint() {
+        Transform player = GameObject.FindGameObjectWithTag("Player").transform;
+        player.transform.position = new Vector2(PlayerData.checkpoint[0], PlayerData.checkpoint[1]);
+    }
+
+    private void SetCheckpointToStart() {
+        Transform player = GameObject.FindGameObjectWithTag("Player").transform;
+        PlayerData.checkpoint = new float[2] { player.transform.position.x, player.transform.position.y };
+    }
+
+
+
+#if UNITY_EDITOR
+    public List<string> GetBuildScenes() {
         List<string> scenes = new List<string>();
         foreach (EditorBuildSettingsScene scene in EditorBuildSettings.scenes) {
             if (scene.enabled)

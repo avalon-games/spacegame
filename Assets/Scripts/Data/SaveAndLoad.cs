@@ -26,11 +26,12 @@ public class SaveAndLoad : MonoBehaviour
 			PlayerData.saveFileNames[2] = PlayerPrefs.GetString("File2");
 			PlayerData.saveFileNames[3] = PlayerPrefs.GetString("File3");
 		}
-		PlayerData.currLevel = SceneChanger.GetCurrScene();
+		PlayerData.currLevel = FindObjectOfType<SceneChanger>().GetCurrScene();
 
 	}
 
 	public void LoadGame(int i) {
+		print("loading game...");
 		Load(i);
 	}
 	public void SaveGame(int i) {
@@ -48,7 +49,7 @@ public class SaveAndLoad : MonoBehaviour
 		if (!PlayerData.saveFileNames[i].Equals("Empty")) {
 			Time.timeScale = 1;
 			SaveFile.Load(i);
-			SceneChanger.GoToLevel(PlayerData.currLevel);
+			StartCoroutine(FindObjectOfType<SceneChanger>().Transition(PlayerData.currLevel));
 			Debug.Log("Loading file " + i);
 		}
 	}
@@ -73,11 +74,11 @@ public class SaveAndLoad : MonoBehaviour
 		PlayerData.maxOxygen = 100;
 		PlayerData.currHealth = PlayerData.maxHealth;
 		PlayerData.currOxygen = PlayerData.maxOxygen;
-		PlayerData.currUnlockedLevel = 1;
-		PlayerData.currLevel = 0;
+		PlayerData.currUnlockedLevel = 2; //2 is level 1
+		PlayerData.currLevel = 1; //0 is title scene, 1 is spaceship
 		PlayerData.checkpoint = null;
 
-		SceneChanger.GoToLevel(PlayerData.currLevel); //go to the first level
+		StartCoroutine(FindObjectOfType<SceneChanger>().Transition(PlayerData.currLevel)); //go to the first level
 	}
 
 	/**
