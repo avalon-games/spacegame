@@ -13,6 +13,7 @@ using UnityEngine;
 public class SaveAndLoad : MonoBehaviour
 {
 	void Start() {
+		InitData();
 		//on entering a new scene, set the audio volume
 		if (PlayerPrefs.HasKey("Volume"))
 			PlayerData.volume = PlayerPrefs.GetFloat("Volume");
@@ -26,11 +27,12 @@ public class SaveAndLoad : MonoBehaviour
 			PlayerData.saveFileNames[2] = PlayerPrefs.GetString("File2");
 			PlayerData.saveFileNames[3] = PlayerPrefs.GetString("File3");
 		}
-		PlayerData.currLevel = SceneChanger.GetCurrScene();
+		PlayerData.currLevel = FindObjectOfType<SceneChanger>().GetCurrScene();
 
 	}
 
 	public void LoadGame(int i) {
+		print("loading game...");
 		Load(i);
 	}
 	public void SaveGame(int i) {
@@ -48,9 +50,16 @@ public class SaveAndLoad : MonoBehaviour
 		if (!PlayerData.saveFileNames[i].Equals("Empty")) {
 			Time.timeScale = 1;
 			SaveFile.Load(i);
-			SceneChanger.GoToLevel(PlayerData.currLevel);
-			Debug.Log("Loading file " + i);
+			LoadLevel(PlayerData.currLevel);
 		}
+	}
+	public void LoadLevel(int level) {
+		print("loading" + level);
+		StartCoroutine(LoadLevelAsync(level));
+	}
+
+	IEnumerator LoadLevelAsync(int level) {
+		yield return FindObjectOfType<SceneChanger>().Transition(level);
 	}
 
 
@@ -61,23 +70,16 @@ public class SaveAndLoad : MonoBehaviour
 	void Save(int i) {
 		SaveFile.Save(i);
 		SaveFileNames();
-		Debug.Log("Saving file " + i);
+		//Debug.Log("Saving file " + i);
 	}
 
 	/*
 	* Starts a new game, resetting all PlayerData values
 	*/
-	void NewGame() {
-		Time.timeScale = 1;
-		PlayerData.maxHealth = 5;
-		PlayerData.maxOxygen = 100;
-		PlayerData.currHealth = PlayerData.maxHealth;
-		PlayerData.currOxygen = PlayerData.maxOxygen;
-		PlayerData.currUnlockedLevel = 1;
-		PlayerData.currLevel = 0;
-		PlayerData.checkpoint = null;
+	public void NewGame() {
+		InitData();
 
-		SceneChanger.GoToLevel(PlayerData.currLevel); //go to the first level
+		LoadLevel(PlayerData.currLevel);
 	}
 
 	/**
@@ -95,6 +97,16 @@ public class SaveAndLoad : MonoBehaviour
 		PlayerPrefs.SetString("File3", PlayerData.saveFileNames[3]);
 	}
 
+	void InitData() {
+		Time.timeScale = 1;
+		PlayerData.maxHealth = 5;
+		PlayerData.maxOxygen = 100;
+		PlayerData.currHealth = PlayerData.maxHealth;
+		PlayerData.currOxygen = PlayerData.maxOxygen;
+		PlayerData.currUnlockedLevel = 2; //2 is level 1
+		PlayerData.currLevel = 1; //0 is title scene, 1 is spaceship
+		PlayerData.checkpoint = null;
+	}
 
 }
 //controls saving the player state to save files and transfer between scenes

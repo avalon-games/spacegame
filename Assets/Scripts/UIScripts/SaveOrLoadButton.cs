@@ -18,7 +18,7 @@ public class SaveOrLoadButton : MonoBehaviour
 	[Range(0,3)] public int buttonNumber; //each button should have a distinct number
 
 	private void OnEnable() {
-		Debug.Log("button" + buttonNumber + " is enabled");
+		//Debug.Log("button" + buttonNumber + " is enabled");
 		if (PlayerData.saveFileNames == null)
 			PlayerData.saveFileNames = new string[] { "Empty", "Empty", "Empty", "Empty" };
 		text.SetText(PlayerData.saveFileNames[buttonNumber]);
@@ -32,7 +32,7 @@ public class SaveOrLoadButton : MonoBehaviour
 			text.SetText(PlayerData.saveFileNames[buttonNumber]);
 
 			sl.SaveGame(buttonNumber);
-			Debug.Log("setting text");
+			//Debug.Log("setting text");
 		} else {
 			sl.LoadGame(buttonNumber);
 		}

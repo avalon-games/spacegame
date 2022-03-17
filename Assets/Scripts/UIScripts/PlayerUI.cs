@@ -20,6 +20,7 @@ public class PlayerUI : MonoBehaviour
 	[SerializeField] private Slider slowmoSlider;
 	[SerializeField] GameObject screenTint;
 	[SerializeField] Texture2D customCursor;
+	[SerializeField] Vector2 cursorOffset;
 
 	public float timeToNoSlowmo = 1f;
 	//public float timeRemaining;
@@ -50,7 +51,7 @@ public class PlayerUI : MonoBehaviour
 
 		// StartCoroutine(DecreaseOxygen());
 		//Debug.Log(healthUI.Length);
-		Cursor.SetCursor(customCursor, Vector2.zero, CursorMode.ForceSoftware);
+		Cursor.SetCursor(customCursor, cursorOffset, CursorMode.Auto);
 	}
 
 	private void Update() {

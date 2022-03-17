@@ -96,7 +96,7 @@ public class GrapplingHook : MonoBehaviour
                 //if on grappable tilemap, return a static position
                 Rigidbody2D hitRb = hit.collider.GetComponent<Rigidbody2D>();
                 if (hitRb == null || hitRb.bodyType == RigidbodyType2D.Static) {
-                    print(hit.point);
+                    //print(hit.point);
                     hitStatic = new Vector2(Mathf.Floor(hit.point.x / 0.99f) * 0.99f + 0.495f,
                                          Mathf.Floor(hit.point.y / 0.99f) * 0.99f + 0.495f);
                     hitDynamic = null;
