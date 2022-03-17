@@ -7,21 +7,16 @@ using UnityEngine.AI;
 public class Portal : MonoBehaviour {
 	[SerializeField] int sceneToLoad = -1;
 
-	SceneChanger sc;
 
-	int originScene;
-
-	private void Awake() {
-		originScene = SceneManager.GetActiveScene().buildIndex;
-		
-	}
-	private void Start() {
-		sc = FindObjectOfType<SceneChanger>();
-	}
-
-	private void OnTriggerEnter(Collider other) {
-		if (other.CompareTag("Player")) {
-			StartCoroutine(sc.Transition(sceneToLoad));
+	private void OnTriggerEnter2D(Collider2D collision) {
+        if (collision.gameObject.CompareTag("Player")) {
+			if (sceneToLoad < 0) {
+				
+				FindObjectOfType<SaveAndLoad>().LoadLevel(PlayerData.currUnlockedLevel);
+			} else {
+				FindObjectOfType<SaveAndLoad>().LoadLevel(sceneToLoad);
+			}
+			
 		}
 	}
 }

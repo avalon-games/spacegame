@@ -18,6 +18,7 @@ public class Fader : MonoBehaviour
 
 	public IEnumerator FadeOut(float time)
 	{
+		canvasGroup.blocksRaycasts = true;
 		while (isFadingIn)
 		{
 			yield return null;
@@ -31,10 +32,12 @@ public class Fader : MonoBehaviour
 
 		canvasGroup.alpha = 1;
 		isFadingOut = false;
+		canvasGroup.blocksRaycasts = false;
 	}
 
 	public IEnumerator FadeIn(float time)
 	{
+		canvasGroup.blocksRaycasts = true;
 		while (isFadingOut)
 		{
 			yield return null;
@@ -47,6 +50,7 @@ public class Fader : MonoBehaviour
 		}
 		canvasGroup.alpha = 0;
 		isFadingIn = false;
+		canvasGroup.blocksRaycasts = false;
 	}
 
 	public IEnumerator FadeOutIn()

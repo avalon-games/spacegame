@@ -1110,6 +1110,7 @@ GameObject:
   - component: {fileID: 1769280211852785676}
   - component: {fileID: 1769280211852785677}
   - component: {fileID: 1769280211852785666}
+  - component: {fileID: 6809941176583652642}
   m_Layer: 5
   m_Name: file2
   m_TagString: Untagged
@@ -1247,6 +1248,21 @@ MonoBehaviour:
   uiMenus: {fileID: 67542192559055627}
   text: {fileID: 1769280213636852103}
   buttonNumber: 2
+--- !u!114 &6809941176583652642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1769280211852785679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91d4ce1b5fa3e4ec7b53f93c481b9b5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  task: 2
+  level: 0
+  saveFile: 2
 --- !u!1 &1769280211862855850
 GameObject:
   m_ObjectHideFlags: 0
@@ -1532,6 +1548,7 @@ GameObject:
   - component: {fileID: 1769280211950520072}
   - component: {fileID: 1769280211950520073}
   - component: {fileID: 1769280211950520078}
+  - component: {fileID: 479243397112206725}
   m_Layer: 5
   m_Name: file0
   m_TagString: Untagged
@@ -1669,6 +1686,21 @@ MonoBehaviour:
   uiMenus: {fileID: 67542192559055627}
   text: {fileID: 1769280213271725842}
   buttonNumber: 0
+--- !u!114 &479243397112206725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1769280211950520075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91d4ce1b5fa3e4ec7b53f93c481b9b5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  task: 2
+  level: 0
+  saveFile: 0
 --- !u!1 &1769280211975745958
 GameObject:
   m_ObjectHideFlags: 0
@@ -3551,6 +3583,7 @@ GameObject:
   - component: {fileID: 1769280212475438848}
   - component: {fileID: 1769280212475438849}
   - component: {fileID: 1769280212475438850}
+  - component: {fileID: 1494149368168212525}
   m_Layer: 5
   m_Name: NewGame
   m_TagString: Untagged
@@ -3672,6 +3705,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1494149368168212525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1769280212475438860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91d4ce1b5fa3e4ec7b53f93c481b9b5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  task: 3
+  level: 0
+  saveFile: 0
 --- !u!1 &1769280212502129378
 GameObject:
   m_ObjectHideFlags: 0
@@ -5315,6 +5363,7 @@ GameObject:
   - component: {fileID: 1769280213138173311}
   - component: {fileID: 1769280213138173304}
   - component: {fileID: 1769280213138173309}
+  - component: {fileID: 1911497054399033036}
   m_Layer: 5
   m_Name: file3
   m_TagString: Untagged
@@ -5452,6 +5501,21 @@ MonoBehaviour:
   uiMenus: {fileID: 67542192559055627}
   text: {fileID: 1769280213367831588}
   buttonNumber: 3
+--- !u!114 &1911497054399033036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1769280213138173306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91d4ce1b5fa3e4ec7b53f93c481b9b5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  task: 2
+  level: 0
+  saveFile: 3
 --- !u!1 &1769280213149949190
 GameObject:
   m_ObjectHideFlags: 0
@@ -7747,6 +7811,7 @@ GameObject:
   - component: {fileID: 1769280213865433770}
   - component: {fileID: 1769280213865433771}
   - component: {fileID: 1769280213865433768}
+  - component: {fileID: 3794406384165630311}
   m_Layer: 5
   m_Name: file1
   m_TagString: Untagged
@@ -7884,6 +7949,21 @@ MonoBehaviour:
   uiMenus: {fileID: 67542192559055627}
   text: {fileID: 1769280212137339084}
   buttonNumber: 1
+--- !u!114 &3794406384165630311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1769280213865433685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91d4ce1b5fa3e4ec7b53f93c481b9b5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  task: 2
+  level: 0
+  saveFile: 1
 --- !u!1 &3146012047519841188
 GameObject:
   m_ObjectHideFlags: 0

@@ -91,7 +91,7 @@ public class PlayerController : MonoBehaviour
 	}
 
     public void Die() {
-        StartCoroutine(FindObjectOfType<SceneChanger>().Transition(1));
+        FindObjectOfType<SaveAndLoad>().LoadLevel(1);
     }
 
     IEnumerator InvincibilityFrames() {

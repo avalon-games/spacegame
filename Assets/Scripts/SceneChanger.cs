@@ -35,7 +35,6 @@ public class SceneChanger : MonoBehaviour {
 
     // Change scene with transition effects
     public IEnumerator Transition(int sceneToLoad) {
-        print("Loading Level...");
         if (sceneToLoad < 0) {
             Debug.LogError("SceneToLoad not set");
             yield break;
@@ -43,6 +42,8 @@ public class SceneChanger : MonoBehaviour {
 
         Fader fader = FindObjectOfType<Fader>();
         yield return fader.FadeOut(fadeOutTime);
+        UpdateCurrLevel(sceneToLoad);
+        PlayerData.checkpoint = null;
         SaveAndLoad sal = FindObjectOfType<SaveAndLoad>();
         sal.SaveGame(0);
 
@@ -55,23 +56,28 @@ public class SceneChanger : MonoBehaviour {
     }
 
     void UpdatePlayer() {
-        if (PlayerData.checkpoint == null)
-            SetCheckpointToStart();
-        else {
-            SpawnAtCheckpoint();
-        }
-    }
+		if (PlayerData.checkpoint == null)
+			SetCheckpointToStart();
+		else {
+			SpawnAtCheckpoint();
+		}
+	}
 
     private void SpawnAtCheckpoint() {
         Transform player = GameObject.FindGameObjectWithTag("Player").transform;
         player.transform.position = new Vector2(PlayerData.checkpoint[0], PlayerData.checkpoint[1]);
+        print("loading checkpoint: " + PlayerData.checkpoint);
     }
 
     private void SetCheckpointToStart() {
         Transform player = GameObject.FindGameObjectWithTag("Player").transform;
         PlayerData.checkpoint = new float[2] { player.transform.position.x, player.transform.position.y };
+        print("checkpoint set to x: " + player.transform.position.x + " y: " + player.transform.position.y);
     }
 
+    void UpdateCurrLevel(int level) {
+        PlayerData.currLevel = level;
+	}
 
 
 #if UNITY_EDITOR

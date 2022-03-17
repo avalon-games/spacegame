@@ -77,7 +77,7 @@ public class UIMenus : MonoBehaviour {
      */
     public void LoadMainMenu() {
         Time.timeScale = 1;
-        FindObjectOfType<SceneChanger>().Transition(0);
+        FindObjectOfType<SaveAndLoad>().LoadLevel(0);
     }
 
     #endregion
