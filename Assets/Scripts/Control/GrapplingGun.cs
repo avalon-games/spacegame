@@ -10,9 +10,11 @@ public class GrapplingGun : MonoBehaviour
 	[SerializeField] PlayerController player;
 
 	[SerializeField] float pullSpeed = 30f;
-	[SerializeField] float swingSpeedMultiplier = 2f;
 	[SerializeField] float pullReleaseMultiplier = 1 / 8f;
+	[SerializeField] float pullStopRadius = 0.5f;
+	[SerializeField] float swingSpeedMultiplier = 2f;
 	[SerializeField] float swingReleaseMultiplier = 1.5f;
+	
 
 	GrapplingHook pullHookScript;
 	GrapplingHook swingHookScript;
@@ -74,7 +76,7 @@ public class GrapplingGun : MonoBehaviour
 		if (pullHook.activeSelf && pullHookScript.isAttached) {
 			mover.isOnGround = false;
 			if (initializePull) InitializePull();
-			if (Vector2.Distance(transform.position, pullHook.transform.position) >= 1f) {
+			if (Vector2.Distance(transform.position, pullHook.transform.position) >= pullStopRadius) {
 				Pull();
 			} else {
 				//print(Vector2.Distance(transform.position, pullHook.transform.position));

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /**
  * Savestate saves the state of the player and loads the appropriate values of 
@@ -37,7 +38,6 @@ public class SaveAndLoad : MonoBehaviour
 	}
 	public void SaveGame(int i) {
 		Save(i);
-		SaveFileNames();
 	}
 	public void SavePreferences() {
 		SavePref();
@@ -91,6 +91,10 @@ public class SaveAndLoad : MonoBehaviour
 
 	//the savefile names are also saved using PlayerPrefs as they should contain the same values accross all save files
 	void SaveFileNames() {
+		string sceneName = SceneManager.GetActiveScene().name;
+		if (sceneName == "ship" || sceneName == "title") {
+			return;
+		}
 		PlayerPrefs.SetString("File0", PlayerData.saveFileNames[0]);
 		PlayerPrefs.SetString("File1", PlayerData.saveFileNames[1]);
 		PlayerPrefs.SetString("File2", PlayerData.saveFileNames[2]);

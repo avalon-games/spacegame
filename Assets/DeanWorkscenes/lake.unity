@@ -941,6 +941,18 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 1014387088}
+    - target: {fileID: 304384388124602694, guid: 2d8d8f75ff27c49229ac92200cbc60fb, type: 3}
+      propertyPath: offset.x
+      value: 124.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 304384388124602694, guid: 2d8d8f75ff27c49229ac92200cbc60fb, type: 3}
+      propertyPath: offset.y
+      value: 26.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 304384388124602695, guid: 2d8d8f75ff27c49229ac92200cbc60fb, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 483cdb923e4f546228a76f1bfef7a8f8, type: 3}
     - target: {fileID: 569538841468218148, guid: 2d8d8f75ff27c49229ac92200cbc60fb, type: 3}
       propertyPath: m_TileAssetArray.Array.data[0].m_Data
       value: 
@@ -1164,7 +1176,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2504844767993875775, guid: 19122134f41c44019b4b5c1f9f095a2f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.7460785
+      value: 1.4051819
       objectReference: {fileID: 0}
     - target: {fileID: 2504844768054543817, guid: 19122134f41c44019b4b5c1f9f095a2f, type: 3}
       propertyPath: m_RootOrder
@@ -1216,7 +1228,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2504844768186895636, guid: 19122134f41c44019b4b5c1f9f095a2f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.7460785
+      value: 1.4051819
       objectReference: {fileID: 0}
     - target: {fileID: 2504844768555564727, guid: 19122134f41c44019b4b5c1f9f095a2f, type: 3}
       propertyPath: m_TagString
