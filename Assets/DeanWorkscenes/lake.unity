@@ -1029,6 +1029,16 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 39487770706530225}
+    - target: {fileID: 7055075915659858671, guid: 2d8d8f75ff27c49229ac92200cbc60fb, type: 3}
+      propertyPath: m_text
+      value: 'Press P to activate
+
+        Or F to launch an activation bullet'
+      objectReference: {fileID: 0}
+    - target: {fileID: 7055075915659858671, guid: 2d8d8f75ff27c49229ac92200cbc60fb, type: 3}
+      propertyPath: m_isRightToLeft
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7751946420138284469, guid: 2d8d8f75ff27c49229ac92200cbc60fb, type: 3}
       propertyPath: player
       value: 
@@ -1176,7 +1186,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2504844767993875775, guid: 19122134f41c44019b4b5c1f9f095a2f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.4051819
+      value: 1.4012909
       objectReference: {fileID: 0}
     - target: {fileID: 2504844768054543817, guid: 19122134f41c44019b4b5c1f9f095a2f, type: 3}
       propertyPath: m_RootOrder
@@ -1228,7 +1238,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2504844768186895636, guid: 19122134f41c44019b4b5c1f9f095a2f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.4051819
+      value: 1.4012909
       objectReference: {fileID: 0}
     - target: {fileID: 2504844768555564727, guid: 19122134f41c44019b4b5c1f9f095a2f, type: 3}
       propertyPath: m_TagString
@@ -1270,5 +1280,9 @@ PrefabInstance:
       propertyPath: m_Color.a
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6912507457735391343, guid: 19122134f41c44019b4b5c1f9f095a2f, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 80283826203365513, guid: 3d5bf26c9c16b47a9835324920e23033, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 19122134f41c44019b4b5c1f9f095a2f, type: 3}
