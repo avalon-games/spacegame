@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerTopDown : MonoBehaviour
 {
-    [Range(0, 5)][SerializeField] float speed;
+    [SerializeField] float speed;
     Rigidbody2D rb;
     Animator animator;
     float horizontalDir;

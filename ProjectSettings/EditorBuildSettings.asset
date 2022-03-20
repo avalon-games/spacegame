@@ -6,16 +6,16 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/TitleScene.unity
+    path: Assets/Scenes/title.unity
     guid: 18c3e09cdc16342a88682a773dcdabf0
   - enabled: 1
-    path: Assets/DeanWorkscenes/dean_ship.unity
+    path: Assets/DeanWorkscenes/ship.unity
     guid: eefccabcd2a1d485ab1ebac1985620e8
   - enabled: 1
-    path: Assets/DeanWorkscenes/desert_remake.unity
+    path: Assets/DeanWorkscenes/desert.unity
     guid: 1308b323515264429b3987e26e5462a9
   - enabled: 1
-    path: Assets/Scenes/Desert_L1.unity
-    guid: 51f53694c9109f6469be68f22790ebc9
+    path: Assets/DeanWorkscenes/lake.unity
+    guid: 8515ae4310f0b4f6b92278198a546daf
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 9f164897e85094575ab2f6ccce7f68d4, type: 2}

@@ -12,7 +12,8 @@ public class Parallax : MonoBehaviour
 {
     float length, startPosX, startPosY;
     [SerializeField] GameObject cam;
-    [SerializeField] float parallaxEffect; 
+    [SerializeField] float parallaxEffect;
+    [SerializeField] Vector2 offset;
 
     void Start() {
         startPosX = transform.position.x;
@@ -25,7 +26,7 @@ public class Parallax : MonoBehaviour
         float distX = (cam.transform.position.x * parallaxEffect);
         float distY = (cam.transform.position.y * parallaxEffect);
         //parallax scrolling
-        transform.position = new Vector3(startPosX + distX, startPosY + distY, transform.position.z);
+        transform.position = new Vector3(startPosX + distX + offset.x, startPosY + distY + offset.y, transform.position.z);
         //repeat pattern at end of sprite - infinite scrolling
         if (tempX > startPosX + length) startPosX += (length-2);
         else if (tempX < startPosX - length) startPosX -= (length-2);

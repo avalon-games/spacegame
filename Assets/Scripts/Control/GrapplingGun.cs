@@ -10,9 +10,13 @@ public class GrapplingGun : MonoBehaviour
 	[SerializeField] PlayerController player;
 
 	[SerializeField] float pullSpeed = 30f;
-	[SerializeField] float swingSpeedMultiplier = 2f;
 	[SerializeField] float pullReleaseMultiplier = 1 / 8f;
+	[SerializeField] float pullStopRadius = 0.5f;
+	[SerializeField] float swingSpeedMultiplier = 2f;
 	[SerializeField] float swingReleaseMultiplier = 1.5f;
+	[SerializeField] float grappleCooldown = 0.25f;
+	[SerializeField] bool infiniteCharge;
+
 
 	GrapplingHook pullHookScript;
 	GrapplingHook swingHookScript;
@@ -25,11 +29,12 @@ public class GrapplingGun : MonoBehaviour
 
 	//defines how many times the player can grapple
 	public int totalCharge;
-	[SerializeField] bool infiniteCharge;
+	
 	bool pullRelease;
 	bool swingRelease;
 	bool slowMo;
 	private Vector3 refVel = Vector3.zero;
+	float timeSinceLastGrapple = Mathf.Infinity;
 
 
 
@@ -54,15 +59,7 @@ public class GrapplingGun : MonoBehaviour
 		ManageInput();
 
 		if (!pullHook.activeSelf && !swingHook.activeSelf) {
-			if (pullRelease) {
-				rb.velocity = pullReleaseMultiplier * rb.velocity;
-				pullRelease = false;
-			}
-			if (swingRelease) {
-				rb.velocity = swingReleaseMultiplier * rb.velocity;
-				swingRelease = false;
-			}
-			rb.gravityScale = initialGravity;
+			LimitPlayerVelocityOnRelease();
 		}
 
 		//freeze movement during launch
@@ -72,45 +69,53 @@ public class GrapplingGun : MonoBehaviour
 		}
 		//while attached, translate the player
 		if (pullHook.activeSelf && pullHookScript.isAttached) {
-			mover.isOnGround = false;
-			if (initializePull) InitializePull();
-			if (Vector2.Distance(transform.position, pullHook.transform.position) >= 1f) {
-				Pull();
-			} else {
-				//print(Vector2.Distance(transform.position, pullHook.transform.position));
-				Rigidbody2D playerParentRB = player.transform.parent ? player.transform.parent.GetComponent<Rigidbody2D>() : null;
-				rb.velocity = playerParentRB ? playerParentRB.velocity : Vector2.zero;
-			}
+			HandlePull();
 		} else if (swingHook.activeSelf && swingHookScript.isAttached) {
-			if (initializeSwing) InitializeSwing();
-			if (!swingHookScript.grappleRelease) Swing();
+			HandleSwing();
 		}
+
+		timeSinceLastGrapple += Time.unscaledDeltaTime;
+	}
+
+	private void HandleSwing() {
+		if (initializeSwing) InitializeSwing();
+		if (!swingHookScript.grappleRelease) Swing();
+	}
+
+	private void HandlePull() {
+		mover.isOnGround = false;
+		if (initializePull) InitializePull();
+		if (Vector2.Distance(transform.position, pullHook.transform.position) >= pullStopRadius) {
+			Pull();
+		} else {
+			//print(Vector2.Distance(transform.position, pullHook.transform.position));
+			Rigidbody2D playerParentRB = player.transform.parent ? player.transform.parent.GetComponent<Rigidbody2D>() : null;
+			rb.velocity = playerParentRB ? playerParentRB.velocity : Vector2.zero;
+		}
+	}
+
+	private void LimitPlayerVelocityOnRelease() {
+		if (pullRelease) {
+			rb.velocity = pullReleaseMultiplier * rb.velocity;
+			pullRelease = false;
+		}
+		if (swingRelease) {
+			rb.velocity = swingReleaseMultiplier * rb.velocity;
+			swingRelease = false;
+		}
+		rb.gravityScale = initialGravity;
 	}
 
 	private void ManageInput() {
 		//assign action based on button press
-		if (Input.GetButtonDown("GrappleSwing") && (totalCharge > 0 || infiniteCharge)) {
-			swingHook.SetActive(false);
-			swingHook.SetActive(true);
-			initializeSwing = true;
-			totalCharge--;
+		if (Input.GetButtonDown("GrappleSwing") && (totalCharge > 0 || infiniteCharge) && timeSinceLastGrapple > grappleCooldown) {
+			LaunchGrappleSwing();
 
-			if (pullHook.activeSelf) {
-				pullHookScript.grappleRelease = true;
-			}
-
-		} else if (Input.GetButtonDown("GrapplePull") &&  (totalCharge > 0 || infiniteCharge)) {
-			pullHook.SetActive(false);
-			pullHook.SetActive(true);
-			totalCharge--;
-			initializePull = true;
-
-			if (swingHook.activeSelf) {
-				swingHookScript.grappleRelease = true;
-			}
+		} else if (Input.GetButtonDown("GrapplePull") &&  (totalCharge > 0 || infiniteCharge) && timeSinceLastGrapple > grappleCooldown) {
+			LaunchGrapplePull();
 
 			//when released, reenable movement
-  		} else if (Input.GetButtonUp("GrappleSwing") && swingHook.activeSelf) {
+		} else if (Input.GetButtonUp("GrappleSwing") && swingHook.activeSelf) {
 			swingHookScript.grappleRelease = true;
 			swingRelease = true;
 		} else if (Input.GetButtonUp("GrapplePull") && pullHook.activeSelf) {
@@ -118,11 +123,40 @@ public class GrapplingGun : MonoBehaviour
 			pullRelease = true;
 		}
 
-		if (Input.GetButtonDown("MechanismHook") && (totalCharge > 0 || infiniteCharge)) {
-			totalCharge--;
-			GameObject bullet = Instantiate(mechanismHook);
-			bullet.GetComponent<MechanismHook>().gunPoint = transform.parent;
+		if (Input.GetButtonDown("MechanismHook") && (totalCharge > 0 || infiniteCharge) && timeSinceLastGrapple > grappleCooldown) {
+			LaunchMechanismHook();
 		}
+	}
+
+	private void LaunchGrappleSwing() {
+		timeSinceLastGrapple = 0f;
+		swingHook.SetActive(false);
+		swingHook.SetActive(true);
+		initializeSwing = true;
+		totalCharge--;
+
+		if (pullHook.activeSelf) {
+			pullHookScript.grappleRelease = true;
+		}
+	}
+
+	private void LaunchGrapplePull() {
+		timeSinceLastGrapple = 0f;
+		pullHook.SetActive(false);
+		pullHook.SetActive(true);
+		totalCharge--;
+		initializePull = true;
+
+		if (swingHook.activeSelf) {
+			swingHookScript.grappleRelease = true;
+		}
+	}
+
+	private void LaunchMechanismHook() {
+		timeSinceLastGrapple = 0f;
+		totalCharge--;
+		GameObject bullet = Instantiate(mechanismHook);
+		bullet.GetComponent<MechanismHook>().gunPoint = transform.parent;
 	}
 
 	/**
