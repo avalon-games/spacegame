@@ -104157,6 +104157,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: HookPull
       objectReference: {fileID: 0}
+    - target: {fileID: 4917594242865575782, guid: d207acdbae6a944f0850d4a7295a7a2d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5184122193687981575, guid: d207acdbae6a944f0850d4a7295a7a2d, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -105663,7 +105667,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 2a53999c3f5d84d6ca2bd47b9177f557, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.332
   m_Pitch: 1
   Loop: 0
   Mute: 0

@@ -13,8 +13,11 @@ using UnityEngine.SceneManagement;
  */
 public class SaveAndLoad : MonoBehaviour
 {
-	void Start() {
+	private void Awake() {
 		InitData();
+	}
+	void Start() {
+		
 		//on entering a new scene, set the audio volume
 		if (PlayerPrefs.HasKey("Volume"))
 			PlayerData.volume = PlayerPrefs.GetFloat("Volume");
@@ -107,7 +110,7 @@ public class SaveAndLoad : MonoBehaviour
 		PlayerData.maxOxygen = 100;
 		PlayerData.currHealth = PlayerData.maxHealth;
 		PlayerData.currOxygen = PlayerData.maxOxygen;
-		PlayerData.currUnlockedLevel = 2; //2 is level 1
+		PlayerData.currUnlockedLevel = 2;
 		PlayerData.currLevel = 1; //0 is title scene, 1 is spaceship
 		PlayerData.checkpoint = null;
 	}
