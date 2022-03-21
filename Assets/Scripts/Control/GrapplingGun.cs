@@ -88,9 +88,11 @@ public class GrapplingGun : MonoBehaviour
 		if (Vector2.Distance(transform.position, pullHook.transform.position) >= pullStopRadius) {
 			Pull();
 		} else {
+			pullHookScript.grappleRelease = true;
+			pullRelease = true;
 			//print(Vector2.Distance(transform.position, pullHook.transform.position));
-			Rigidbody2D playerParentRB = player.transform.parent ? player.transform.parent.GetComponent<Rigidbody2D>() : null;
-			rb.velocity = playerParentRB ? playerParentRB.velocity : Vector2.zero;
+			// Rigidbody2D playerParentRB = player.transform.parent ? player.transform.parent.GetComponent<Rigidbody2D>() : null;
+			// rb.velocity = playerParentRB ? playerParentRB.velocity : Vector2.zero;
 		}
 	}
 

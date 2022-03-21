@@ -1,13 +1,25 @@
 fileFormatVersion: 2
-guid: c7b81a09476df4bc898fd0d7e2af2324
+guid: f64bef011cf4d7d47b404f731f76f580
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1302723820812287101
-    second: Untitled_Artwork_0
+      213: -1280464965214625674
+    second: props-rotated_1
   - first:
-      213: 6146782616825927046
-    second: Untitled_Artwork_1
+      213: 4840822708215654103
+    second: props-rotated_2
+  - first:
+      213: -8930057332024512176
+    second: props-rotated_4
+  - first:
+      213: 3618521975141350714
+    second: props-rotated_5
+  - first:
+      213: -2138100699537905008
+    second: props-rotated_10
+  - first:
+      213: 3550932468787890776
+    second: props-rotated_11
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -97,51 +109,127 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Untitled_Artwork_0
+      name: props-rotated_1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 284
+        x: 28
+        y: 3002
         width: 284
         height: 284
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape:
-      - - {x: -5, y: -132}
-        - {x: -105, y: -91}
-        - {x: -132, y: 1}
-        - {x: -99, y: 99}
-        - {x: 1, y: 131}
-        - {x: 101, y: 111}
-        - {x: 130, y: 2}
-        - {x: 89, y: -117}
-      tessellationDetail: 0
-      bones: []
-      spriteID: d7cb4f3b964341210800000000000000
-      internalID: 1302723820812287101
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Untitled_Artwork_1
-      rect:
-        serializedVersion: 2
-        x: 6
-        y: 59
-        width: 272
-        height: 136
-      alignment: 9
-      pivot: {x: 0.972088, y: 0.7209764}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 68594731932cd4550800000000000000
-      internalID: 6146782616825927046
+      spriteID: 670ac09f5efda3ee0800000000000000
+      internalID: -1280464965214625674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: props-rotated_2
+      rect:
+        serializedVersion: 2
+        x: 521
+        y: 3026
+        width: 284
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d6a6d7fa9e0e2340800000000000000
+      internalID: 4840822708215654103
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: props-rotated_4
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 2557
+        width: 284
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0517ec48b20121480800000000000000
+      internalID: -8930057332024512176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: props-rotated_5
+      rect:
+        serializedVersion: 2
+        x: 548
+        y: 2559
+        width: 284
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3dbe3c8092973230800000000000000
+      internalID: 3618521975141350714
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: props-rotated_10
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 2118
+        width: 284
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 09a670eedb0f352e0800000000000000
+      internalID: -2138100699537905008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: props-rotated_11
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 2112
+        width: 284
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 85ac0874442774130800000000000000
+      internalID: 3550932468787890776
       vertices: []
       indices: 
       edges: []
