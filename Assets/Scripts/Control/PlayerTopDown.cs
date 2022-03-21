@@ -10,6 +10,8 @@ public class PlayerTopDown : MonoBehaviour
     float horizontalDir;
     float verticalDir;
     bool isBusy;
+    [SerializeField] AudioSource step1;
+    [SerializeField] AudioSource step2;
 
     enum State { idle, running, jumping, falling, pushing, hurt }; //animation states, decides interactions
     State state;
@@ -59,5 +61,12 @@ public class PlayerTopDown : MonoBehaviour
             transform.localScale = new Vector3(1, 1, 1);
         }
     }
-    
+
+    public void PlayStep1() {
+        step1.Play();
+    }
+    public void PlayStep2() {
+        step2.Play();
+    }
+
 }

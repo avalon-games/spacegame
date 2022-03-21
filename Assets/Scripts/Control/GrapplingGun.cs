@@ -108,7 +108,6 @@ public class GrapplingGun : MonoBehaviour
 
 	private void ManageInput() {
 		//assign action based on button press
-		if (Input.GetButtonDown("GrappleSwing")) { print(totalCharge); }
 		if (Input.GetButtonDown("GrappleSwing") && (totalCharge > 0 || infiniteCharge) && timeSinceLastGrapple > grappleCooldown) {
 			LaunchGrappleSwing();
 
