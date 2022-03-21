@@ -20,6 +20,12 @@ public class PlayerMovement : MonoBehaviour
     [Range(0, 1f)] public float airControl = 0.8f;
     [Range(0, 5f)] public float groundDetectRadius = 1.51f;
 
+    private enum CURRENT_TERRAIN { GRASS, GRAVEL, WOOD_FLOOR, WATER, METAL, STONE };
+    [SerializeField]
+    private CURRENT_TERRAIN currentTerrain;
+
+    private FMOD.Studio.EventInstance foosteps;
+
 
 
     private float lastJumpTime;
@@ -85,6 +91,16 @@ public class PlayerMovement : MonoBehaviour
 		UpdateTimers();
 
         anim.SetInteger("state", (int)state);
+        if (state == State.running) {
+            foosteps = FMODUnity.RuntimeManager.CreateInstance("event:/Footsteps");
+            foosteps.setParameterByName("Terrain", terrain);
+            foosteps.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(gameObject));
+            foosteps.start();
+            foosteps.release();
+
+        } else {
+
+		}
     }
 
     public void MovementBehavior(float horizontalInput) {

@@ -333,12 +333,12 @@ MonoBehaviour:
   m_Name: FMODStudioSettings
   m_EditorClassIdentifier: 
   SwitchSettingsMigration: 1
-  HasSourceProject: 0
-  HasPlatforms: 0
-  sourceProjectPath: 
-  sourceBankPath: FMODBanks/Desktop
+  HasSourceProject: 1
+  HasPlatforms: 1
+  sourceProjectPath: ../../../Library/Application Support/FMOD Studio/2.01.11/Spacegame/Spacegame.fspro
+  sourceBankPath: ../../../Library/Application Support/FMOD Studio/2.01.11/Spacegame/Build
   SourceBankPathUnformatted: 
-  BankRefreshCooldown: -2
+  BankRefreshCooldown: 1
   ShowBankRefreshWindow: 1
   AutomaticEventLoading: 1
   BankLoadType: 0

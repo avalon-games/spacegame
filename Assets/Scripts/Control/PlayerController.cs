@@ -7,8 +7,6 @@ public class PlayerController : MonoBehaviour
 {
     SpriteRenderer sprite;
     PlayerUI ui;
-
-    Animator animator;
     
     float horizontalInput;
     private bool controlAllowed = true;
