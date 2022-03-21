@@ -5,41 +5,36 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] float jumpBufferTime = 0.1f;
-
-
-    [Range(0, 20f)] public float maxSpeed = 5;
-    public float acceleration = 13f;
-    public float decceleration = 13f;
-    public float velPower = 0.96f;
-    public float frictionAmount = 0.22f;
-    public float jumpForce = 13;
-    [Range(-15f, 0)] public float maxDownVelocity = -10f;
-    [Range(0, 1)] public float jumpCutMultiplier = 0.4f;
-    public float jumpCoyoteTime = 0.15f;
-    public float fallGravityMultiplier = 2;
-    [Range(0, 1f)] public float airControl = 0.8f;
-    [Range(0, 5f)] public float groundDetectRadius = 1.51f;
-
-
+    [Range(0, 20f)] [SerializeField] float maxSpeed = 5;
+    [SerializeField] float acceleration = 13f;
+    [SerializeField] float decceleration = 13f;
+    [SerializeField] float velPower = 0.96f;
+    [SerializeField] float frictionAmount = 0.22f;
+    [SerializeField] float jumpForce = 13;
+    [Range(-15f, 0)] [SerializeField] float maxDownVelocity = -10f;
+    [Range(0, 1)] [SerializeField] float jumpCutMultiplier = 0.4f;
+    [SerializeField] float jumpCoyoteTime = 0.15f;
+    [SerializeField] float fallGravityMultiplier = 2;
+    [Range(0, 1f)] [SerializeField] float airControl = 0.8f;
+    [Range(0, 5f)] [SerializeField] float groundDetectRadius = 1.51f;
+    [SerializeField] AudioSource step1;
+    [SerializeField] AudioSource step2;
 
     private float lastJumpTime;
-    public float lastGroundedTime;
-    public float gravityScale;
-    public bool isJumping;
+    float lastGroundedTime;
+    float gravityScale;
+    bool isJumping;
+    float targetSpeed;
     Vector2 relativeVelocity;
     [HideInInspector] public bool isOnGround;
     [HideInInspector] public bool isInQuicksand;
 
-
     [HideInInspector] public Rigidbody2D rb;
-    public Rigidbody2D groundHitRB;
-    public Collider2D coll;
+    Rigidbody2D groundHitRB;
+    Collider2D coll;
     Animator anim;
-    public LayerMask groundLayer;
-    public LayerMask sandLayer;
-
-    public float targetSpeed;
-
+    LayerMask groundLayer;
+    LayerMask sandLayer;
 
     //animation states
     enum State { idle, running, jumping, falling, pushing, hurt }; 
@@ -85,6 +80,9 @@ public class PlayerMovement : MonoBehaviour
 		UpdateTimers();
 
         anim.SetInteger("state", (int)state);
+        //if (state == State.running && !footsteps.isPlaying) { footsteps.Play(); }
+        //else if (footsteps.isPlaying) { footsteps.Stop(); }
+
     }
 
     public void MovementBehavior(float horizontalInput) {
@@ -191,6 +189,18 @@ public class PlayerMovement : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, new Vector2(transform.position.x, transform.position.y - groundDetectRadius));
     }
+
+
+    public void PlayGravel1() {
+        if (isOnGround) {
+            step1.Play();
+        }
+	}
+    public void PlayGravel2() {
+        if(isOnGround) {
+            step2.Play();
+        }
+	}
 
 
 }
