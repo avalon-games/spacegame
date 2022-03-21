@@ -21,8 +21,13 @@ public class PlayerController : MonoBehaviour
 	private void Awake() {
         mover = GetComponent<PlayerMovement>();
         sprite = GetComponent<SpriteRenderer>();
-        animator = GetComponent<Animator>();
         ui = GameObject.FindGameObjectWithTag("UI").GetComponent<PlayerUI>();
+    }
+
+	private void Start() {
+        if (PlayerData.checkpoint == null) {
+            PlayerData.checkpoint = new float[2] { transform.position.x, transform.position.y };
+        }
     }
 
 	void Update() {

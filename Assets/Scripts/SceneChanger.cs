@@ -56,6 +56,7 @@ public class SceneChanger : MonoBehaviour {
     }
 
     void UpdatePlayer() {
+        if (!GameObject.FindGameObjectWithTag("Player")) { return; } 
 		if (PlayerData.checkpoint == null)
 			SetCheckpointToStart();
 		else {
