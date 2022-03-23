@@ -54,9 +54,35 @@ public class SceneChanger : MonoBehaviour {
         yield return new WaitForSeconds(fadeWaitTime);
         yield return fader.FadeIn(fadeInTime);
     }
+    public IEnumerator LoadFileTransition(int sceneToLoad, int fileToLoad) {
+        if (sceneToLoad < 0) {
+            Debug.LogError("SceneToLoad not set");
+            yield break;
+        }
+
+        Fader fader = FindObjectOfType<Fader>();
+        yield return fader.FadeOut(fadeOutTime);
+        UpdateCurrLevel(sceneToLoad);
+        PlayerData.checkpoint = null;
+        //SaveAndLoad sal = FindObjectOfType<SaveAndLoad>();
+        //sal.SaveGame(0);
+
+        DontDestroyOnLoad(gameObject);
+        yield return SceneManager.LoadSceneAsync(sceneToLoad);
+        if (fileToLoad > -1) {
+            print("loading file" + fileToLoad);
+            SaveFile.Load(fileToLoad);
+        }
+        UpdatePlayer();
+
+        yield return new WaitForSeconds(fadeWaitTime);
+        yield return fader.FadeIn(fadeInTime);
+    }
 
     void UpdatePlayer() {
-        if (!GameObject.FindGameObjectWithTag("Player") || SceneManager.GetActiveScene().buildIndex <= 1) { return; } 
+        if (!GameObject.FindGameObjectWithTag("Player") || SceneManager.GetActiveScene().buildIndex <= 1) {
+            print("no player found/scene is not a gameplay level");
+            return; } 
 		if (PlayerData.checkpoint == null)
 			SetCheckpointToStart();
 		else {

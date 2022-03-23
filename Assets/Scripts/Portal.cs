@@ -12,12 +12,12 @@ public class Portal : MonoBehaviour {
         if (collision.gameObject.CompareTag("Player")) {
 			if (sceneToLoad < 0) {
 				//-1 to automatically load the currently unlocked level
-				FindObjectOfType<SaveAndLoad>().LoadLevel(PlayerData.currUnlockedLevel);
+				FindObjectOfType<SaveAndLoad>().LoadLevel(PlayerData.currUnlockedLevel,-1);
 			} else {
 				if (sceneToLoad > PlayerData.currUnlockedLevel) {
 					PlayerData.currUnlockedLevel = sceneToLoad;
 				}
-				FindObjectOfType<SaveAndLoad>().LoadLevel(sceneToLoad);
+				FindObjectOfType<SaveAndLoad>().LoadLevel(sceneToLoad,-1);
 			}
 			
 		}

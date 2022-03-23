@@ -18,9 +18,12 @@ public class Fader : MonoBehaviour
 
 	public IEnumerator FadeOut(float time)
 	{
+		//UIMenus uiMenu = FindObjectOfType<UIMenus>();
+		//if (uiMenu) uiMenu.enabled = false;
 		canvasGroup.blocksRaycasts = true;
 		while (isFadingIn)
 		{
+			isFadingOut = false;
 			yield return null;
 		}
 		isFadingOut = true;
@@ -29,7 +32,6 @@ public class Fader : MonoBehaviour
 			canvasGroup.alpha += Time.deltaTime / time;
 			yield return null;
 		}
-
 		canvasGroup.alpha = 1;
 		isFadingOut = false;
 		canvasGroup.blocksRaycasts = false;
@@ -37,9 +39,12 @@ public class Fader : MonoBehaviour
 
 	public IEnumerator FadeIn(float time)
 	{
+		//UIMenus uiMenu = FindObjectOfType<UIMenus>();
+		//if (uiMenu) uiMenu.enabled = false;
 		canvasGroup.blocksRaycasts = true;
 		while (isFadingOut)
 		{
+			isFadingIn = false;
 			yield return null;
 		}
 		isFadingIn = true;
@@ -48,6 +53,7 @@ public class Fader : MonoBehaviour
 			canvasGroup.alpha -= Time.deltaTime / time;
 			yield return null;
 		}
+		//if (uiMenu) uiMenu.enabled = true;
 		canvasGroup.alpha = 0;
 		isFadingIn = false;
 		canvasGroup.blocksRaycasts = false;

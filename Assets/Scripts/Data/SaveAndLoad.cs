@@ -53,16 +53,16 @@ public class SaveAndLoad : MonoBehaviour
 		if (!PlayerData.saveFileNames[i].Equals("Empty")) {
 			Time.timeScale = 1;
 			SaveFile.Load(i);
-			LoadLevel(PlayerData.currLevel);
+			LoadLevel(PlayerData.currLevel, i);
 		}
 	}
-	public void LoadLevel(int level) {
+	public void LoadLevel(int level, int i = -1) {
 		print("loading" + level);
-		StartCoroutine(LoadLevelAsync(level));
+		StartCoroutine(LoadLevelAsync(level, i));
 	}
 
-	IEnumerator LoadLevelAsync(int level) {
-		yield return FindObjectOfType<SceneChanger>().Transition(level);
+	IEnumerator LoadLevelAsync(int level, int i) {
+		yield return FindObjectOfType<SceneChanger>().LoadFileTransition(level, i);
 	}
 
 
@@ -71,6 +71,7 @@ public class SaveAndLoad : MonoBehaviour
 	* - in the future, add multiple save file functionality
 	*/
 	void Save(int i) {
+		print("saving checkpoint: " + PlayerData.checkpoint);
 		SaveFile.Save(i);
 		SaveFileNames();
 		//Debug.Log("Saving file " + i);
@@ -105,6 +106,7 @@ public class SaveAndLoad : MonoBehaviour
 	}
 
 	void InitData() {
+		print("initalizing data...");
 		Time.timeScale = 1;
 		PlayerData.maxHealth = 5;
 		PlayerData.maxOxygen = 100;

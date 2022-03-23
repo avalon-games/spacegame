@@ -17,6 +17,7 @@ public class UIMenus : MonoBehaviour {
     public AudioMixer mixer; //make sure to drag it in
 
     public PlayerUI playerUI;
+    [HideInInspector] public bool enableOpenMenu = true;
     [HideInInspector] public bool isSaving; //is loading if false, used to control button behavior in SaveOrLoadButton
 
 
@@ -31,7 +32,7 @@ public class UIMenus : MonoBehaviour {
     }
 
     void Update() {
-        if (Input.GetKeyDown(KeyCode.Escape)) {
+        if (Input.GetKeyDown(KeyCode.Escape) && enableOpenMenu) {
             if (pauseMenu.activeSelf) {
                 Time.timeScale = 1;
                 pauseMenu.SetActive(false);
