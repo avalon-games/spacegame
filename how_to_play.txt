@@ -1,0 +1,20 @@
+Player Movement Controls:
+
+
+Basic: 
+a / d - left and right movement
+wasd - movement on ship
+
+space - jump
+
+left click - hold to launch a grapple to pull yourself towards the attached point, release button to release grapple
+
+right click - hold to launch a grapple to swing yourself around the attached point, release button to release grapple
+
+left shift - hold to enter slowMo mode, playing the game at 0.4 speed, allows player to specify the grapple direction more easily while moving, release button to exit
+
+f - launch a bullet that will activate pressure plates 
+
+esc - open menu
+
+` - toggle open debug console, use 'help' to show the list of available commands
