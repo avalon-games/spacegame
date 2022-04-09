@@ -63,14 +63,14 @@ public class GrapplingGun : MonoBehaviour
 		}
 
 		//freeze movement during launch
-		if ((!pullHookScript.isAttached && pullHook.activeSelf && !pullHookScript.grappleRelease) ||
-			(!swingHookScript.isAttached && swingHook.activeSelf && !swingHookScript.grappleRelease)) {
+		if ((!pullHookScript.GetIsAttached() && pullHook.activeSelf && !pullHookScript.grappleRelease) ||
+			(!swingHookScript.GetIsAttached() && swingHook.activeSelf && !swingHookScript.grappleRelease)) {
 			rb.velocity = Vector2.zero;
 		}
 		//while attached, translate the player
-		if (pullHook.activeSelf && pullHookScript.isAttached) {
+		if (pullHook.activeSelf && pullHookScript.GetIsAttached()) {
 			HandlePull();
-		} else if (swingHook.activeSelf && swingHookScript.isAttached) {
+		} else if (swingHook.activeSelf && swingHookScript.GetIsAttached()) {
 			HandleSwing();
 		}
 
@@ -251,13 +251,13 @@ public class GrapplingGun : MonoBehaviour
 	}
 
 	public bool IsAttached() {
-		return pullHookScript.isAttached || swingHookScript.isAttached;
+		return pullHookScript.GetIsAttached() || swingHookScript.GetIsAttached();
 	}
 
 	public Vector2 GetAnchorPoint() {
-		if (pullHookScript.isAttached) {
+		if (pullHookScript.GetIsAttached()) {
 			return pullHookScript.GetAnchorPoint();
-		} else if (swingHookScript.isAttached) {
+		} else if (swingHookScript.GetIsAttached()) {
 			return swingHookScript.GetAnchorPoint();
 		} else
 			return Vector2.negativeInfinity;

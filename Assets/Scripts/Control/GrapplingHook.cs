@@ -11,22 +11,25 @@ using UnityEngine;
  */
 public class GrapplingHook : MonoBehaviour
 {
-    public bool isAttached;
-    public bool grappleRelease; //true if currently on the way back from attached point
+    [SerializeField] Transform gunPoint;
+    [Range(0, 30)][SerializeField] float maxRange = 10;
+    [SerializeField] float launchSpeed = 31.9f;
+    [SerializeField] Sprite attachedSprite;
+
+
     Camera cam;
     Rigidbody2D rb;
-    public Transform gunPoint;
     LineRenderer rope;
     Transform hitDynamic;
     Vector2 hitStatic;
-    public Sprite attachedSprite;
     Sprite detachedSprite;
     SpriteRenderer sp;
 
-    [Range(0, 30)] public float maxRange = 10;
+    bool isAttached;
+    bool hasStaticAnchor;
+    [HideInInspector] public bool grappleRelease; //true if currently on the way back from attached point
 
     Vector2 launchDirection;
-    [SerializeField] float launchSpeed = 31.9f;
 
     void Awake() {
         rb = GetComponent<Rigidbody2D>();
@@ -49,7 +52,7 @@ public class GrapplingHook : MonoBehaviour
         if (hitDynamic != null) {
             float timeToHit = Vector2.Distance(gunPoint.position, hitDynamic.position)/launchSpeed;
             StartCoroutine(AttachAfterTime(timeToHit));
-        }  else if (hitStatic != Vector2.negativeInfinity) {
+        }  else if (hasStaticAnchor) {
             float timeToHit = Vector2.Distance(gunPoint.position, hitStatic) / launchSpeed;
             StartCoroutine(AttachAfterTime(timeToHit));
         }
@@ -99,10 +102,11 @@ public class GrapplingHook : MonoBehaviour
                     //print(hit.point);
                     hitStatic = new Vector2(Mathf.Floor(hit.point.x / 0.99f) * 0.99f + 0.495f,
                                          Mathf.Floor(hit.point.y / 0.99f) * 0.99f + 0.495f);
+                    hasStaticAnchor = true;
                     hitDynamic = null;
                 } else {
                     hitDynamic = hit.collider.transform;
-                    hitStatic = Vector2.negativeInfinity;
+                    hasStaticAnchor = false;
                 }
                 break;
 			}
@@ -110,7 +114,7 @@ public class GrapplingHook : MonoBehaviour
      }
     void ClearAnchorPoint() {
         hitDynamic = null;
-        hitStatic = Vector2.negativeInfinity;
+        hasStaticAnchor = false;
     }
     public Vector2 GetAnchorPoint() {
         if(hitDynamic) {
@@ -129,12 +133,12 @@ public class GrapplingHook : MonoBehaviour
 
 	private void PositionAtHitPoint() {
         if (hitDynamic) transform.position = hitDynamic.position;
-        else if (hitStatic != Vector2.negativeInfinity) transform.position = hitStatic;
+        else if (hasStaticAnchor) transform.position = hitStatic;
 	}
 
 	IEnumerator AttachAfterTime(float time) {
         yield return new WaitForSeconds(time);
-        if (hitDynamic != null || hitStatic != Vector2.negativeInfinity) Attach();
+        if (hitDynamic != null || hasStaticAnchor) Attach();
 	}
 
     //private void OnTriggerEnter2D(Collider2D collision) {
@@ -175,5 +179,7 @@ public class GrapplingHook : MonoBehaviour
         isAttached = false;
         ClearAnchorPoint();
 	}
+
+    public bool GetIsAttached() { return isAttached; }
 }
 //add rendering of the grappling rope

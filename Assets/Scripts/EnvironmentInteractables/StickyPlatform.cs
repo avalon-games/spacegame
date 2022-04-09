@@ -30,7 +30,7 @@ public class StickyPlatform : MonoBehaviour
 	private void OnTriggerStay2D(Collider2D collision) {
 		if(collision.gameObject.CompareTag("Hook")) {
 			GrapplingHook hook = collision.GetComponent<GrapplingHook>();
-			if (hook && hook.isAttached) {
+			if (hook && hook.GetIsAttached()) {
 				AttachPlayer();
 			}
 		}
